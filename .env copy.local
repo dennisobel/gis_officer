@@ -1,0 +1,3 @@
+REACT_APP_BASE_URL='http://localhost:5001'
+REACT_APP_MAPBOX_TOKEN='pk.eyJ1IjoiZGVubmlzb2JlbCIsImEiOiJjbGg1dmxqYTMwMDBnM2VwaTk2MXNvemh3In0.PCXH5DjguDHHgmaHviCFow'
+GITTOKEN='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'
