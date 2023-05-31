@@ -32,7 +32,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // const user = useSelector((state) => state.user);
-  const [user,setUser] = useState()
+  const [user, setUser] = useState()
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
   const theme = useTheme();
@@ -43,9 +43,9 @@ const Navbar = () => {
   const alt = theme.palette.background.alt;
   const [query, setQuery] = useState()
 
-  useEffect(()=>{
+  useEffect(() => {
     getUsername().then(user => setUser(user))
-  },[])
+  }, [])
 
   const handleInputChange = (event) => {
     dispatch(setSearchQuery(event.target.value));
@@ -72,16 +72,16 @@ const Navbar = () => {
           DRS
         </Typography>
         <FlexBetween
-            backgroundColor={neutralLight}
-            borderRadius="9px"
-            gap="3rem"
-            padding="0.1rem 1.5rem"
-          >
-            <InputBase placeholder="Search..." onChange={handleInputChange}/>
-            <IconButton>
-              <Search />
-            </IconButton>
-          </FlexBetween>
+          backgroundColor={neutralLight}
+          borderRadius="9px"
+          gap="3rem"
+          padding="0.1rem 1.5rem"
+        >
+          <InputBase placeholder="Search..." onChange={handleInputChange} />
+          <IconButton>
+            <Search />
+          </IconButton>
+        </FlexBetween>
         {/* {isNonMobileScreens && (
           <FlexBetween
             backgroundColor={neutralLight}
@@ -182,6 +182,29 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
+
+            <FlexBetween gap="0.5rem">
+              <Typography
+                color={theme.palette.mode === "dark"}
+                variant="h5"
+                fontWeight="500"
+                sx={{ mb: "0.5rem" }}
+                onClick = {() => {navigate("/home")}}
+              >
+                Home
+              </Typography>
+            </FlexBetween>
+            <FlexBetween gap="0.5rem">
+              <Typography
+                color={theme.palette.mode === "dark"}
+                variant="h5"
+                fontWeight="500"
+                sx={{ mb: "0.5rem" }}
+                onClick = {() => {navigate("/businessregistration")}}
+              >
+                Register Business
+              </Typography>
+            </FlexBetween>
             {/* <Message sx={{ fontSize: "25px" }} />
             <Notifications sx={{ fontSize: "25px" }} />
             <Help sx={{ fontSize: "25px" }} /> */}
