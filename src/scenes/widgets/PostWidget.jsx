@@ -4,6 +4,7 @@ import {
   FavoriteOutlined,
   LocationOnOutlined,
   ShareOutlined,
+  VisibilityOutlined
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
@@ -43,7 +44,7 @@ const PostWidget = ({
 
 
   return (
-    <WidgetWrapper m="2rem 0" onClick={handleClick}>
+    <WidgetWrapper m="2rem 0" >
       <FlexBetween gap="0.3rem">
         <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
           Building # {building_number}
@@ -70,8 +71,8 @@ const PostWidget = ({
           </FlexBetween>
         </FlexBetween>
 
-        <IconButton>
-          <ShareOutlined />
+        <IconButton onClick={handleClick}>
+          <VisibilityOutlined />
         </IconButton>
       </FlexBetween>
       <Box>

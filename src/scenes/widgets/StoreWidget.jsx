@@ -7,7 +7,7 @@ import {
     BusinessOutlined,
     ShareOutlined,
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Divider, IconButton, Typography, useTheme, Modal } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setPost } from "state";
+import Compliance from "components/Compliance";
 
 const StoreWidget = ({
     branch,
@@ -30,6 +31,20 @@ const StoreWidget = ({
     const { palette } = useTheme();
     const main = palette.neutral.main;
     const primary = palette.primary.main;
+    const [open, setOpen] = useState(false);
+  const [openView, setOpenView] = useState(false)
+
+    const handleOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+      };
+    
+      const handleCloseView = () => {
+        setOpenView(false);
+      };
 
 
     return (
@@ -49,7 +64,8 @@ const StoreWidget = ({
                     Store # {store_no}
                 </Typography>
                 <FlexBetween gap="0.3rem">
-                    <IconButton >
+                    <Compliance isOpen={open} onClose={handleClose}/>
+                    <IconButton onClick={handleOpen} >
                         <CheckCircleOutlined />
                     </IconButton>
                     <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
@@ -67,15 +83,6 @@ const StoreWidget = ({
                     </Typography>
                 </FlexBetween>
             </FlexBetween>
-            {/* {picturePath && (
-          <img
-            width="100%"
-            height="auto"
-            alt="post"
-            style={{ borderRadius: "0.75rem", marginTop: "0.75rem" }}
-            src={`http://localhost:3001/assets/${picturePath}`}
-          />
-        )} */}
             <FlexBetween mt="0.25rem">
                 <FlexBetween gap="1rem">
                     <FlexBetween gap="0.3rem">
@@ -88,9 +95,6 @@ const StoreWidget = ({
                     </FlexBetween>
 
                     <FlexBetween gap="0.3rem">
-                        {/* <IconButton onClick={() => setIsComments(!isComments)}>
-                <ChatBubbleOutlineOutlined />
-              </IconButton> */}
                         <Typography>Category # {category}</Typography>
                     </FlexBetween>
                 </FlexBetween>
@@ -110,19 +114,6 @@ const StoreWidget = ({
                     </Typography>
                 </FlexBetween>
             </Box>
-            {/* {isComments && (
-          <Box mt="0.5rem">
-            {comments.map((comment, i) => (
-              <Box key={`${name}-${i}`}>
-                <Divider />
-                <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                  {comment}
-                </Typography>
-              </Box>
-            ))}
-            <Divider />
-          </Box>
-        )} */}
         </WidgetWrapper>
     );
 };

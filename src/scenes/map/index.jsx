@@ -22,6 +22,9 @@ import {
   
   const center = { lat: -1.336180, lng: 36.894335 }
   
+  
+
+  
   function Map() {
     const { isLoaded } = useJsApiLoader({
       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -48,6 +51,13 @@ import {
             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
         );
     };
+
+    useEffect(()=>{
+      if (userLocation !== null) {
+        console.log("user location:", userLocation);
+        // const centerr = { lat: userLocation !== null && userLocation.latitude, lng: 36.894335 +}
+      }
+    },[userLocation])
   
     /** @type React.MutableRefObject<HTMLInputElement> */
     const originRef = useRef()
