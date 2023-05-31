@@ -7,7 +7,9 @@ const initialState = {
   posts: [],
   searchQuery: "",
   searchStoreQuery: "",
-  stores: {}
+  stores: {},
+  businessReg:{},
+  reviewAccept: { terms: '' }
 };
 
 export const authSlice = createSlice({
@@ -50,7 +52,18 @@ export const authSlice = createSlice({
     },
     setStores: (state,action) => {
       state.stores = action.payload
-    }
+    },
+    setBusinessReg: (state,action) => {
+      state.businessReg = {
+        ...state.businessReg, ...action.payload
+      }
+    },
+    updateReviewAccept: (state, action) => {
+      state.userData.reviewAccept = {
+        ...state.userData.reviewAccept,
+        ...action.payload,
+      };
+    },
   },
 });
 
@@ -63,6 +76,8 @@ export const {
   setPost,
   setSearchQuery,
   setSearchStoreQuery,
-  setStores
+  setStores,
+  setBusinessReg,
+  updateReviewAccept
 } = authSlice.actions;
 export default authSlice.reducer;

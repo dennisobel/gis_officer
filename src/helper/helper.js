@@ -310,3 +310,12 @@ export async function sendMail({ to, from, name, email_body }) {
     return { error: "message not sent" };
   }
 }
+
+export async function createBusinessPermit(data) {
+  try {
+      const res = await axios.post('/business/register', data)
+      return Promise.resolve(res)
+  } catch (error) {
+      return Promise.reject({ error })
+  }
+}

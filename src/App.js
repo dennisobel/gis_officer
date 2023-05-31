@@ -3,6 +3,7 @@ import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import OtpPage from "scenes/otp";
 import ProfilePage from "scenes/profilePage";
+import BusinessRegPage from "scenes/business_reg";
 import Map from "scenes/map";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -36,6 +37,7 @@ function App() {
             />
             <Route path="/map" element={user ? <Map /> : <Navigate to="/" />} />
             <Route path="/stores" element={user ? <StoresPage /> : <Navigate to="/" />} />
+            <Route path="/businessregistration" element={user ? <BusinessRegPage /> : <Navigate to="/" />} />
             <Route
               path="/profile/:userId"
               element={user ? <ProfilePage /> : <Navigate to="/" />}
