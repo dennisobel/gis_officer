@@ -189,7 +189,7 @@ const Navbar = () => {
                 variant="h5"
                 fontWeight="500"
                 sx={{ mb: "0.5rem" }}
-                onClick = {() => {navigate("/home")}}
+                onClick={() => { navigate("/home") }}
               >
                 Home
               </Typography>
@@ -200,9 +200,20 @@ const Navbar = () => {
                 variant="h5"
                 fontWeight="500"
                 sx={{ mb: "0.5rem" }}
-                onClick = {() => {navigate("/businessregistration")}}
+                onClick={() => { navigate("/businessregistration") }}
               >
                 Register Business
+              </Typography>
+            </FlexBetween>
+            <FlexBetween gap="0.5rem">
+              <Typography
+                color={theme.palette.mode === "dark"}
+                variant="h5"
+                fontWeight="500"
+                sx={{ mb: "0.5rem" }}
+                onClick={() => { navigate("/dashboard") }}
+              >
+                Dashboard
               </Typography>
             </FlexBetween>
             {/* <Message sx={{ fontSize: "25px" }} />

@@ -13,6 +13,7 @@ import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { getUsername } from "helper/helper";
 import StoresPage from "scenes/stores";
+import SummariesPage from "scenes/summaries";
 import { setCurrentLocation } from "state";
 import { setBusinessReg } from "state"; 
 
@@ -38,7 +39,6 @@ function App() {
   }, [location]);
 
   useEffect(() => {
-    console.log("form vs in App:",formValues)
     formValues !== undefined && dispatch(setBusinessReg(formValues))
   },[formValues,dispatch])
 
@@ -81,6 +81,7 @@ function App() {
             <Route path="/map" element={user ? <Map /> : <Navigate to="/" />} />
             <Route path="/stores" element={user ? <StoresPage /> : <Navigate to="/" />} />
             <Route path="/businessregistration" element={user ? <BusinessRegPage /> : <Navigate to="/" />} />
+            <Route path="/dashboard" element={user ? <SummariesPage /> : <Navigate to="/" />} />
             <Route
               path="/profile/:userId"
               element={user ? <ProfilePage /> : <Navigate to="/" />}

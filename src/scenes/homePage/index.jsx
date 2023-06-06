@@ -19,10 +19,6 @@ const HomePage = () => {
     .then(user => setUser(user))
   },[])
 
-  useEffect(()=>{
-    console.log(user)
-  },[user])
-
   return (
     <Box>
       <Navbar />
@@ -43,13 +39,6 @@ const HomePage = () => {
           {/* <MyPostWidget picturePath={""} /> */}
           <PostsWidget userId={user?.msisdn} />
         </Box>
-        {isNonMobileScreens && (
-          <Box flexBasis="26%">
-            <AdvertWidget />
-            <Box m="2rem 0" />
-            {/* <FriendListWidget userId={user?._id} /> */}
-          </Box>
-        )}
       </Box>
     </Box>
   );
