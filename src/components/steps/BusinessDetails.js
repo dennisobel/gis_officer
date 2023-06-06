@@ -26,6 +26,7 @@ import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 
 export default function BusinessDetails() {
+  const businessReg = useSelector(state => state.businessReg)
   const dispatch = useDispatch()
   const { palette } = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
@@ -43,6 +44,20 @@ export default function BusinessDetails() {
     floor_no: "",
     room_no: "",
   });
+
+  useEffect(() => {
+    setFormValues({
+      business_name: businessReg?.business_name || "",
+      branch_name: businessReg?.branch_name || "",
+      street: businessReg?.street || "",
+      sub_county: businessReg?.sub_county || "",
+      ward: businessReg?.ward || "",
+      plot_no: businessReg?.plot_no || "",
+      building_name: businessReg?.building_name || "",
+      floor_no: businessReg?.floor_no || "",
+      room_no: businessReg?.room_no || ""
+    });
+  }, []);
 
   const handleChange = (e) => {
 
@@ -72,7 +87,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["business_name"] || ""}
+              value={formValues["business_name"] || businessReg?.business_name}
               name="business_name"
               placeholder="Enter Business Name"
               sx={{
@@ -94,7 +109,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["branch_name"] || ""}
+              value={formValues["branch_name"] || businessReg?.branch_name}
               name="branch_name"
               placeholder="e.g Mavindini Branch "
               sx={{
@@ -113,7 +128,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["street"] || ""}
+              value={formValues["street"] || businessReg?.street}
               name="street"
               placeholder="e.g Yinthungu"
               type="text"
@@ -136,7 +151,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["sub_county"] || ""}
+              value={formValues["sub_county"] || businessReg?.sub_county}
               name="sub_county"
               placeholder="e.g Yinthungu"
               type="text"
@@ -156,7 +171,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["ward"] || ""}
+              value={formValues["ward"] || businessReg?.ward}
               name="ward"
               placeholder="e.g Yinthungu"
               type="text"
@@ -179,7 +194,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["plot_no"] || ""}
+              value={formValues["plot_no"] || businessReg?.plot_no}
               name="plot_no"
               placeholder="Enter Plot Number"
               sx={{
@@ -198,7 +213,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["building_name"] || ""}
+              value={formValues["building_name"] || businessReg?.building_name}
               name="building_name"
               placeholder="Enter Building Name"
               type="text"
@@ -221,7 +236,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["floor_no"] || ""}
+              value={formValues["floor_no"] || businessReg?.floor_no}
               name="floor_no"
               placeholder="Enter Floor Number"
               sx={{
@@ -240,7 +255,7 @@ export default function BusinessDetails() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["room_no"] || ""}
+              value={formValues["room_no"] || businessReg?.room_no}
               name="room_no"
               placeholder="Enter Room Number"
               type="text"

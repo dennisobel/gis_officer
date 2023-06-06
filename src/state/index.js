@@ -9,7 +9,9 @@ const initialState = {
   searchStoreQuery: "",
   stores: {},
   businessReg:{},
-  reviewAccept: { terms: '' }
+  reviewAccept: { terms: '' },
+  currentLocation: {},
+  signup: {}
 };
 
 export const authSlice = createSlice({
@@ -64,10 +66,18 @@ export const authSlice = createSlice({
         ...action.payload,
       };
     },
+    setCurrentLocation: (state,action) => {
+      state.currentLocation = action.payload
+    },
+    setSignup: (state, action) => {
+      state.signup = action.payload;
+    },
   },
 });
 
 export const {
+  setSignup,
+  setCurrentLocation,
   setMode,
   setLogin,
   setLogout,

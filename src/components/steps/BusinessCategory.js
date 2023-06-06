@@ -3,48 +3,34 @@ import { setBusinessReg } from "../../state";
 import { useEffect, useState } from "react";
 import WidgetWrapper from "components/WidgetWrapper";
 import {
-  EditOutlined,
-  DeleteOutlined,
-  AttachFileOutlined,
-  GifBoxOutlined,
-  ImageOutlined,
-  MicOutlined,
-  MoreHorizOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Typography,
-  InputBase,
-  useTheme,
-  Button,
-  IconButton,
-  useMediaQuery,
   Select,
   MenuItem
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Dropzone from "react-dropzone";
-import UserImage from "components/UserImage";
 
 export default function BusinessCategory() {
+  const businessReg = useSelector(state => state.businessReg)
   const dispatch = useDispatch()
   const [formValues,setFormValues] = useState({
     applicationType:"",
     registered:""
   })
 
-  
-
   const handleChange = (e) => {
-    // const { name, value } = e.target;
-    // setUserData({ ...userData, [name]: value });
     e.preventDefault()
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
     });
   };
+
+  useEffect(() => {
+    setFormValues({
+      applicationType: businessReg?.applicationType || "",
+      registered: businessReg?.registered || ""
+    });
+  }, []);
+  
 
   useEffect(()=>{
     dispatch(setBusinessReg(formValues))
@@ -65,7 +51,7 @@ export default function BusinessCategory() {
           <FlexBetween gap="1.5rem">
             <Select
               onChange={handleChange}
-              value={formValues["applicationType"] || ""}
+              value={formValues["applicationType"] || businessReg?.applicationType}
               name="applicationType"
               sx={{
                 width:"300px"
@@ -85,8 +71,8 @@ export default function BusinessCategory() {
           <FlexBetween gap="1.5rem">
             <Select
               onChange={handleChange}
-              value={formValues["applicationType"] || ""}
-              name="applicationType"
+              value={formValues["registered"] || businessReg?.registered}
+              name="registered"
               sx={{
                 width:"300px"
               }}

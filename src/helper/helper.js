@@ -1,6 +1,8 @@
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
+// const location = useSelector(state => state.location)
+
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 
 /** Make API Requests */
@@ -53,12 +55,16 @@ export async function getOfficers({ county, role }) {
 }
 
 /** register user function */
-export async function registerUser(credentials) {
+
+export async function registerUser(credentials, location) {
   try {
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+    };
     const {
       data: { msg },
       status,
-    } = await axios.post(`/auth/register`, credentials);
+    } = await axios.post(`/auth/register`, credentials, { headers });
 
     let { email } = credentials;
 
@@ -194,16 +200,6 @@ export async function updateBuilding(building) {
   }
 }
 
-/** create business */
-export async function createBusiness(body) {
-  try {
-    const data = await axios.post(`/business/register`, body);
-    return Promise.resolve(data);
-  } catch (error) {
-    return Promise.reject({ error });
-  }
-}
-
 /** get business */
 export async function getBusinessById({ business }) {
   try {
@@ -295,7 +291,6 @@ export async function getBuildingStores(id) {
   }
 }
 
-
 /**Send Message */
 export async function sendMail({ to, from, name, email_body }) {
   try {
@@ -311,11 +306,32 @@ export async function sendMail({ to, from, name, email_body }) {
   }
 }
 
-export async function createBusinessPermit(data) {
+export async function createBusinessPermit(data,location) {
   try {
-      const res = await axios.post('/business/register', data)
-      return Promise.resolve(res)
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+    };
+    const res = await axios.post("/business/register", data, {
+      headers,
+    });
+    return Promise.resolve(res);
   } catch (error) {
-      return Promise.reject({ error })
+    return Promise.reject({ error });
   }
 }
+
+/** create business */
+export async function createBusiness(body,location) {
+  try {
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+    };
+    const res = await axios.post("/business/register", body, {
+      headers,
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}
+

@@ -27,10 +27,22 @@ import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 
 export default function BusinessActivity() {
+  const businessReg = useSelector(state => state.businessReg)
   const { palette } = useTheme();
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  const dispatch = useDispatch()
+
+  const [formErrors, setFormErrors] = useState({
+    business_category: false,
+    business_sub_category: false,
+    business_description: false,
+    no_of_employees: false,
+    additional_activity: false,
+    premise_size: false,
+  });
+
   const [formValues, setFormValues] = useState({
     business_category: "",
     business_sub_category: "",
@@ -40,15 +52,29 @@ export default function BusinessActivity() {
     premise_size: "",
   });
 
+  useEffect(() => {
+    setFormValues({
+      business_category: businessReg?.business_category || "",
+      business_sub_category: businessReg?.business_sub_category || "",
+      business_description: businessReg?.business_description || "",
+      no_of_employees: businessReg?.no_of_employees || "",
+      additional_activity: businessReg?.additional_activity || "",
+      premise_size: businessReg?.premise_size || "",
+    });
+  }, []);
+
+  useEffect(()=>{
+    dispatch(setBusinessReg(formValues))
+  },[formValues,dispatch])
+
   const handleChange = (e) => {
-    // const { name, value } = e.target;
-    // setUserData({ ...userData, [name]: value });
     e.preventDefault();
     setFormValues({
       ...formValues,
       [e.target.name]: e.target.value,
     });
   };
+
   return (
     <WidgetWrapper>
       <div className="text-center">
@@ -64,7 +90,7 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["business_category"] || ""}
+              value={formValues["business_category"] || businessReg?.business_category}
               name="business_category"
               placeholder="Health"
               sx={{
@@ -83,7 +109,7 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["business_sub_category"] || ""}
+              value={formValues["business_sub_category"] || businessReg?.business_sub_category}
               name="business_sub_category"
               placeholder="Clinic"
               sx={{
@@ -106,6 +132,9 @@ export default function BusinessActivity() {
             <TextareaAutosize
               rows={4}
               placeholder="Enter business description"
+              onChange={handleChange}
+              value={formValues["business_description"] || businessReg?.business_description}
+              name="business_description"
               style={{
                 width: "95%",
                 resize: "vertical",
@@ -127,7 +156,7 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["no_of_employees"] || ""}
+              value={formValues["no_of_employees"] || businessReg?.no_of_employees}
               name="no_of_employees"
               placeholder="0"
               sx={{
@@ -149,7 +178,7 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["additional_activity"] || ""}
+              value={formValues["additional_activity"] || businessReg?.additional_activity}
               name="additional_activity"
               placeholder="Additional activity"
               sx={{
@@ -171,7 +200,7 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["premise_size"] || ""}
+              value={formValues["premise_size"] || businessReg?.premise_size}
               name="premise_size"
               placeholder="Premises Size (Area)"
               type="text"

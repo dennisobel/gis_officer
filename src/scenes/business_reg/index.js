@@ -53,12 +53,20 @@ const BusinessRegPage = (props) => {
   );
 
   return (
-        <main className="flex-1">
-          <Navbar/>
-          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-            <BusinessReg />
-          </div>
-        </main>
+    <Box>
+      <Navbar />
+      <Box
+        width="100%"
+        padding="2rem 6%"
+        display={isNonMobileScreens ? "flex" : "block"}
+        gap="0.5rem"
+        justifyContent="space-between"
+      >
+        <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
+          <BusinessReg />
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

@@ -49,16 +49,6 @@ const StoreWidget = ({
 
     return (
         <WidgetWrapper m="2rem 0">
-            {/* <Friend
-          friendId={postUserId}
-          name={name}
-          subtitle={location}
-          userPicturePath={userPicturePath}
-        /> */}
-            {/* <Typography color={main} sx={{ mt: "1rem" }}>
-          {building_number}
-        </Typography> */}
-
             <FlexBetween gap="0.3rem">
                 <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                     Store # {store_no}

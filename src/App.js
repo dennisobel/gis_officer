@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
@@ -6,19 +7,61 @@ import ProfilePage from "scenes/profilePage";
 import BusinessRegPage from "scenes/business_reg";
 import Map from "scenes/map";
 import { useMemo } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { getUsername } from "helper/helper";
 import StoresPage from "scenes/stores";
+import { setCurrentLocation } from "state";
+import { setBusinessReg } from "state"; 
 
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   const isAuth = Boolean(useSelector((state) => state.token));
+  const businessReg = useSelector(state => state.businessReg)
+  const dispatch = useDispatch()
+  const [location, setLocation] = useState(null);
+  const [distance,setDistance] = useState()
 
   const user = getUsername();
+
+  const [formValues, setFormValues] = useState({
+    location: {}
+  });
+
+  useEffect(() => {
+    location !== undefined && setFormValues({
+      location: businessReg?.location || "",
+    });
+  }, [location]);
+
+  useEffect(() => {
+    console.log("form vs in App:",formValues)
+    formValues !== undefined && dispatch(setBusinessReg(formValues))
+  },[formValues,dispatch])
+
+  useEffect(() => {
+    const watchId = navigator.geolocation.watchPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setLocation({ latitude, longitude });
+      },
+      (error) => {
+        console.log("Error:", error);
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
+
+    return () => {
+      navigator.geolocation.clearWatch(watchId);
+    };
+  }, []);
+
+  useEffect(()=>{
+    location !== undefined && dispatch(setCurrentLocation(location))
+  },[location])
 
   return (
     <div className="app">

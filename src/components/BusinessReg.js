@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useDropzone } from "react-dropzone";
 import "react-tabs/style/react-tabs.css";
 import { setBusinessReg } from "state";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BusinessActivity from "components/steps/BusinessActivity";
 import BusinessCategory from "components/steps/BusinessCategory";
 import BusinessContacts from "components/steps/BusinessContacts";
@@ -14,6 +14,7 @@ import Final from "components/steps/Final";
 const BusinessReg = (props) => {
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
+
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: "image/*",
@@ -61,16 +62,16 @@ const BusinessReg = (props) => {
           <div className="flex flex-row justify-between items-center">
             <TabList className="flex flex-row mb-4 border-b">
               <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
-                <span>01</span> Business Category
+                <span>01</span>
               </Tab>
               <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
-                <span>02</span> Business Details
+                <span>02</span>
               </Tab>
               <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
-                <span>03</span> Business Activity
+                <span>03</span>
               </Tab>
               <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
-                <span>04</span> Business Contacts
+                <span>04</span>
               </Tab>
               {/* <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
                 <span>05</span> Review
@@ -126,7 +127,7 @@ const BusinessReg = (props) => {
                 <Final />
               </div>
             </div>
-          </TabPanel>
+          </TabPanel> 
         </div>
       </Tabs>
     </div>
