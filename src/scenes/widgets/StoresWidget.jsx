@@ -75,6 +75,7 @@ const StoresWidget = ({ userId, isProfile = false }) => {
             phone={store.business_phone}
             paymentstatus={store.payment_status}
             store_no={store.store_no}
+            store={store}
           />
         )
       )}

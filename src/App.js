@@ -14,6 +14,7 @@ import { themeSettings } from "./theme";
 import { getUsername } from "helper/helper";
 import StoresPage from "scenes/stores";
 import SummariesPage from "scenes/summaries";
+import VisitPage from "scenes/visit";
 import { setCurrentLocation } from "state";
 import { setBusinessReg } from "state"; 
 
@@ -82,6 +83,7 @@ function App() {
             <Route path="/stores" element={user ? <StoresPage /> : <Navigate to="/" />} />
             <Route path="/businessregistration" element={user ? <BusinessRegPage /> : <Navigate to="/" />} />
             <Route path="/dashboard" element={user ? <SummariesPage /> : <Navigate to="/" />} />
+            <Route path="/visit" element={user ? <VisitPage /> : <Navigate to="/" />} />
             <Route
               path="/profile/:userId"
               element={user ? <ProfilePage /> : <Navigate to="/" />}

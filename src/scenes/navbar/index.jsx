@@ -216,6 +216,17 @@ const Navbar = () => {
                 Dashboard
               </Typography>
             </FlexBetween>
+            <FlexBetween gap="0.5rem">
+              <Typography
+                color={theme.palette.mode === "dark"}
+                variant="h5"
+                fontWeight="500"
+                sx={{ mb: "0.5rem" }}
+                onClick={() => { navigate("/visit") }}
+              >
+                Visit Plan
+              </Typography>
+            </FlexBetween>
             {/* <Message sx={{ fontSize: "25px" }} />
             <Notifications sx={{ fontSize: "25px" }} />
             <Help sx={{ fontSize: "25px" }} /> */}

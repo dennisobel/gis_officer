@@ -1,11 +1,13 @@
 import React, { useState, useRef } from "react";
 import { Box, useTheme, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, useMediaQuery } from "@mui/material";
-import { useDispatch } from "react-redux";
 import validator from "validator";
 import MyPostWidget from "scenes/widgets/MyPostWidget";
+import { useDispatch, useSelector } from "react-redux";
+import { initiateSTK } from "helper/helper";
 
-const Compliance = ({ isOpen, onClose }) => {
+const Compliance = ({ isOpen, onClose, store }) => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
+    const location = useSelector(state => state.currentLocation)
     const { palette } = useTheme();
     const main = palette.neutral.main;
     const primary = palette.primary.main;
@@ -19,36 +21,36 @@ const Compliance = ({ isOpen, onClose }) => {
 
     const [formValues, setFormValues] = useState({
         amount: "",
-        compliance: ""
     });
 
     const [formErrors, setFormErrors] = useState({
         amount: false,
-        compliance: false,
     });
 
     const handleChange = (e) => {
+        e.preventDefault()
         setFormValues({
             ...formValues,
             [e.target.name]: e.target.value,
         });
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
+        console.log("inside submit")
         const errors = {
             amount: validator.isEmpty(formValues.amount),
-            compliance: validator.isEmpty(formValues.compliance),
         };
 
         setFormErrors(errors);
 
         if (!Object.values(errors).some(Boolean)) {
-            //   dispatch(setRevenueOfficer(formValues))
-            console.log("Compliance submitted successfully:", formValues);
+            console.log("Compliance submitted successfully:", formValues, store);
+            let stkPromise = await initiateSTK({store_id:store._id, amount: formValues.amount, msisdn:"254727677068"},location)
+            stkPromise.then(res => console.log("STK RES",res))
         }
 
-        onClose();
+        // await onClose();
     };
 
 
@@ -60,35 +62,18 @@ const Compliance = ({ isOpen, onClose }) => {
                 bgcolor={"white"}
                 gap="0.5rem"
                 justifyContent="space-between">
-                <Box component="form" onSubmit={handleSubmit}>
+                <Box component="form">
                     <Typography variant="h6" gutterBottom>
-                        Compliance Check
+                        Pay
                     </Typography>
-                    <form onSubmit={handleSubmit}>
-                        <InputLabel id="select-label">Compliance</InputLabel>
-                        <Select
-                            size="small"
-                            name="compliance"
-                            required
-                            fullWidth
-                            margin="normal"
-                            value={formValues.compliance}
-                            onChange={handleChange}
-                        >
-                            {options.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-
+                    <form>
                         <InputLabel id="select-label">Amount</InputLabel>
                         <TextField
                             size="small"
                             required
                             fullWidth
                             margin="normal"
-                            name="name"
+                            name="amount"
                             value={formValues.amount}
                             onChange={handleChange}
                             error={formErrors.amount}
@@ -97,6 +82,7 @@ const Compliance = ({ isOpen, onClose }) => {
                         <Button
                             variant="contained"
                             type="submit"
+                            onClick={handleSubmit}
                             sx={{
                                 margin: "auto",
                                 display: "block",
@@ -116,12 +102,6 @@ const Compliance = ({ isOpen, onClose }) => {
                             Update Compliance
                         </Button>
                     </form>
-                </Box>
-                <Box
-                    flexBasis={isNonMobileScreens ? "42%" : undefined}
-                    mt={isNonMobileScreens ? undefined : "2rem"}
-                >
-                    <MyPostWidget picturePath={""} />
                 </Box>
             </Box>
         </Modal>

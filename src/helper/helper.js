@@ -335,3 +335,18 @@ export async function createBusiness(body,location) {
   }
 }
 
+/**STK Push */
+export async function initiateSTK(data,location) {
+  console.log("inside initiate stk")
+  try {
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+    };
+    const res = await axios.post("/general/stk", data, {
+      headers
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}

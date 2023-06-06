@@ -11,7 +11,8 @@ const initialState = {
   businessReg:{},
   reviewAccept: { terms: '' },
   currentLocation: {},
-  signup: {}
+  signup: {},
+  TODO: []
 };
 
 export const authSlice = createSlice({
@@ -72,6 +73,12 @@ export const authSlice = createSlice({
     setSignup: (state, action) => {
       state.signup = action.payload;
     },
+    setTODO: (state,action) => {
+      return {
+        ...state,
+        TODO: [...state.TODO,action.payload]
+      }
+    }
   },
 });
 
@@ -88,6 +95,7 @@ export const {
   setSearchStoreQuery,
   setStores,
   setBusinessReg,
-  updateReviewAccept
+  updateReviewAccept,
+  setTODO
 } = authSlice.actions;
 export default authSlice.reducer;

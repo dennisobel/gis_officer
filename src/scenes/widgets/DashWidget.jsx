@@ -84,7 +84,7 @@ export const lineoptions = {
   },
 };
 
-const linelabels = ['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun'];
+const linelabels = ['Jan','Feb','March', 'Apr', 'May'];
 
 export const linedata = {
   labels:linelabels,
