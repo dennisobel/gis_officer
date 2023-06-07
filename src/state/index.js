@@ -12,7 +12,9 @@ const initialState = {
   reviewAccept: { terms: '' },
   currentLocation: {},
   signup: {},
-  TODO: []
+  TODO: [],
+  togglecompliance:false,
+  togglereg:false
 };
 
 export const authSlice = createSlice({
@@ -78,6 +80,12 @@ export const authSlice = createSlice({
         ...state,
         TODO: [...state.TODO,action.payload]
       }
+    },
+    toggleCompliance: (state,action) => {
+      state.togglecompliance = action.payload
+    },
+    toggleReg: (state,action) => {
+      state.togglereg = action.payload
     }
   },
 });
@@ -96,6 +104,8 @@ export const {
   setStores,
   setBusinessReg,
   updateReviewAccept,
-  setTODO
+  setTODO,
+  toggleCompliance,
+  toggleReg
 } = authSlice.actions;
 export default authSlice.reducer;

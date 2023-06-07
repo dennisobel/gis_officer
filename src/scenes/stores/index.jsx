@@ -18,9 +18,6 @@ function StoresPage() {
             .then(user => setUser(user))
     }, [])
 
-    // useEffect(()=>{
-    //   console.log(user)
-    // },[user])
     return (
         <Box>
             <Box

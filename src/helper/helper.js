@@ -169,7 +169,7 @@ export async function createBuilding(body) {
 /** get building */
 export async function getBuildingById({ _id }) {
   try {
-    const { data } = await axios.get(`/buildings/building/${_id}`);
+    const { data } = await axios.get(`/buildings/${_id}`);
     return { data };
   } catch (error) {
     return { error };
@@ -201,9 +201,9 @@ export async function updateBuilding(building) {
 }
 
 /** get business */
-export async function getBusinessById({ business }) {
+export async function getBusinessById(id) {
   try {
-    const { data } = await axios.get(`/business/business/${business}`);
+    const { data } = await axios.get(`/business/business/${id}`);
     return { data };
   } catch (error) {
     return { error };
@@ -306,7 +306,7 @@ export async function sendMail({ to, from, name, email_body }) {
   }
 }
 
-export async function createBusinessPermit(data,location) {
+export async function createBusinessPermit(data, location) {
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
@@ -321,7 +321,7 @@ export async function createBusinessPermit(data,location) {
 }
 
 /** create business */
-export async function createBusiness(body,location) {
+export async function createBusiness(body, location) {
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
@@ -336,17 +336,44 @@ export async function createBusiness(body,location) {
 }
 
 /**STK Push */
-export async function initiateSTK(data,location) {
-  console.log("inside initiate stk")
+export async function initiateSTK(data, location) {
+  console.log("inside initiate stk");
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
     };
     const res = await axios.post("/general/stk", data, {
-      headers
+      headers,
     });
     return Promise.resolve(res);
   } catch (error) {
     return Promise.reject({ error });
   }
 }
+
+/**CALCULATE DISTANCE BETWEEN CURRENT LOCATION AND STORE */
+export function calculateDistance(origin, destination) {
+  function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+  }
+  
+  const earthRadius = 6371; // Radius of the Earth in kilometers
+
+  const { lat: lat1, lng: lng1 } = origin;
+  const { lat: lat2, lng: lng2 } = destination;
+
+  const dLat = toRadians(lat2 - lat1);
+  const dLng = toRadians(lng2 - lng1);
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRadians(lat1)) *
+      Math.cos(toRadians(lat2)) *
+      Math.sin(dLng / 2) *
+      Math.sin(dLng / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = earthRadius * c;
+
+  return distance * 1000; // Convert distance to meters
+}
+

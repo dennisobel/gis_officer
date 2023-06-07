@@ -4,12 +4,13 @@ import {
     CheckCircleOutlined,
     ContactsOutlined,
     BusinessOutlined,
+    VisibilityOutlined
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Compliance from "components/Compliance";
 
@@ -56,6 +57,10 @@ const StoreWidget = ({
         setOpenView(false);
     };
 
+    const handleView = () => {
+        navigate(`/store/${store._id}`)
+    }
+
     const handleTodo = () => {
         console.log("add to list:", todo)
         dispatch(setTODO(todo))
@@ -76,9 +81,12 @@ const StoreWidget = ({
                     <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                         {paymentstatus}
                     </Typography>
+                    <IconButton onClick={handleView} >
+                        <VisibilityOutlined />
+                    </IconButton>
                 </FlexBetween>
             </FlexBetween>
-            <FlexBetween gap="0.3rem">
+            {/* <FlexBetween gap="0.3rem">
                 <FlexBetween gap="0.3rem">
                     <IconButton >
                         <DescriptionOutlined />
@@ -87,7 +95,7 @@ const StoreWidget = ({
                         {description}
                     </Typography>
                 </FlexBetween>
-            </FlexBetween>
+            </FlexBetween> */}
             <FlexBetween mt="0.25rem">
                 <FlexBetween gap="1rem">
                     <FlexBetween gap="0.3rem">
@@ -101,14 +109,14 @@ const StoreWidget = ({
                 </FlexBetween>
             </FlexBetween>
             <Box>
-                <FlexBetween gap="0.3rem">
+                {/* <FlexBetween gap="0.3rem">
                     <IconButton onClick={() => navigate("/map")}>
                         <ContactsOutlined />
                     </IconButton>
                     <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                         {phone}
                     </Typography>
-                </FlexBetween>
+                </FlexBetween> */}
                 <Divider />
                 <br/>
                 <FlexBetween gap="0.3rem">

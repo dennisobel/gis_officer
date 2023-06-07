@@ -57,7 +57,7 @@ const VisitPage = () => {
             >
                 <WidgetWrapper>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <MobileDatePicker label="Filter by date" value={visitdate} onChange={(newValue) => setDate(newValue)} onAccept={""} />
+                        <MobileDatePicker label="Filter visit plan by date" value={visitdate} onChange={(newValue) => setDate(newValue)} onAccept={""} />
                     </LocalizationProvider>
                 </WidgetWrapper>
                 <Box padding="0.2rem 6%" gap="0.3rem" flexBasis={isNonMobileScreens ? "26%" : undefined}>

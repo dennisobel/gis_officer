@@ -1,29 +1,8 @@
-import {
-    EditOutlined,
-    DeleteOutlined,
-    AttachFileOutlined,
-    GifBoxOutlined,
-    ImageOutlined,
-    MicOutlined,
-    MoreHorizOutlined,
-    ArrowBackOutlined,
-    Search
-} from "@mui/icons-material";
-import {
-    Box,
-    Divider,
-    Typography,
-    InputBase,
-    useTheme,
-    Button,
-    IconButton,
-    useMediaQuery,
-} from "@mui/material";
+import { ArrowBackOutlined } from "@mui/icons-material";
+import { InputBase, useTheme, IconButton } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Dropzone from "react-dropzone";
-import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setSearchStoreQuery } from "state";
 import { getUsername } from "helper/helper";
 import { useEffect, useState } from "react";

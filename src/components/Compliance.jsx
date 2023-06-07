@@ -10,14 +10,6 @@ const Compliance = ({ isOpen, onClose, store }) => {
     const location = useSelector(state => state.currentLocation)
     const { palette } = useTheme();
     const main = palette.neutral.main;
-    const primary = palette.primary.main;
-    const dispatch = useDispatch();
-
-    const options = [
-        { value: "paid", label: "Paid" },
-        { value: "partially paid", label: "Partially Paid" },
-        { value: "not paid", label: "Not Paid" },
-    ];
 
     const [formValues, setFormValues] = useState({
         amount: "",

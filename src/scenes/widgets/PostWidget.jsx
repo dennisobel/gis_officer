@@ -1,20 +1,14 @@
 import {
-  ChatBubbleOutlineOutlined,
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
   LocationOnOutlined,
-  ShareOutlined,
   VisibilityOutlined
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Friend from "components/Friend";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setStores } from "state";
-import { getAllBuildingStores,getBuildingStores } from "helper/helper";
+import { getAllBuildingStores } from "helper/helper";
 
 const PostWidget = ({
   building_number,
@@ -25,19 +19,15 @@ const PostWidget = ({
   payment_status,
   id
 }) => {
-  const [isComments, setIsComments] = useState(false);
   const navigate = useNavigate()
   const dispatch = useDispatch();
-  // const [stores,setStores] = useState()
 
   const { palette } = useTheme();
   const main = palette.neutral.main;
-  const primary = palette.primary.main;
 
   const handleClick = () => {
     console.log("ID",id)
     getAllBuildingStores({_id:id}).then(({data}) => {
-      // setStores(data)
       dispatch(setStores(data))
     }).then(navigate("/stores"))
   }

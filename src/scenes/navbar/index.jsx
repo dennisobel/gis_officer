@@ -222,7 +222,7 @@ const Navbar = () => {
                 variant="h5"
                 fontWeight="500"
                 sx={{ mb: "0.5rem" }}
-                onClick={() => { navigate("/visit") }}
+                onClick={() => { navigate("/visitplan") }}
               >
                 Visit Plan
               </Typography>
