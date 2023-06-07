@@ -7,40 +7,19 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setLogin } from "state";
-import Dropzone from "react-dropzone";
-import FlexBetween from "components/FlexBetween";
-import { verifyPassword } from '../../helper/helper'
-
-const registerSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-  location: yup.string().required("required"),
-  occupation: yup.string().required("required"),
-  picture: yup.string().required("required"),
-});
+import { verifyPassword,getUsername } from '../../helper/helper'
+/**TOAST IMPORTS */
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const loginSchema = yup.object().shape({
   email: yup.string().email("invalid email").required("required"),
   password: yup.string().required("required"),
 });
-
-const initialValuesRegister = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  location: "",
-  occupation: "",
-  picture: "",
-};
 
 const initialValuesLogin = {
   email: "",
@@ -57,9 +36,16 @@ const Form = () => {
   const login = async (values, onSubmitProps) => {
     console.log(" in here")
     const res = await verifyPassword(values)
+    console.log("login res:",res)
     let {token} = res.data
     await localStorage.setItem("token",token)
-    navigate("/otp")
+    let user = await getUsername()
+    console.log("user:",user)
+    if(user.role === "revenueOfficer"){
+      navigate("/otp")
+    }else {
+      toast.warning("This is not an officer account.")
+    }    
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
@@ -84,6 +70,7 @@ const Form = () => {
         resetForm,
       }) => (
         <form onSubmit={handleSubmit}>
+          <ToastContainer/>
           <Box
             display="grid"
             gap="30px"
