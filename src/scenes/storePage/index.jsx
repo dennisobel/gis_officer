@@ -135,7 +135,7 @@ const StorePage = () => {
                     flexBasis={isNonMobileScreens ? "42%" : undefined}
                     mt={isNonMobileScreens ? undefined : "2rem"}
                 >
-                    {togglecompliance && <ComplianceWidget picturePath={""} />}
+                    {togglecompliance && <ComplianceWidget store={store} picturePath={""} />}
                 </Box>
 
                 <Box

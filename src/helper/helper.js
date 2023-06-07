@@ -351,6 +351,21 @@ export async function initiateSTK(data, location) {
   }
 }
 
+/**ESCALATE */
+export async function escalate(data,location){
+  try {
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+    };
+    const res = await axios.post("/business/escalation", data, {
+      headers,
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}
+
 /**CALCULATE DISTANCE BETWEEN CURRENT LOCATION AND STORE */
 export function calculateDistance(origin, destination) {
   function toRadians(degrees) {

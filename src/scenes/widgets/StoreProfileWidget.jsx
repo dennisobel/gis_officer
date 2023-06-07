@@ -1,5 +1,4 @@
 import {
-    ManageAccountsOutlined,
     EditOutlined,
     WorkOutlineOutlined,
     EmailOutlined,
@@ -35,7 +34,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [showreg, setShowReg] = useState(false);
     const [coords, setCoords] = useState({})
     const [distance, setDistance] = useState()
-    const [minimumdist,setMinimumDist] = useState(100000)
+    const [minimumdist] = useState(10000)
     const location = useSelector(state => state.currentLocation)
 
     useEffect(() => {
@@ -89,7 +88,8 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
         no_of_employees,
         payment_status,
         registered,
-        store_no
+        store_no,
+        escalated
     } = store
 
     const {
@@ -207,17 +207,17 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                     <EditOutlined sx={{ color: main }} onClick={() => setShowCompliance(!showcompliance)} />
                 </FlexBetween>
 
-                {/* <FlexBetween gap="1rem">
+                <FlexBetween gap="1rem">
                     <FlexBetween gap="1rem">
-                        <ReportProblemOutlined fontSize="small" sx={{ color: main }} />
+                        <ReportProblemOutlined fontSize="small" sx={{ color: "red" }} />
                         <Box>
-                            <Typography color={main} fontWeight="500">
-                                Escalation
+                            <Typography color={main} fontWeight="700">
+                                Escalated
                             </Typography>
                         </Box>
                     </FlexBetween>
-                    <EditOutlined sx={{ color: main }} />
-                </FlexBetween> */}
+                    {/* <EditOutlined sx={{ color: main }} /> */}
+                </FlexBetween>
             </Box>
         </WidgetWrapper>
     );

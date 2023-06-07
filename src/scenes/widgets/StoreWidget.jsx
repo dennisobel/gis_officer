@@ -74,10 +74,10 @@ const StoreWidget = ({
                     Store # {store_no}
                 </Typography>
                 <FlexBetween gap="0.3rem">
-                    <Compliance isOpen={open} onClose={handleClose} store={store} />
-                    <IconButton onClick={handleOpen} >
+                    {/* <Compliance isOpen={open} onClose={handleClose} store={store} /> */}
+                    {/* <IconButton>
                         <CheckCircleOutlined />
-                    </IconButton>
+                    </IconButton> */}
                     <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                         {paymentstatus}
                     </Typography>

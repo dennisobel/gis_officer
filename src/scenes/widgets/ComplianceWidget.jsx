@@ -26,10 +26,13 @@ import { setPosts } from "state";
 import { getUsername } from "helper/helper";
 import { useEffect, useState } from "react";
 import validator from "validator";
-import { initiateSTK } from "helper/helper";
+import { initiateSTK, escalate } from "helper/helper";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useDropzone } from "react-dropzone";
 import "react-tabs/style/react-tabs.css";
+/**TOAST IMPORTS */
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ComplianceWidget = ({ picturePath, store }) => {
     const dispatch = useDispatch();
@@ -75,7 +78,10 @@ const ComplianceWidget = ({ picturePath, store }) => {
         if (!Object.values(errors).some(Boolean)) {
             console.log("Compliance submitted successfully:", formValues, store);
             let stkPromise = await initiateSTK({ store_id: store._id, amount: formValues.amount, msisdn: "254727677068" }, location)
-            stkPromise.then(res => console.log("STK RES", res))
+            stkPromise.then(res => {
+                console.log("STK RES", res)
+                toast.success("Payment successfully initiated.")
+            }).catch(err => console.error("ERR:",err))
         }
 
         // await onClose();
@@ -94,7 +100,8 @@ const ComplianceWidget = ({ picturePath, store }) => {
         }
     }
 
-    const handleEscalate = (event) => {
+    const handleEscalate = async (event) => {
+        console.log("in handleescalate:",store)
         event.preventDefault()
         const errors = {
             escalation_reason: validator.isEmpty(formValues.escalation_reason),
@@ -103,7 +110,17 @@ const ComplianceWidget = ({ picturePath, store }) => {
         setFormErrors(errors);
 
         if (!Object.values(errors).some(Boolean)) {
-            console.log("Compliance submitted successfully:", formValues, store);
+            await escalate(
+                {
+                    store_id:store?._id, 
+                    reason:formValues.escalation_reason, 
+                    escalate:true
+                },
+                location
+            ).then((res) => {
+                console.log("RES:",res)
+                toast.success("Issue successfully escalated.")
+            }).catch(err => console.error("ERR:",err))
         }
     }
 
