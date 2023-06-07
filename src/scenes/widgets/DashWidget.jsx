@@ -54,54 +54,43 @@ ChartJS.register(
   LineElement,
 );
 
-export const lineoptions = {
-  responsive: true,
-  interaction: {
-    mode: 'index',
-    intersect: false,
-  },
-  stacked: false,
+const labels = ['March', 'April', 'May'];
+const payment_history_labels = ['March', 'April', 'May'];
+const target_number = 1000; // Constant target value
+
+// Example data for the actual paid amounts
+const paidData = [800, 900, 1000];
+
+export const payment_history_options = {
   plugins: {
     title: {
       display: true,
-      text: 'Payment History',
+      text: "Last 3 Months' Payment History",
     },
   },
+  responsive: true,
   scales: {
-    y: {
-      type: 'linear',
-      display: true,
-      position: 'left',
+    x: {
+      stacked: true,
     },
-    y1: {
-      type: 'linear',
-      display: true,
-      position: 'right',
-      grid: {
-        drawOnChartArea: false,
-      },
+    y: {
+      stacked: true,
     },
   },
 };
 
-const linelabels = ['Jan','Feb','March', 'Apr', 'May'];
-
-export const linedata = {
-  labels:linelabels,
+export const payment_history_data = {
+  labels: payment_history_labels,
   datasets: [
     {
       label: 'Collected',
-      data: linelabels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      borderColor: 'rgb(0, 255, 0)',
-      backgroundColor: 'rgba(255, 165, 0, 0.5)',
-      yAxisID: 'y',
+      data: paidData,
+      backgroundColor: 'rgba(0, 255, 0, 0.5)',
     },
     {
-      label: 'Balance',
-      data: linelabels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      borderColor: 'rgb(255, 0, 0)',
-      backgroundColor: 'rgba(255, 165, 0, 0.5)',
-      yAxisID: 'y1',
+      label: 'Target',
+      data: paidData.map((paid) => target_number - paid),
+      backgroundColor: 'rgba(255, 0, 0, 0.5)',
     },
   ],
 };
@@ -123,8 +112,6 @@ export const options = {
     },
   },
 };
-
-const labels = ['March', 'April', 'May'];
 
 export const data = {
   labels,
@@ -318,7 +305,7 @@ const DashWidget = ({ userId }) => {
       </WidgetWrapper>
       <br />
       <Box p="1rem 0">
-      <Line options={lineoptions} data={linedata} />;
+      <Bar options={payment_history_options} data={payment_history_data} />
       </Box>
       <WidgetWrapper>
         <Box p="1rem 0">
