@@ -35,7 +35,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [showreg, setShowReg] = useState(false);
     const [coords, setCoords] = useState({})
     const [distance, setDistance] = useState()
-    const [minimumdist,setMinimumDist] = useState(10000)
+    const [minimumdist,setMinimumDist] = useState(100000)
     const location = useSelector(state => state.currentLocation)
 
     useEffect(() => {
@@ -57,7 +57,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     }, [coords, location])
 
     useEffect(() => {
-        if(distance > minimumdist && showcompliance) {
+        if(distance > minimumdist) {
             dispatch(toggleCompliance(showcompliance))
         }else if(showcompliance) {
             toast.warning("This operation can only be performed on-site, not remote.")
@@ -65,7 +65,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     }, [showcompliance, dispatch, distance, minimumdist])
 
     useEffect(() => {
-        if(distance > minimumdist && showreg) {
+        if(distance > minimumdist) {
             dispatch(toggleReg(showreg))
         }else if(showreg) {
             toast.warning("This operation can only be performed on-site, not remote.")
