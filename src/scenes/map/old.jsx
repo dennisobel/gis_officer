@@ -1,190 +1,13 @@
-// import {
-//     Box,
-//     Button,
-//     ButtonGroup,
-//     Flex,
-//     HStack,
-//     IconButton,
-//     Input,
-//     SkeletonText,
-//     Text,
-//   } from '@chakra-ui/react'
-//   import { FaLocationArrow, FaTimes } from 'react-icons/fa'
-  
-//   import {
-//     useJsApiLoader,
-//     GoogleMap,
-//     Marker,
-//     Autocomplete,
-//     DirectionsRenderer,
-//   } from '@react-google-maps/api'
-//   import { useRef, useState, useEffect } from 'react'
-  
-//   const center = { lat: -1.336180, lng: 36.894335 }
-  
-  
-
-  
-//   function Map() {
-//     const { isLoaded } = useJsApiLoader({
-//       googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-//       libraries: ['places'],
-//     })
-  
-//     const [map, setMap] = useState(/** @type google.maps.Map */ (null))
-//     const [directionsResponse, setDirectionsResponse] = useState(null)
-//     const [distance, setDistance] = useState('')
-//     const [duration, setDuration] = useState('')
-//     const [userLocation, setUserLocation] = useState(null);
-
-//     useEffect(() => {
-//         getUserLocation();
-//     }, []);
-
-//     const getUserLocation = () => {
-//         navigator.geolocation.getCurrentPosition(
-//             (position) => {
-//                 const { latitude, longitude } = position.coords;
-//                 setUserLocation({ latitude:parseFloat(latitude), longitude:parseFloat(longitude) });
-//             },
-//             (error) => console.log(error),
-//             { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-//         );
-//     };
-
-//     useEffect(()=>{
-//       if (userLocation !== null) {
-//         console.log("user location:", userLocation);
-//         // const centerr = { lat: userLocation !== null && userLocation.latitude, lng: 36.894335 +}
-//       }
-//     },[userLocation])
-  
-//     /** @type React.MutableRefObject<HTMLInputElement> */
-//     const originRef = useRef()
-//     /** @type React.MutableRefObject<HTMLInputElement> */
-//     const destiantionRef = useRef()
-  
-//     if (!isLoaded) {
-//         return <SkeletonText />
-//     }
-  
-//     async function calculateRoute() {
-//       if (originRef.current.value === '' || destiantionRef.current.value === '') {
-//         return
-//       }
-//       // eslint-disable-next-line no-undef
-//       const directionsService = new google.maps.DirectionsService()
-//       const results = await directionsService.route({
-//         origin: originRef.current.value,
-//         destination: destiantionRef.current.value,
-//         // eslint-disable-next-line no-undef
-//         travelMode: google.maps.TravelMode.DRIVING,
-//       })
-//       setDirectionsResponse(results)
-//       setDistance(results.routes[0].legs[0].distance.text)
-//       setDuration(results.routes[0].legs[0].duration.text)
-//     }
-  
-//     function clearRoute() {
-//       setDirectionsResponse(null)
-//       setDistance('')
-//       setDuration('')
-//       originRef.current.value = ''
-//       destiantionRef.current.value = ''
-//     }
-  
-//     return (
-//       <Flex
-//         position='relative'
-//         flexDirection='column'
-//         alignItems='center'
-//         h='100vh'
-//         w='100vw'
-//       >
-//         <Box position='absolute' left={0} top={0} h='100%' w='100%'>
-//           {/* Google Map Box */}
-//           <GoogleMap
-//             center={center}
-//             zoom={15}
-//             mapContainerStyle={{ width: '100%', height: '100%' }}
-//             options={{
-//               zoomControl: false,
-//               streetViewControl: false,
-//               mapTypeControl: false,
-//               fullscreenControl: false,
-//             }}
-//             onLoad={map => setMap(map)}
-//           >
-//             <Marker position={center} />
-//             {directionsResponse && (
-//               <DirectionsRenderer directions={directionsResponse} />
-//             )}
-//           </GoogleMap>
-//         </Box>
-//         <Box
-//           p={4}
-//           borderRadius='lg'
-//           m={4}
-//           bgColor='white'
-//           shadow='base'
-//           minW='container.md'
-//           zIndex='1'
-//         >
-//           <HStack spacing={2} justifyContent='space-between'>
-//             <Box flexGrow={1}>
-//               <Autocomplete>
-//                 <Input type='text' placeholder='Origin' ref={originRef} />
-//               </Autocomplete>
-//             </Box>
-//             <Box flexGrow={1}>
-//               <Autocomplete>
-//                 <Input
-//                   type='text'
-//                   placeholder='Destination'
-//                   ref={destiantionRef}
-//                 />
-//               </Autocomplete>
-//             </Box>
-  
-//             <ButtonGroup>
-//               <Button colorScheme='pink' type='submit' onClick={calculateRoute}>
-//                 Calculate Route
-//               </Button>
-//               <IconButton
-//                 aria-label='center back'
-//                 icon={<FaTimes />}
-//                 onClick={clearRoute}
-//               />
-//             </ButtonGroup>
-//           </HStack>
-//           <HStack spacing={4} mt={4} justifyContent='space-between'>
-//             <Text>Distance: {distance} </Text>
-//             <Text>Duration: {duration} </Text>
-//             <IconButton
-//               aria-label='center back'
-//               icon={<FaLocationArrow />}
-//               isRound
-//               onClick={() => {
-//                 map.panTo(center)
-//                 map.setZoom(15)
-//               }}
-//             />
-//           </HStack>
-//         </Box>
-//       </Flex>
-//     )
-//   }
-  
-//   export default Map
-  
-
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { styled } from '@mui/material/styles';
+import { ArrowBackOutlined } from "@mui/icons-material";
 import { Box } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getBusinessById, calculateDistance, getBuildingById } from "helper/helper";
-
+import FlexBetween from "components/FlexBetween";
+import WidgetWrapper from "components/WidgetWrapper";
+import { IconButton } from '@chakra-ui/react';
 
 const MapContainer = styled(Box)(({ theme }) => ({
     height: '100vh',
@@ -197,6 +20,47 @@ const MapView = () => {
     const mapContainerRef = useRef(null);
     const [map, setMap] = useState(null);
     const [coords, setCoords] = useState(null);
+    const { NavigationControl } = mapboxgl;
+    const navigate = useNavigate()
+
+
+    function decodePolyline(polyline) {
+        const polylinePoints = [];
+        let index = 0;
+        let lat = 0;
+        let lng = 0;
+
+        while (index < polyline.length) {
+            let shift = 0;
+            let result = 0;
+
+            let byte;
+            do {
+                byte = polyline.charCodeAt(index++) - 63;
+                result |= (byte & 0x1f) << shift;
+                shift += 5;
+            } while (byte >= 0x20);
+
+            const deltaLat = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
+            lat += deltaLat;
+
+            shift = 0;
+            result = 0;
+
+            do {
+                byte = polyline.charCodeAt(index++) - 63;
+                result |= (byte & 0x1f) << shift;
+                shift += 5;
+            } while (byte >= 0x20);
+
+            const deltaLng = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
+            lng += deltaLng;
+
+            polylinePoints.push([lng * 1e-5, lat * 1e-5]);
+        }
+
+        return polylinePoints;
+    }
 
     const getStore = async () => {
         try {
@@ -227,13 +91,15 @@ const MapView = () => {
 
     useEffect(() => {
         if (!map) {
+            const nav = new NavigationControl();
+
             const newMap = new mapboxgl.Map({
                 container: mapContainerRef.current,
-                style: 'mapbox://styles/mapbox/streets-v11',
+                style: 'mapbox://styles/mapbox/streets-v12',
                 center: [longitude, latitude],
-                zoom: 10,
+                zoom: 8,
                 accessToken: MAPBOX_TOKEN,
-            });
+            }).addControl(nav, "top-left");
             setMap(newMap);
         }
 
@@ -249,10 +115,8 @@ const MapView = () => {
             const { latitude: destLat, longitude: destLng } = coords;
 
             // Add markers
-            const markers = [
-                new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map),
-                new mapboxgl.Marker().setLngLat([destLng, destLat]).addTo(map),
-            ];
+            const originMarker = new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
+            const destinationMarker = new mapboxgl.Marker().setLngLat([destLng, destLat]).addTo(map);
 
             // Calculate distance
             const distance = calculateDistance(
@@ -261,28 +125,69 @@ const MapView = () => {
             );
             console.log("Distance:", distance);
 
+            // Fit the markers within the map's view
+            const bounds = new mapboxgl.LngLatBounds();
+            bounds.extend([longitude, latitude]);
+            bounds.extend([destLng, destLat]);
+            map.fitBounds(bounds, { padding: 50 });
+
+
             // Fetch directions from Mapbox Directions API
-            const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/walking/${longitude},${latitude};${destLng},${destLat}?access_token=${MAPBOX_TOKEN}`;
+            const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/driving/${longitude},${latitude};${destLng},${destLat}?access_token=${MAPBOX_TOKEN}`;
             fetch(directionsUrl)
                 .then((response) => response.json())
                 .then((data) => {
-                    const route = data.routes[0].geometry;
-                    const routeLayer = {
+                    console.log(" DATA:", data)
+                    const geometry = data.routes[0].geometry;
+                    const route = data.routes[0];
+                    const steps = route.legs[0].steps;
+
+                    steps.forEach((step, index) => {
+                        const { maneuver, instruction } = step;
+                        const turnMarker = new mapboxgl.Marker()
+                            .setLngLat(step.maneuver.location)
+                            .addTo(map);
+
+                        const popupContent = `
+                          <div>
+                            <strong>${maneuver.type}</strong><br/>
+                            ${instruction}
+                          </div>
+                        `;
+
+                        const popup = new mapboxgl.Popup({ closeButton: false, offset: 25 })
+                            .setHTML(popupContent)
+                            .addTo(map);
+
+                        turnMarker.setPopup(popup);
+
+                        // Open the popup by default for the first turn
+                        if (index === 0) {
+                            popup.addTo(map);
+                        }
+                    });
+                    const geojson = {
+                        type: "Feature",
+                        geometry: {
+                            type: "LineString",
+                            coordinates: decodePolyline(geometry)
+                        }
+                    };
+
+                    // Draw route line
+                    map.addSource('route', {
+                        type: 'geojson',
+                        data: geojson
+                    });
+                    map.addLayer({
                         id: 'route',
                         type: 'line',
-                        source: {
-                            type: 'geojson',
-                            data: {
-                                type: 'Feature',
-                                geometry: route,
-                            },
-                        },
+                        source: 'route',
                         paint: {
-                            'line-color': 'blue',
+                            'line-color': 'teal',
                             'line-width': 3,
                         },
-                    };
-                    map.addLayer(routeLayer);
+                    });
                 })
                 .catch((error) => {
                     console.log("Error fetching directions:", error);
@@ -290,7 +195,18 @@ const MapView = () => {
         }
     }, [map, latitude, longitude, coords]);
 
-    return <MapContainer ref={mapContainerRef} />;
+    return (
+        <>
+            <WidgetWrapper>
+                <FlexBetween gap="1.5rem">
+                    <IconButton onClick={() => navigate(`/store/${id}`)}>
+                        <ArrowBackOutlined />
+                    </IconButton>
+                </FlexBetween>
+            </WidgetWrapper>
+            <MapContainer ref={mapContainerRef} />
+        </>
+    )
 };
 
 export default MapView;

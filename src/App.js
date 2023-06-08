@@ -5,7 +5,7 @@ import LoginPage from "scenes/loginPage";
 import OtpPage from "scenes/otp";
 import ProfilePage from "scenes/profilePage";
 import BusinessRegPage from "scenes/business_reg";
-import Map from "scenes/map";
+import Map from "scenes/map/old";
 import { useMemo } from "react";
 import { useDispatch,useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";

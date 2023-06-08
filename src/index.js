@@ -18,6 +18,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
+import * as serviceWorker from './service-worker';
 
 const persistConfig = { key: "root", storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -43,3 +44,5 @@ root.render(
     </ChakraProvider>
   </React.StrictMode>
 );
+
+serviceWorker.register();

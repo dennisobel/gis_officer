@@ -1,188 +1,150 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { styled } from '@mui/material/styles';
-import { ArrowBackOutlined } from "@mui/icons-material";
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
+import { Icon } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getBusinessById, calculateDistance, getBuildingById } from "helper/helper";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { IconButton } from '@chakra-ui/react';
+import { ArrowBackOutlined } from "@mui/icons-material";
+
+import L from 'leaflet';
+import 'leaflet-routing-machine';
+import { getBusinessById, calculateDistance, getBuildingById } from "helper/helper";
 
 const MapContainer = styled(Box)(({ theme }) => ({
     height: '100vh',
     width: '100vw',
 }));
 
-const MapView = () => {
+const MapView = ({ isRightbarOpen, setIsRightbarOpen }) => {
     const MAPBOX_TOKEN = 'pk.eyJ1Ijoid2VzbGV5MjU0IiwiYSI6ImNsMzY2dnA0MDAzem0zZG8wZTFzc3B3eG8ifQ.EVg7Sg3_wpa_QO6EJjj9-g';
-    const { latitude, longitude, id } = useParams();
+    const location = useSelector(state => state.currentLocation)
+    const theme = useTheme();
+    const dispatch = useDispatch();
     const mapContainerRef = useRef(null);
-    const [map, setMap] = useState(null);
-    const [coords, setCoords] = useState(null);
-    const { NavigationControl } = mapboxgl;
+    const [mapp, setMap] = useState();
+    const [coords, setCoords] = useState()
+    const [distance, setDistance] = useState()
+    const [minimumdist] = useState(10000)
+    const [routingControl, setRoutingControl] = useState()
     const navigate = useNavigate()
 
-
-    function decodePolyline(polyline) {
-        const polylinePoints = [];
-        let index = 0;
-        let lat = 0;
-        let lng = 0;
-
-        while (index < polyline.length) {
-            let shift = 0;
-            let result = 0;
-
-            let byte;
-            do {
-                byte = polyline.charCodeAt(index++) - 63;
-                result |= (byte & 0x1f) << shift;
-                shift += 5;
-            } while (byte >= 0x20);
-
-            const deltaLat = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
-            lat += deltaLat;
-
-            shift = 0;
-            result = 0;
-
-            do {
-                byte = polyline.charCodeAt(index++) - 63;
-                result |= (byte & 0x1f) << shift;
-                shift += 5;
-            } while (byte >= 0x20);
-
-            const deltaLng = (result & 1) !== 0 ? ~(result >> 1) : result >> 1;
-            lng += deltaLng;
-
-            polylinePoints.push([lng * 1e-5, lat * 1e-5]);
-        }
-
-        return polylinePoints;
-    }
+    const [store, setStore] = useState()
+    const { latitude, longitude, id } = useParams()
+    const { NavigationControl } = mapboxgl;
 
     const getStore = async () => {
-        try {
-            const { data } = await getBusinessById(id);
-            return data;
-        } catch (error) {
-            console.log("Error getting store:", error);
-            return null;
-        }
-    };
+        const { data } = await getBusinessById(id)
+        setStore(data)
+        return data
+    }
 
     useEffect(() => {
-        const initializeMap = async () => {
-            const store = await getStore();
-            if (store) {
-                const { data } = await getBuildingById({ _id: store.building });
-                if (data) {
-                    setCoords({
-                        latitude: parseFloat(data.latitude),
-                        longitude: parseFloat(data.longitude),
+        getStore()
+            .then((res) => {
+                console.log("STORE:", res);
+                getBuildingById({ _id: res?.building })
+                    .then(({ data }) => {
+                        console.log(data);
+                        setCoords({
+                            latitude: parseFloat(data?.latitude),
+                            longitude: parseFloat(data?.longitude),
+                        });
+                    })
+                    .catch((error) => {
+                        console.log("Error getting building:", error);
                     });
+            })
+            .catch((error) => {
+                console.log("Error getting store:", error);
+            })
+            .finally(() => {
+                // This code will run after coords is set
+                if (coords) {
+                    console.log("Coordinates:", coords);
+                    const distance = calculateDistance(
+                        { lat: location?.latitude, lng: location?.longitude },
+                        { lat: coords?.latitude, lng: coords?.longitude }
+                    );
+                    console.log("Distance:", distance);
+                    setDistance(distance);
                 }
-            }
-        };
-
-        initializeMap();
+            });
     }, []);
 
-    useEffect(() => {
-        if (!map) {
-            const nav = new NavigationControl();
-
-            const newMap = new mapboxgl.Map({
-                container: mapContainerRef.current,
-                style: 'mapbox://styles/mapbox/streets-v11',
-                center: [longitude, latitude],
-                zoom: 8,
-                accessToken: MAPBOX_TOKEN,
-            }).addControl(nav, "bottom-left");
-            setMap(newMap);
-        }
-
-        return () => {
-            if (map) {
-                map.remove();
-            }
-        };
-    }, [map, latitude, longitude]);
 
     useEffect(() => {
-        if (map && coords) {
-            const { latitude: destLat, longitude: destLng } = coords;
-
-            // Add markers
-            const originMarker = new mapboxgl.Marker().setLngLat([longitude, latitude]).addTo(map);
-            const destinationMarker = new mapboxgl.Marker().setLngLat([destLng, destLat]).addTo(map);
-
-            // Calculate distance
+        if (coords) {
+            console.log("Coordinates:", coords);
             const distance = calculateDistance(
-                { lat: latitude, lng: longitude },
-                { lat: destLat, lng: destLng }
+                { lat: location?.latitude, lng: location?.longitude },
+                { lat: coords?.latitude, lng: coords?.longitude }
             );
             console.log("Distance:", distance);
-
-            // Fit the markers within the map's view
-            const bounds = new mapboxgl.LngLatBounds();
-            bounds.extend([longitude, latitude]);
-            bounds.extend([destLng, destLat]);
-            map.fitBounds(bounds, { padding: 50 });
-
-
-            // Fetch directions from Mapbox Directions API
-            const directionsUrl = `https://api.mapbox.com/directions/v5/mapbox/walking/${longitude},${latitude};${destLng},${destLat}?access_token=${MAPBOX_TOKEN}`;
-            fetch(directionsUrl)
-                .then((response) => response.json())
-                .then((data) => {
-                    console.log(" DATA:", data)
-                    const geometry = data.routes[0].geometry;
-                    const geojson = {
-                        type: "Feature",
-                        geometry: {
-                            type: "LineString",
-                            coordinates: decodePolyline(geometry)
-                        }
-                    };
-
-                    // Draw route line
-                    map.addSource('route', {
-                        type: 'geojson',
-                        data: geojson
-                    });
-                    map.addLayer({
-                        id: 'route',
-                        type: 'line',
-                        source: 'route',
-                        paint: {
-                            'line-color': 'teal',
-                            'line-width': 3,
-                        },
-                    });
-                })
-                .catch((error) => {
-                    console.log("Error fetching directions:", error);
-                });
+            setDistance(distance);
         }
-    }, [map, latitude, longitude, coords]);
+    }, [coords]);
+
+    useEffect(() => {
+        const map = L.map(mapContainerRef.current).setView([latitude, longitude], 15);
+        // const tileurl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png'
+        const tileurl = "https://studio.mapbox.com/tilesets/dennisobel.0kkicap0"
+
+        L.tileLayer(tileurl, {
+            attribution: '',
+            maxZoom: 18,
+            id: 'mapbox://styles/mapbox/streets-v12',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: MAPBOX_TOKEN,
+        }).addTo(map);
+
+        if (coords) {
+            const markers = [
+                L.marker([latitude, longitude]),
+                L.marker([coords.latitude, coords.longitude]),
+            ];
+
+            markers.forEach((marker) => {
+                marker.addTo(map);
+            });
+
+            // Add routing control
+            const routingControl = L.Routing.control({
+                waypoints: [
+                    L.latLng(latitude, longitude),
+                    L.latLng(latitude - 0.00054, longitude - 0.0078),
+                ],
+                routeWhileDragging: true,
+            }).addTo(map);
+            setRoutingControl(routingControl);
+        }
+
+
+        return () => {
+            if (routingControl) {
+                routingControl.removeFrom(map);
+            }
+            map.remove();
+        };
+    }, [latitude, longitude, coords])
 
     return (
         <>
-            <Box>
-                <WidgetWrapper>
-                    <FlexBetween gap="1.5rem">
-                        <IconButton onClick={() => navigate(`/store/${id}`)}>
-                            <ArrowBackOutlined />
-                        </IconButton>
-                    </FlexBetween>
-                </WidgetWrapper>
-                <MapContainer ref={mapContainerRef} />
-            </Box>
-
+            <WidgetWrapper>
+                <FlexBetween gap="1.5rem">
+                    <IconButton onClick={() => navigate(`/store/${id}`)}>
+                        <ArrowBackOutlined />
+                    </IconButton>
+                </FlexBetween>
+            </WidgetWrapper>
+            <MapContainer ref={mapContainerRef} />
         </>
-    )
+    );
 };
 
 export default MapView;
