@@ -18,7 +18,14 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { PersistGate } from "redux-persist/integration/react";
-import * as serviceWorker from './service-worker';
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { Workbox } from 'workbox-window';
+
+// Add this code at the top of the file
+if ('serviceWorker' in navigator) {
+  const wb = new Workbox(`${process.env.PUBLIC_URL}/service-worker.js`);
+  wb.register();
+}
 
 const persistConfig = { key: "root", storage, version: 1 };
 const persistedReducer = persistReducer(persistConfig, authReducer);
@@ -45,4 +52,4 @@ root.render(
   </React.StrictMode>
 );
 
-serviceWorker.register();
+serviceWorkerRegistration.register();

@@ -1,4 +1,12 @@
+/* eslint-disable no-undef */
 /* eslint-disable no-restricted-globals */
+import { precacheAndRoute } from 'workbox-precaching';
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
+importScripts('./sw-src.js');
+
+
+precacheAndRoute(self.__WB_MANIFEST || []);
+
 var CACHE_NAME = 'pwa-task-manager';
 var urlsToCache = [
   '/',
