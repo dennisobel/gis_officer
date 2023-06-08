@@ -80,7 +80,7 @@ function App() {
               path="/home"
               element={user ? <HomePage /> : <Navigate to="/" />}
             />
-            <Route path="/map" element={user ? <Map /> : <Navigate to="/" />} />
+            <Route path="/map/:longitude/:latitude/:id" element={user ? <Map /> : <Navigate to="/" />} />
             <Route path="/stores" element={user ? <StoresPage /> : <Navigate to="/" />} />
             <Route path="/store/:storeId" element={user ? <StorePage /> : <Navigate to="/" />} />
             <Route path="/businessregistration" element={user ? <BusinessRegPage /> : <Navigate to="/" />} />

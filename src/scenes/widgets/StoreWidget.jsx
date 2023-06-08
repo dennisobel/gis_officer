@@ -40,7 +40,7 @@ const StoreWidget = ({
     const [openView, setOpenView] = useState(false)
     const [visitdate,setDate] = useState()
     const [todo,setAddTODO] = useState({})
-
+    const MAPBOX_TOKEN = 'pk.eyJ1Ijoid2VzbGV5MjU0IiwiYSI6ImNsMzY2dnA0MDAzem0zZG8wZTFzc3B3eG8ifQ.EVg7Sg3_wpa_QO6EJjj9-g';
     useEffect(() => {
         visitdate !== undefined && setAddTODO({...store,visitdate:dayjs(visitdate).format("DD-MM-YYYY")})
     },[visitdate,store])

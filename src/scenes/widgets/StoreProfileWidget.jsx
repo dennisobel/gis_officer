@@ -108,7 +108,6 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
             <FlexBetween
                 gap="0.5rem"
                 pb="1.1rem"
-                onClick={() => navigate(`/profile/${userId}`)}
             >
                 <FlexBetween gap="1rem">
                     <UserImage image={picturePath} />
@@ -133,7 +132,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
 
             <Box p="1rem 0">
                 <FlexBetween mb="0.5rem">
-                    <LocationOnOutlined fontSize="small" sx={{ color: main }} />
+                    <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)}/>
                     <Typography color={main} fontWeight="500">
                         Distance #: {Math.floor(distance)} Ms
                     </Typography>
