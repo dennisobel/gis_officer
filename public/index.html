@@ -87,7 +87,12 @@
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
       showRoot();
     } else {
-      showAddToHomeCard();
+      // Event listener for beforeinstallprompt event
+      window.addEventListener('beforeinstallprompt', function(event) {
+        event.preventDefault();
+        deferredPrompt = event;
+        showAddToHomeCard();
+      });
     }
 
     // Event listener for "Add to Home Screen" button
@@ -110,13 +115,6 @@
       document.getElementById('root').style.display = 'block';
     }
 
-    // Event listener for beforeinstallprompt event
-    window.addEventListener('beforeinstallprompt', function(event) {
-      event.preventDefault();
-      deferredPrompt = event;
-      showAddToHomeCard();
-    });
-
     // Function to handle the "Add to Home Screen" functionality
     function addToHomeScreen() {
       if (deferredPrompt) {
@@ -136,6 +134,6 @@
       }
     }
   </script>
-  
+
 </body>
 </html>
