@@ -42,8 +42,8 @@
         <img src="/img/logo-pwa.png" />
       </div>
       <div class="name">
-        <span class="title">Mountlift.com</span>
-        <span class="description">Ski & Snowboard</span>
+        <span class="title">GIS Officer</span>
+        <span class="description">Make sure you install for best performance.</span>
       </div>
       <div class="cta">
         <button id="BlockInstallButton" class="btn btn-outline">Install</button>
@@ -53,7 +53,7 @@
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('worker.js').then(function (registration) {
+        navigator.serviceWorker.register('service-worker.mjs').then(function (registration) {
           console.log('Worker registration successful', registration.scope);
         }, function (err) {
           console.log('Worker registration failed', err);

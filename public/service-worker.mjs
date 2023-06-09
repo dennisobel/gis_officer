@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-globals */
 import { precacheAndRoute } from 'workbox-precaching';
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.2.0/workbox-sw.js');
-importScripts('./sw-src.js');
+importScripts('./sw-src.mjs');
 
 
 precacheAndRoute(self.__WB_MANIFEST || []);
