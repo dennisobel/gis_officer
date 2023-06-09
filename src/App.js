@@ -14,6 +14,7 @@ import { themeSettings } from "./theme";
 import { getUsername } from "helper/helper";
 import StoresPage from "scenes/stores";
 import StorePage from "scenes/storePage";
+import ImageCapturePage from "scenes/image_capture";
 import SummariesPage from "scenes/summaries";
 import VisitPage from "scenes/visit";
 import { setCurrentLocation } from "state";
@@ -86,6 +87,7 @@ function App() {
             <Route path="/businessregistration" element={user ? <BusinessRegPage /> : <Navigate to="/" />} />
             <Route path="/dashboard" element={user ? <SummariesPage /> : <Navigate to="/" />} />
             <Route path="/visitplan" element={user ? <VisitPage /> : <Navigate to="/" />} />
+            <Route path="/image_capture" element={user ? <VisitPage /> : <Navigate to="/" />} />
             <Route
               path="/profile/:userId"
               element={user ? <ProfilePage /> : <Navigate to="/" />}

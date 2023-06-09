@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8" />
   <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -15,79 +14,113 @@
   <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
-  <script
-    src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
-  <link rel="stylesheet"
-    href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css"
-    type="text/css">
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" type="text/css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 
   <title>GIS</title>
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+    }
+
+    .card {
+      width: 300px;
+      border-radius: 8px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+      text-align: center;
+    }
+
+    .card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      margin-bottom: 20px;
+    }
+
+    .card h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      background-color: #4caf50;
+      color: #ffffff;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
+  <!-- <div id="root"></div> -->
   <div class="card">
-    <img src="/public/logo192.png" alt="App Icon" />
-    <h2>Your App Name</h2>
+    <!-- <img src="/logo192.png" alt="App Icon" /> -->
+    <h2>SBP Officer</h2>
     <p>Add this app to your home screen for quick access and an enhanced experience.</p>
     <button id="addToHomeButton">Add to Home Screen</button>
   </div>
-  </div>
+
   <script>
-    if ('serviceWorker' in navigator && 'addToHomeScreen' in window) {
-      window.addEventListener('load', function () {
-        // Register the service worker
-        navigator.serviceWorker.register('/path/to/service-worker.js').then(function () {
-          console.log('Service Worker registered');
-        }).catch(function (error) {
-          console.log('Service Worker registration failed:', error);
-        });
+    let deferredPrompt;
 
-        // Check if the app is already installed
-        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
-          hideAddToHomeButton();
-        }
+    window.addEventListener('beforeinstallprompt', function(event) {
+      // Prevent the default prompt dialog
+      event.preventDefault();
+      
+      // Store the event for later use
+      deferredPrompt = event;
+      
+      // Show the custom "Add to Home Screen" button
+      document.getElementById('addToHomeButton').style.display = 'block';
+    });
 
-        // Add event listener to the Add to Home Screen button
-        document.getElementById('addToHomeButton').addEventListener('click', function () {
-          addToHomeScreen();
-        });
-      });
-    }
+    document.getElementById('addToHomeButton').addEventListener('click', function() {
+      if (deferredPrompt) {
+        // Show the installation prompt
+        deferredPrompt.prompt();
 
-    function addToHomeScreen() {
-      if ('addToHomeScreen' in window) {
-        window.addToHomeScreen.prompt();
-        window.addToHomeScreen.userChoice.then(function (choiceResult) {
+        // Wait for the user's choice
+        deferredPrompt.userChoice.then(function(choiceResult) {
           if (choiceResult.outcome === 'accepted') {
             console.log('User added the app to the home screen');
             hideAddToHomeButton();
           } else {
             console.log('User dismissed the add to home screen prompt');
           }
-        }).catch(function (error) {
-          console.log('Error occurred while prompting to add to home screen:', error);
+
+          // Reset the deferredPrompt variable
+          deferredPrompt = null;
         });
       }
-    }
+    });
 
     function hideAddToHomeButton() {
       document.getElementById('addToHomeButton').style.display = 'none';
-    }
-
-
-    // ------------------------
-    // Cookies methods found on w3schools - We need them to not annoy our visitors
-    // https://www.w3schools.com/js/js_cookies.asp
-    // ------------------------
-    function hideAddToHomeButton() {
-      document.getElementById('addToHomeButton').style.display = 'none';
+      // Scroll to the root element after installation
+      document.getElementById('root').scrollIntoView();
     }
   </script>
 </body>
-
 </html>

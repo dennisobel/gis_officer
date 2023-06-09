@@ -131,7 +131,10 @@ const Navbar = () => {
               <MenuItem value={fullName}>
                 <Typography>{fullName}</Typography>
               </MenuItem>
-              <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
+              <MenuItem onClick={() => {
+                navigate("/")
+                dispatch(setLogout())
+              }}>Log Out</MenuItem>
             </Select>
           </FormControl>
         </FlexBetween>
@@ -227,6 +230,17 @@ const Navbar = () => {
                 Visit Plan
               </Typography>
             </FlexBetween>
+            <FlexBetween gap="0.5rem">
+              <Typography
+                color={theme.palette.mode === "dark"}
+                variant="h5"
+                fontWeight="500"
+                sx={{ mb: "0.5rem" }}
+                onClick={() => { navigate("/image_capture") }}
+              >
+                Images
+              </Typography>
+            </FlexBetween>
             {/* <Message sx={{ fontSize: "25px" }} />
             <Notifications sx={{ fontSize: "25px" }} />
             <Help sx={{ fontSize: "25px" }} /> */}
@@ -251,7 +265,10 @@ const Navbar = () => {
                 <MenuItem value={fullName}>
                   <Typography>{fullName}</Typography>
                 </MenuItem>
-                <MenuItem onClick={() => dispatch(setLogout())}>
+                <MenuItem onClick={() => {
+                  navigate("/")
+                  dispatch(setLogout())
+                }}>
                   Log Out
                 </MenuItem>
               </Select>
