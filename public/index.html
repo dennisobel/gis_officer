@@ -75,25 +75,27 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root" style="display: none;"></div>
-  <div class="card" id="addToHomeCard" style="display: none;" >
-    <!-- <img src="/logo192.png" alt="App Icon" /> -->
+  <div class="card" id="addToHomeCard" style="display: none;">
+    <!-- ... card content ... -->
     <h2>SBP Officer</h2>
     <p>Add this app to your home screen for quick access and an enhanced experience.</p>
     <button id="addToHomeButton">Add to Home Screen</button>
   </div>
 
-  <script src="script.js?v=1">
+  <script>
     // Check if the app is already installed as a PWA
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
       showRoot();
     } else {
-      // Event listener for beforeinstallprompt event
-      window.addEventListener('beforeinstallprompt', function(event) {
-        event.preventDefault();
-        deferredPrompt = event;
-        showAddToHomeCard();
-      });
+      showAddToHomeCard();
     }
+
+    // Event listener for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', function(event) {
+      event.preventDefault();
+      deferredPrompt = event;
+      showAddToHomeCard();
+    });
 
     // Event listener for "Add to Home Screen" button
     document.getElementById('addToHomeButton').addEventListener('click', function() {
@@ -103,6 +105,7 @@
     // Function to show the "Add to Home Screen" card
     function showAddToHomeCard() {
       document.getElementById('addToHomeCard').style.display = 'block';
+      document.getElementById('root').style.display = 'none';
     }
 
     // Function to hide the "Add to Home Screen" card
@@ -113,6 +116,7 @@
     // Function to show the "root" page
     function showRoot() {
       document.getElementById('root').style.display = 'block';
+      document.getElementById('addToHomeCard').style.display = 'none';
     }
 
     // Function to handle the "Add to Home Screen" functionality
