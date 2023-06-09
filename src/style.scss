@@ -50,3 +50,62 @@ $themes: (
     @content;
   }
 }
+
+
+// Hide it on large screens - You can change that
+.block__install {
+  display: none;
+}
+
+// We want to display it only on mobile
+@media (max-width: 768px) {
+  .block__install {
+      position: fixed;
+      bottom: 0px;
+      left: 0px;
+      width: 100%;
+      z-index: 999999;
+      background: $white;
+      padding: 15px;
+      box-shadow: $box-shadow;
+      .inner {
+          display: flex;
+          align-items: center;
+          .close {
+              width: 32px;
+              height: 32px;
+              line-height: 32px;
+              img {
+                width: 32px;
+                height: 32px;
+              }              
+          }
+          .logo {
+              width: 48px;
+              img {
+                  width: 42px;
+                  border-radius: 2px;
+              }
+          }
+
+          .name {
+              padding-left: 10px;
+              span {
+                  display: block;
+                  &.title {
+                      font-size: 1.125rem;
+                      line-height: 1;
+                      font-weight: 600;
+                  }
+              }
+          }
+
+          .cta {
+              margin-left: auto;
+          }
+      }
+      &.is-active {
+          display: block;
+      }
+  }
+}
