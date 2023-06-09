@@ -30,134 +30,62 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <div id="root"></div>
-  <div class="block__install" id="BlockInstall">
-    <div class="inner">
-      <div class="close" id="BlockInstallClose">
-        <span>
-          <img src="/logo192.png" />
-        </span>
-      </div>
-      <div class="logo">
-        <img src="/logo192.png" />
-      </div>
-      <div class="name">
-        <span class="title">GIS Officer</span>
-        <span class="description">Make sure you install for best performance.</span>
-      </div>
-      <div class="cta">
-        <button id="BlockInstallButton" class="btn btn-outline">Install</button>
-      </div>
-    </div>
+  <div class="card">
+    <img src="/public/logo192.png" alt="App Icon" />
+    <h2>Your App Name</h2>
+    <p>Add this app to your home screen for quick access and an enhanced experience.</p>
+    <button id="addToHomeButton">Add to Home Screen</button>
+  </div>
   </div>
   <script>
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && 'addToHomeScreen' in window) {
       window.addEventListener('load', function () {
-        navigator.serviceWorker.register('service-worker.mjs').then(function (registration) {
-          console.log('Worker registration successful', registration.scope);
-        }, function (err) {
-          console.log('Worker registration failed', err);
-        }).catch(function (err) {
-          console.log(err);
+        // Register the service worker
+        navigator.serviceWorker.register('/path/to/service-worker.js').then(function () {
+          console.log('Service Worker registered');
+        }).catch(function (error) {
+          console.log('Service Worker registration failed:', error);
+        });
+
+        // Check if the app is already installed
+        if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+          hideAddToHomeButton();
+        }
+
+        // Add event listener to the Add to Home Screen button
+        document.getElementById('addToHomeButton').addEventListener('click', function () {
+          addToHomeScreen();
         });
       });
-    } else {
-      console.log('Service Worker is not supported by browser.');
     }
+
+    function addToHomeScreen() {
+      if ('addToHomeScreen' in window) {
+        window.addToHomeScreen.prompt();
+        window.addToHomeScreen.userChoice.then(function (choiceResult) {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User added the app to the home screen');
+            hideAddToHomeButton();
+          } else {
+            console.log('User dismissed the add to home screen prompt');
+          }
+        }).catch(function (error) {
+          console.log('Error occurred while prompting to add to home screen:', error);
+        });
+      }
+    }
+
+    function hideAddToHomeButton() {
+      document.getElementById('addToHomeButton').style.display = 'none';
+    }
+
 
     // ------------------------
     // Cookies methods found on w3schools - We need them to not annoy our visitors
     // https://www.w3schools.com/js/js_cookies.asp
     // ------------------------
-    function setCookie(cname, cvalue, exdays) {
-      var d = new Date();
-      d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-      var expires = "expires=" + d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    }
-
-    function getCookie(cname) {
-      var name = cname + "=";
-      var decodedCookie = decodeURIComponent(document.cookie);
-      var ca = decodedCookie.split(";");
-      for (var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == " ") {
-          c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-        }
-      }
-      return "";
-    }
-
-    function checkCookie() {
-      var user = getCookie("username");
-      if (user != "") {
-        alert("Welcome again " + user);
-      } else {
-        user = prompt("Please enter your name:", "");
-        if (user != "" && user != null) {
-          setCookie("username", user, 365);
-        }
-      }
-    }
-
-
-
-    // ------------------------
-    // Here starts our part
-    // ------------------------
-    $(document).ready(function () {
-      // When the user clicks on Close, we need to keep this in mind and not annoy him again
-      $("#BlockInstallClose").on("click", function (e) {
-        $("#BlockInstall").removeClass("is-active");
-        setCookie("BlockInstallCookieHide", 1, 14);
-      });
-    });
-
-    // ------------------------
-    // We listen to the `beforeinstallprompt` event
-    // If the user has
-    // ------------------------
-    window.addEventListener("beforeinstallprompt", function (event) {
-      // Don't display the standard one
-      event.preventDefault();
-
-      // We check if the user has the Don't Show Cookie stored. If not, we'll show him the banner.
-      let cookieBlockInstallCookieHide = getCookie("BlockInstallCookieHide");
-      if (!cookieBlockInstallCookieHide) {
-        $("#BlockInstall").addClass("is-active");
-      }
-
-      // Save the event to use it later
-      window.promptEvent = event;
-    });
-
-    // If the visitor clicks on `Install` button, we'll show the banner
-    document.addEventListener("click", function (event) {
-      if (event.target.matches("#BlockInstallButton")) {
-        addToHomeScreen();
-      }
-    });
-
-    function addToHomeScreen() {
-      // Install prompt
-      window.promptEvent.prompt();
-
-      // I added a Google Analytics Event so we can know how many installs we have
-      window.promptEvent.userChoice.then(function (choiceResult) {
-        if (choiceResult.outcome === "accepted") {
-          gtag("event", "Installed PWA", {
-            event_category: "PWA",
-            value: 1,
-          });
-        } else {
-          // Do nothing
-        }
-        window.promptEvent = null;
-      });
+    function hideAddToHomeButton() {
+      document.getElementById('addToHomeButton').style.display = 'none';
     }
   </script>
 </body>
