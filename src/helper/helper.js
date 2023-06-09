@@ -310,9 +310,11 @@ export async function sendMail({ to, from, name, email_body }) {
 }
 
 export async function createBusinessPermit(data, location) {
+  const token = await localStorage.getItem("token");
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`
     };
     const res = await axios.post("/business/register", data, {
       headers,
@@ -325,9 +327,11 @@ export async function createBusinessPermit(data, location) {
 
 /** create business */
 export async function createBusiness(body, location) {
+  const token = await localStorage.getItem("token");
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`
     };
     const res = await axios.post("/business/register", body, {
       headers,
@@ -340,10 +344,11 @@ export async function createBusiness(body, location) {
 
 /**STK Push */
 export async function initiateSTK(data, location) {
-  console.log("inside initiate stk");
+  const token = await localStorage.getItem("token");
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`
     };
     const res = await axios.post("/general/stk", data, {
       headers,
@@ -354,11 +359,47 @@ export async function initiateSTK(data, location) {
   }
 }
 
+/**VERIFY TRANSACTION */
+export async function verifyTransaction(data,location){
+  try {
+    const token = await localStorage.getItem("token");
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`
+    };
+    const res = await axios.post("/transaction/verify", data, {
+      headers,
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}
+
+/**VERIFY BUSINESS */
+export async function verifyBusiness(data,location){
+  try {
+    const token = await localStorage.getItem("token");
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`
+    };
+    const res = await axios.post("/business/verify", data, {
+      headers,
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}
+
 /**ESCALATE */
 export async function escalate(data,location){
+  const token = await localStorage.getItem("token");
   try {
     const headers = {
       "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`
     };
     const res = await axios.post("/business/escalation", data, {
       headers,

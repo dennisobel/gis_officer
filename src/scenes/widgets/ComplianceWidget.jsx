@@ -26,7 +26,7 @@ import { setPosts } from "state";
 import { getUsername } from "helper/helper";
 import { useEffect, useState } from "react";
 import validator from "validator";
-import { initiateSTK, escalate } from "helper/helper";
+import { initiateSTK, escalate, verifyTransaction } from "helper/helper";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useDropzone } from "react-dropzone";
 import "react-tabs/style/react-tabs.css";
@@ -87,7 +87,7 @@ const ComplianceWidget = ({ picturePath, store }) => {
         // await onClose();
     };
 
-    const handleVerify = (event) => {
+    const handleVerify = async (event) => {
         event.preventDefault()
         const errors = {
             receipt_no: validator.isEmpty(formValues.receipt_no),
@@ -97,6 +97,17 @@ const ComplianceWidget = ({ picturePath, store }) => {
 
         if (!Object.values(errors).some(Boolean)) {
             console.log("Compliance submitted successfully:", formValues, store);
+            let verificationPromise = verifyTransaction({
+                store: store._id,
+                receipt_no: formValues.receipt_no
+            })
+            verificationPromise.then(res => {
+                console.log("RES:",res)
+                toast.success("Receipt has been verified")
+            }).catch(err => {
+                console.error("ERR:",err)
+                toast.error("Something went wrong in verification")
+            })
         }
     }
 
