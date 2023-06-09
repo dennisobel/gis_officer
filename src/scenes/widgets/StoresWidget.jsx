@@ -26,7 +26,7 @@ const StoresWidget = ({ userId, isProfile = false }) => {
 //   }, [user]);
 
   useEffect(() => {
-    console.log("QUERY:", query);
+    console.log("STORES:", stores);
     let filtered = stores?.singleBusinessPermits.filter((el) => {
       const {
         branch_name,
@@ -60,7 +60,7 @@ const StoresWidget = ({ userId, isProfile = false }) => {
     setFiltered(filtered);
   }, [query, stores]);
 
-  const storestorender = query ? filteredbusiness : stores?.singleBusinessPermits;
+  const storestorender = query && stores ? filteredbusiness : stores?.singleBusinessPermits;
 
   return (
     <>

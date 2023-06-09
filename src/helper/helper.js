@@ -202,8 +202,11 @@ export async function updateBuilding(building) {
 
 /** get business */
 export async function getBusinessById(id) {
+  const token = await localStorage.getItem("token");
   try {
-    const { data } = await axios.get(`/business/business/${id}`);
+    const { data } = await axios.get(`/business/business/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return { data };
   } catch (error) {
     return { error };

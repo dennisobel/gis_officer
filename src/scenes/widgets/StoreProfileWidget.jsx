@@ -36,6 +36,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [distance, setDistance] = useState()
     const [minimumdist] = useState(10000)
     const location = useSelector(state => state.currentLocation)
+    console.log(location)
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -46,7 +47,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     }, []);
 
     useEffect(() => {
-        const distance = calculateDistance(
+        const distance = location && calculateDistance(
             { lat: location?.latitude, lng: location?.longitude },
             { lat: coords?.latitude, lng: coords?.longitude },
         );
