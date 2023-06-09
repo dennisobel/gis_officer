@@ -74,53 +74,67 @@
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
-  <!-- <div id="root"></div> -->
+  <div id="root" style="display: none;"></div>
   <div class="card">
     <!-- <img src="/logo192.png" alt="App Icon" /> -->
     <h2>SBP Officer</h2>
     <p>Add this app to your home screen for quick access and an enhanced experience.</p>
     <button id="addToHomeButton">Add to Home Screen</button>
   </div>
-
   <script>
-    let deferredPrompt;
+    // Check if the app is already installed as a PWA
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      showRoot();
+    } else {
+      showAddToHomeButton();
+    }
 
-    window.addEventListener('beforeinstallprompt', function(event) {
-      // Prevent the default prompt dialog
-      event.preventDefault();
-      
-      // Store the event for later use
-      deferredPrompt = event;
-      
-      // Show the custom "Add to Home Screen" button
-      document.getElementById('addToHomeButton').style.display = 'block';
+    // Event listener for "Add to Home Screen" button
+    document.getElementById('addToHomeButton').addEventListener('click', function() {
+      addToHomeScreen();
     });
 
-    document.getElementById('addToHomeButton').addEventListener('click', function() {
+    // Function to show the "Add to Home Screen" button
+    function showAddToHomeButton() {
+      document.getElementById('addToHomeCard').style.display = 'block';
+    }
+
+    // Function to hide the "Add to Home Screen" button
+    function hideAddToHomeButton() {
+      document.getElementById('addToHomeCard').style.display = 'none';
+    }
+
+    // Function to show the "root" page
+    function showRoot() {
+      document.getElementById('root').style.display = 'block';
+    }
+
+    // Event listener for beforeinstallprompt event
+    window.addEventListener('beforeinstallprompt', function(event) {
+      event.preventDefault();
+      deferredPrompt = event;
+      showAddToHomeButton();
+    });
+
+    // Function to handle the "Add to Home Screen" functionality
+    function addToHomeScreen() {
       if (deferredPrompt) {
-        // Show the installation prompt
         deferredPrompt.prompt();
 
-        // Wait for the user's choice
         deferredPrompt.userChoice.then(function(choiceResult) {
           if (choiceResult.outcome === 'accepted') {
             console.log('User added the app to the home screen');
             hideAddToHomeButton();
+            showRoot();
           } else {
             console.log('User dismissed the add to home screen prompt');
           }
-
-          // Reset the deferredPrompt variable
-          deferredPrompt = null;
         });
-      }
-    });
 
-    function hideAddToHomeButton() {
-      document.getElementById('addToHomeButton').style.display = 'none';
-      // Scroll to the root element after installation
-      document.getElementById('root').scrollIntoView();
+        deferredPrompt = null;
+      }
     }
   </script>
+
 </body>
 </html>
