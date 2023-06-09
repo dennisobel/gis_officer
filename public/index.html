@@ -75,14 +75,14 @@
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root" style="display: none;"></div>
-  <div class="card" id="addToHomeCard">
+  <div class="card" id="addToHomeCard" style="display: none;" >
     <!-- <img src="/logo192.png" alt="App Icon" /> -->
     <h2>SBP Officer</h2>
     <p>Add this app to your home screen for quick access and an enhanced experience.</p>
     <button id="addToHomeButton">Add to Home Screen</button>
   </div>
 
-  <script>
+  <script src="script.js?v=1">
     // Check if the app is already installed as a PWA
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
       showRoot();
