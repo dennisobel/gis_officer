@@ -96,17 +96,14 @@ const ComplianceWidget = ({ picturePath, store }) => {
         setFormErrors(errors);
 
         if (!Object.values(errors).some(Boolean)) {
-            console.log("Compliance submitted successfully:", formValues, store);
             let verificationPromise = verifyTransaction({
                 store: store._id,
                 receipt_no: formValues.receipt_no
-            })
+            },location)
             verificationPromise.then(res => {
-                console.log("RES:",res)
                 toast.success("Receipt has been verified")
-            }).catch(err => {
-                console.error("ERR:",err)
-                toast.error("Something went wrong in verification")
+            }).catch(({error}) => {
+                toast.error(`${error?.response.data.error}`)
             })
         }
     }

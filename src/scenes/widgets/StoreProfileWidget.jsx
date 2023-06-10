@@ -188,11 +188,9 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                     <EditOutlined sx={{ color: main }} onClick={() => {
                         verifyBusiness({store_id:store._id,verified:true},location)
                         .then(({data}) => {
-                            console.log("RES:",data)
                             setReg("true")
                             toast.success(`${data.message}`)
                         }).catch(err => {
-                            console.error("ERR:",err)
                             toast.error("Something went wrong in verification")
                         })
                         // setShowReg(!showreg)

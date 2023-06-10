@@ -367,7 +367,7 @@ export async function verifyTransaction(data,location){
       "X-Coordinates": `${location.latitude},${location.longitude}`,
       "Authorization": `Bearer ${token}`
     };
-    const res = await axios.post("/transaction/verify", data, {
+    const res = await axios.post("/transactions/verify", data, {
       headers,
     });
     return Promise.resolve(res);
