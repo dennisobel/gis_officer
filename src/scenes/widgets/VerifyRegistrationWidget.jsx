@@ -26,10 +26,13 @@ import { setPosts } from "state";
 import { getUsername } from "helper/helper";
 import { useEffect, useState } from "react";
 import validator from "validator";
-import { initiateSTK } from "helper/helper";
+import { verifyBusiness } from "helper/helper";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useDropzone } from "react-dropzone";
 import "react-tabs/style/react-tabs.css";
+/**TOAST IMPORTS */
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const VerifyRegistrationWidget = ({ picturePath, store }) => {
     const dispatch = useDispatch();
@@ -64,24 +67,7 @@ const VerifyRegistrationWidget = ({ picturePath, store }) => {
         });
     };
 
-    const handlePay = async (event) => {
-        event.preventDefault();
-        const errors = {
-            amount: validator.isEmpty(formValues.amount),
-        };
-
-        setFormErrors(errors);
-
-        if (!Object.values(errors).some(Boolean)) {
-            console.log("Compliance submitted successfully:", formValues, store);
-            let stkPromise = await initiateSTK({ store_id: store._id, amount: formValues.amount, msisdn: "254727677068" }, location)
-            stkPromise.then(res => console.log("STK RES", res))
-        }
-
-        // await onClose();
-    };
-
-    const handleVerify = (event) => {
+    const handleVerify = async (event) => {
         event.preventDefault()
         const errors = {
             receipt_no: validator.isEmpty(formValues.receipt_no),
@@ -91,19 +77,17 @@ const VerifyRegistrationWidget = ({ picturePath, store }) => {
 
         if (!Object.values(errors).some(Boolean)) {
             console.log("Compliance submitted successfully:", formValues, store);
-        }
-    }
-
-    const handleEscalate = (event) => {
-        event.preventDefault()
-        const errors = {
-            escalation_reason: validator.isEmpty(formValues.escalation_reason),
-        };
-
-        setFormErrors(errors);
-
-        if (!Object.values(errors).some(Boolean)) {
-            console.log("Compliance submitted successfully:", formValues, store);
+            let verificationPromise = verifyBusiness({
+                store_id: store._id,
+                verified: true
+            },location)
+            verificationPromise.then(res => {
+                console.log("RES:",res)
+                toast.success("Receipt has been verified")
+            }).catch(err => {
+                console.error("ERR:",err)
+                toast.error("Something went wrong in verification")
+            })
         }
     }
 
@@ -114,6 +98,7 @@ const VerifyRegistrationWidget = ({ picturePath, store }) => {
 
     return (
         <WidgetWrapper>
+            <ToastContainer/>
             <div style={{ position: "sticky" }}>
                 <FlexBetween gap="1.5rem">
                     <InputBase
@@ -135,7 +120,7 @@ const VerifyRegistrationWidget = ({ picturePath, store }) => {
                 <FlexBetween>
                     <Button
                         disabled={!formValues.amount}
-                        onClick={handlePay}
+                        onClick={handleVerify}
                         sx={{
                             color: palette.background.alt,
                             backgroundColor: palette.primary.main,

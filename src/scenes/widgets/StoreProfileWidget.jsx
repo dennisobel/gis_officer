@@ -17,12 +17,22 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUsername } from "helper/helper";
 import { toggleCompliance, toggleReg } from "state";
-import { getBuildingById, calculateDistance } from "helper/helper";
+import { getBuildingById, calculateDistance, verifyBusiness } from "helper/helper";
 /**TOAST IMPORTS */
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const StoreProfileWidget = ({ userId, picturePath, store }) => {
+    const {
+        business_category,
+        business_description,
+        business_email,
+        business_name,
+        business_phone,
+        payment_status,
+        registered,
+        store_no,
+    } = store
     const [user, setUser] = useState(null);
     const { palette } = useTheme();
     const navigate = useNavigate();
@@ -36,7 +46,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [distance, setDistance] = useState()
     const [minimumdist] = useState(10000)
     const location = useSelector(state => state.currentLocation)
-    console.log(location)
+    const [reg,setReg] = useState(registered)
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -76,22 +86,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
         return null;
     }
 
-    const {
-        additional_activity,
-        application_type,
-        branch_name,
-        business_category,
-        business_description,
-        business_email,
-        business_name,
-        business_phone,
-        floor_no,
-        no_of_employees,
-        payment_status,
-        registered,
-        store_no,
-        escalated
-    } = store
+
 
     const {
         name,
@@ -187,10 +182,21 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                             <Typography color={main} fontWeight="500">
                                 Registered
                             </Typography>
-                            <Typography color={medium}>{registered === "false" ? "No" : "Yes"}</Typography>
+                            <Typography color={medium}>{reg === "false" ? "No" : "Yes"}</Typography>
                         </Box>
                     </FlexBetween>
-                    <EditOutlined sx={{ color: main }} onClick={() => setShowReg(!showreg)} />
+                    <EditOutlined sx={{ color: main }} onClick={() => {
+                        verifyBusiness({store_id:store._id,verified:true},location)
+                        .then(({data}) => {
+                            console.log("RES:",data)
+                            setReg("true")
+                            toast.success(`${data.message}`)
+                        }).catch(err => {
+                            console.error("ERR:",err)
+                            toast.error("Something went wrong in verification")
+                        })
+                        // setShowReg(!showreg)
+                    }} />
                 </FlexBetween>
 
                 <FlexBetween gap="1rem" mb="0.5rem">

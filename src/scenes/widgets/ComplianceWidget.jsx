@@ -142,6 +142,7 @@ const ComplianceWidget = ({ picturePath, store }) => {
 
     return (
         <WidgetWrapper>
+            <ToastContainer/>
             <div className="section">
                 <Tabs>
                     <div className="container">
