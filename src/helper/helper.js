@@ -436,3 +436,21 @@ export function calculateDistance(origin, destination) {
   return distance * 1000; // Convert distance to meters
 }
 
+/**IMAGE UPLOAD */
+export async function imageUpload(data,location){
+  console.log("inside image upload",data,location)
+  const token = await localStorage.getItem("token");
+  try {
+    const headers = {
+      "X-Coordinates": `${location.latitude},${location.longitude}`,
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "multipart/form-data"
+    };
+    const res = await axios.post("/business/upload", data, {
+      headers,
+    });
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}

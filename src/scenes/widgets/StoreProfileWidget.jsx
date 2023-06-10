@@ -17,10 +17,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUsername } from "helper/helper";
 import { toggleCompliance, toggleReg } from "state";
-import { getBuildingById, calculateDistance, verifyBusiness } from "helper/helper";
+import { getBuildingById, calculateDistance, verifyBusiness, imageUpload } from "helper/helper";
 /**TOAST IMPORTS */
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+/**IMAGE UPLOAD */
+import Dropzone from "react-dropzone";
 
 const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const {
@@ -34,6 +36,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
         store_no,
     } = store
     const [user, setUser] = useState(null);
+    const [image, setImage] = useState();
     const { palette } = useTheme();
     const navigate = useNavigate();
     const dispatch = useDispatch()
@@ -46,7 +49,16 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [distance, setDistance] = useState()
     const [minimumdist] = useState(10000)
     const location = useSelector(state => state.currentLocation)
-    const [reg,setReg] = useState(registered)
+    const [reg, setReg] = useState(registered)
+    const [files, setFiles] = useState([]);
+
+    const thumbs = files.map((file) => (
+        <div className="thumb" key={file.name}>
+            <div className="thumbInner">
+                <img src={file.preview} alt="img" />
+            </div>
+        </div>
+    ));
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -61,41 +73,50 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
             { lat: location?.latitude, lng: location?.longitude },
             { lat: coords?.latitude, lng: coords?.longitude },
         );
-
-        console.log(distance)
         setDistance(distance)
     }, [coords, location])
 
     useEffect(() => {
-        if(distance > minimumdist) {
+        if (distance > minimumdist) {
             dispatch(toggleCompliance(showcompliance))
-        }else if(showcompliance) {
+        } else if (showcompliance) {
             toast.warning("This operation can only be performed on-site, not remote.")
-        }        
+        }
     }, [showcompliance, dispatch, distance, minimumdist])
 
     useEffect(() => {
-        if(distance > minimumdist) {
+        if (distance > minimumdist) {
             dispatch(toggleReg(showreg))
-        }else if(showreg) {
+        } else if (showreg) {
             toast.warning("This operation can only be performed on-site, not remote.")
-        }  
+        }
     }, [showreg, dispatch, distance, minimumdist])
+
+    const createFormData = async (image) => {
+        if (image !== undefined || image !== null) {
+            const formData = new FormData();
+            await formData.append("image", image);
+            await formData.append("category", "building");
+            await formData.append("store_id", store?._id);
+            await formData.append("description", `${store.store_no} building`);
+
+            console.log("IMAGE:", formData);
+            imageUpload(formData,location).then(res => console.log("image upload successful", res))
+
+            // Call your image upload function here using the formData
+            // For example: imageUpload(formData);
+        }
+    };
+
+    const handleImageDrop = (acceptedFiles) => {
+        const file = acceptedFiles[0];
+        // setImage(file);
+        createFormData(file)
+      };
 
     if (!user) {
         return null;
     }
-
-
-
-    const {
-        name,
-        email,
-        id_number,
-        msisdn,
-        role,
-        ministry,
-    } = user;
 
     return (
         <WidgetWrapper>
@@ -106,7 +127,22 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                 pb="1.1rem"
             >
                 <FlexBetween gap="1rem">
-                    <UserImage image={picturePath} />
+                    <Dropzone
+                        acceptedFiles=".jpg,.jpeg,.png"
+                        multiple={false}
+                        onDrop={handleImageDrop}
+                    >
+                        {({ getRootProps, getInputProps }) => (
+                            <Box
+                                {...getRootProps()}
+                                sx={{ "&:hover": { cursor: "pointer" } }}
+                            >
+                                <UserImage image={picturePath} store={store} />
+                            </Box>
+
+                        )}
+
+                    </Dropzone>
                     <Box>
                         <Typography
                             variant="h4"
@@ -128,7 +164,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
 
             <Box p="1rem 0">
                 <FlexBetween mb="0.5rem">
-                    <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)}/>
+                    <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)} />
                     <Typography color={main} fontWeight="500">
                         Distance #: {Math.floor(distance)} Ms
                     </Typography>
@@ -186,13 +222,13 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                         </Box>
                     </FlexBetween>
                     <EditOutlined sx={{ color: main }} onClick={() => {
-                        verifyBusiness({store_id:store._id,verified:true},location)
-                        .then(({data}) => {
-                            setReg("true")
-                            toast.success(`${data.message}`)
-                        }).catch(err => {
-                            toast.error("Something went wrong in verification")
-                        })
+                        verifyBusiness({ store_id: store._id, verified: true }, location)
+                            .then(({ data }) => {
+                                setReg("true")
+                                toast.success(`${data.message}`)
+                            }).catch(err => {
+                                toast.error("Something went wrong in verification")
+                            })
                         // setShowReg(!showreg)
                     }} />
                 </FlexBetween>
