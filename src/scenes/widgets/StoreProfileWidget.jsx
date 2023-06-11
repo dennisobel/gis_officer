@@ -101,10 +101,9 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
             await formData.append("description", `${store.store_no} building`);
 
             console.log("IMAGE:", formData);
-            imageUpload(formData,location).then(res => console.log("image upload successful", res))
-
-            // Call your image upload function here using the formData
-            // For example: imageUpload(formData);
+            imageUpload(formData,location).then(res => {
+                toast.success("Image successfully uploaded")
+            })
         }
     };
 
