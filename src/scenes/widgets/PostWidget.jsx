@@ -26,7 +26,6 @@ const PostWidget = ({
   const main = palette.neutral.main;
 
   const handleClick = () => {
-    console.log("ID",id)
     getAllBuildingStores({_id:id}).then(({data}) => {
       dispatch(setStores(data))
     }).then(navigate("/stores"))

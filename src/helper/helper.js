@@ -169,7 +169,10 @@ export async function createBuilding(body) {
 /** get building */
 export async function getBuildingById({ _id }) {
   try {
-    const { data } = await axios.get(`/buildings/${_id}`);
+    const token = await localStorage.getItem("token");
+    const { data } = await axios.get(`/buildings/${_id}`,{
+      headers: { Authorization: `Bearer ${token}` },
+    });
     return { data };
   } catch (error) {
     return { error };
@@ -222,8 +225,11 @@ export async function getCountyBusiness({
   county,
 }) {
   try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
     const { data } = await axios.get(`/business/businesses/${county}`, {
       params: { page, pageSize, sort, search },
+      headers
     });
     return { data };
   } catch (error) {
@@ -234,7 +240,9 @@ export async function getCountyBusiness({
 /** get ward business */
 export async function getWardBusinesses({ ward }) {
   try {
-    const { data } = await axios.get(`/buildings/ward/${ward}`);
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+    const { data } = await axios.get(`/buildings/ward/${ward}`,{headers});
     return { data };
   } catch (error) {
     return { error };
@@ -277,7 +285,11 @@ export async function getCounty(code) {
 /** get building */
 export async function getAllBuildingStores({ _id }) {
   try {
-    const { data } = await axios.get(`/buildings/${_id}`);
+    const token = await localStorage.getItem("token");
+    const headers = {
+      "Authorization": `Bearer ${token}`
+    };
+    const { data } = await axios.get(`/buildings/${_id}`,{headers});
     return { data };
   } catch (error) {
     return { error };
@@ -375,6 +387,7 @@ export async function verifyTransaction(data,location){
     return Promise.reject({ error });
   }
 }
+
 
 /**VERIFY BUSINESS */
 export async function verifyBusiness(data,location){

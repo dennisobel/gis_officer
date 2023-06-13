@@ -163,7 +163,11 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
 
             <Box p="1rem 0">
                 <FlexBetween mb="0.5rem">
-                    <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)} />
+                    {/* <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)} /> */}
+                    {/* <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`https://google.com`)}/> */}
+                    <a target="_blank" href={`https://www.google.com/maps/dir/${coords.latitude},${coords.longitude}/@${location?.latitude},${location?.longitude},10z/data=!4m10!4m9!1m1!4e1!1m5!1m1!1s0x182f16d5f67653d9:0x13ef638e1bb7a5c5!2m2!1d${location?.longitude}!2d${location?.latitude}!3e0?entry=ttu`}>
+                    <LocationOnOutlined fontSize="small" sx={{ color: main }}/>
+                    </a>
                     <Typography color={main} fontWeight="500">
                         Distance #: {Math.floor(distance)} Ms
                     </Typography>

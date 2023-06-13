@@ -24,7 +24,6 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   }, [user]);
 
   useEffect(() => {
-    console.log("QUERY:", query);
     let filtered = wardbusinesses.filter((el) => {
       const {
         building_number,
