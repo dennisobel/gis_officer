@@ -14,12 +14,11 @@ import { themeSettings } from "./theme";
 import { getUsername } from "helper/helper";
 import StoresPage from "scenes/stores";
 import StorePage from "scenes/storePage";
-import ImageCapturePage from "scenes/image_capture";
 import SummariesPage from "scenes/summaries";
 import VisitPage from "scenes/visit";
 import { setCurrentLocation } from "state";
 import { setBusinessReg } from "state";
-import { useGeolocation } from "react-use";
+// import { useGeolocation } from "react-use";
 
 function App() {
   const mode = useSelector((state) => state.mode);
