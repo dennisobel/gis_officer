@@ -328,7 +328,7 @@ const OldMap = () => {
             onClose={handleClosePopup}
             closeButton={true}
             closeOnClick={false}
-            style={{ maxWidth: "700px", maxHeight: "500px", overflow: "auto", backgroundColor: "rgba(0, 188, 212, 0.2)" }}
+            style={{ maxWidth: "325px", maxHeight: "500px", overflow: "auto", backgroundColor: "rgba(0, 188, 212, 0.2)" }}
           >
             <PopupDetails selectedMarker={selectedMarker} />
           </Popup>

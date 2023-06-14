@@ -9,8 +9,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function PopupDetails({ selectedMarker }) {
-    const countyBuildings = useSelector(state => state.global.buildings)
-    const searchQuery = useSelector(state => state.global.searchQuery)
+    console.log("selectedMarker",selectedMarker)
+    const countyBuildings = useSelector(state => state.buildings)
+    // const searchQuery = useSelector(state => state.global.searchQuery)
     const [paymentdistribution, setPaymentDistribution] = useState()
     const [message, setMessage] = useState();
     const [toggleChatArray, setToggleChatArray] = useState([]);
@@ -23,13 +24,13 @@ function PopupDetails({ selectedMarker }) {
 
     useEffect(() => {
         const selected = countyBuildings?.filter(el => {
-            return el.properties._id === selectedMarker._id
+            return el._id === selectedMarker._id
         })
 
         setWard(selected[0]?.ward)
         setCounty(selected[0]?.county)
 
-        console.log("selectedMarker",selectedMarker)
+        
 
         function getPaymentStatusDistribution(permits) {
             const result = permits?.reduce((acc, permit) => {
@@ -104,9 +105,9 @@ function PopupDetails({ selectedMarker }) {
     }, [message]);
     
     return (
-        <Grid width={700} height={500} container spacing={1} sx={{ maxWidth: "700px", maxHeight: "700px" }}>
+        <Grid width={325} height={500} container spacing={1} sx={{ maxWidth: "325px", maxHeight: "700px" }}>
             <ToastContainer />
-            <Grid item xs={6}>
+            <Grid>
                 <List>
                     <ListItem sx={{ marginBottom: '-20px', }}>
                         <ListItemText sx={{
@@ -121,18 +122,18 @@ function PopupDetails({ selectedMarker }) {
                     </ListItem>
 
                     {selectedMarker?.singleBusinessPermits
-                        .filter((store) => {
-                            const { business_category, is_building_open, store_no } = store;
-                            const permitObj = { business_category, is_building_open, store_no };
+                        // .filter((store) => {
+                        //     const { business_category, is_building_open, store_no } = store;
+                        //     const permitObj = { business_category, is_building_open, store_no };
 
-                            for (const key in permitObj) {
-                                if (permitObj[key].toString().toLowerCase().includes(searchQuery.toLowerCase())) {
-                                    return true;
-                                }
-                            }
+                        //     for (const key in permitObj) {
+                        //         if (permitObj[key].toString().toLowerCase().includes(searchQuery.toLowerCase())) {
+                        //             return true;
+                        //         }
+                        //     }
 
-                            return false;
-                        })
+                        //     return false;
+                        // })
                         .map((store, index) => {
                             let borderColor;
                             if (store.payment_status === 'Paid') {
@@ -155,7 +156,7 @@ function PopupDetails({ selectedMarker }) {
                                         borderRadius: '2px',
                                         cursor: "pointer"
                                     }}
-                                    onClick={() => handleToggleChat(index, store)}
+                                    // onClick={() => handleToggleChat(index, store)}
                                 >
                                     <div>
                                         <ListItemText
@@ -172,18 +173,18 @@ function PopupDetails({ selectedMarker }) {
                     }
 
                     {selectedMarker?.singleBusinessPermits
-                        .filter((store) => {
-                            const { business_category, is_building_open, store_no } = store;
-                            const permitObj = { business_category, is_building_open, store_no };
+                        // .filter((store) => {
+                        //     const { business_category, is_building_open, store_no } = store;
+                        //     const permitObj = { business_category, is_building_open, store_no };
 
-                            for (const key in permitObj) {
-                                if (permitObj[key].toString().toLowerCase().includes(searchQuery.toLowerCase())) {
-                                    return true;
-                                }
-                            }
+                        //     for (const key in permitObj) {
+                        //         if (permitObj[key].toString().toLowerCase().includes(searchQuery.toLowerCase())) {
+                        //             return true;
+                        //         }
+                        //     }
 
-                            return false;
-                        })
+                        //     return false;
+                        // })
                         .length === 0 && (
                             selectedMarker?.singleBusinessPermits.map((store, index) => {
                                 let borderColor;
@@ -222,7 +223,7 @@ function PopupDetails({ selectedMarker }) {
                         )}
                 </List>
             </Grid>
-            <Grid item xs={6} sx={{ position: "fixed", top: 3, right: 9 }} width={320}>
+            {/* <Grid item xs={6} sx={{ position: "fixed", top: 3, right: 9 }} width={320}>
                 
                     <ListItem sx={{ marginBottom: '-5px', }}>
                         <ListItemText sx={{
@@ -282,7 +283,7 @@ function PopupDetails({ selectedMarker }) {
                 )
                 }
 
-            </Grid>
+            </Grid> */}
         </Grid>
     )
 }
