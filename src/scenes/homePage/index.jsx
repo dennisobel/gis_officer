@@ -1,18 +1,17 @@
-import { Box, useMediaQuery } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import Navbar from "scenes/navbar";
 import UserWidget from "scenes/widgets/UserWidget";
-import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
-import AdvertWidget from "scenes/widgets/AdvertWidget";
-import FriendListWidget from "scenes/widgets/FriendListWidget";
 import { ArrowUpwardOutlined } from "@mui/icons-material";
 import { getUsername } from "helper/helper";
 import { useState, useEffect } from "react";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  // const { _id, picturePath } = useSelector((state) => state.user);
+  const { palette } = useTheme();
+  const dark = palette.neutral.dark;
+  const medium = palette.neutral.medium;
+  const main = palette.neutral.main;
   const [user, setUser] = useState()
 
   useEffect(() => {
@@ -44,7 +43,7 @@ const HomePage = () => {
         >
           {/* <MyPostWidget picturePath={""} /> */}
           <PostsWidget userId={user?.msisdn} />
-          <ArrowUpwardOutlined sx={{position:"fixed", bottom:10, left:1}} onClick={handleReturnToTop}>
+          <ArrowUpwardOutlined fontSize="small" sx={{position:"fixed", bottom:10, left:1, color:dark}} onClick={handleReturnToTop}>
             Return to Top
           </ArrowUpwardOutlined>
         </Box>
