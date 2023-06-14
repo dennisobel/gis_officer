@@ -501,8 +501,8 @@ export async function getUserActivity({type}){
   }
 }
 
-/**USER ACTIVITY LOG */
-export async function getWardActivity({type,id}){
+/**STORE ACTIVITY LOG */
+export async function getStoreActivity({type,id}){
   try {
     const token = localStorage.getItem("token");
     const headers = { Authorization: `Bearer ${token}` };

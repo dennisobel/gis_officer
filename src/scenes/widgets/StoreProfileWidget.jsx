@@ -14,7 +14,7 @@ import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { getUsername } from "helper/helper";
+import { getUsername, getStoreActivity } from "helper/helper";
 import { toggleCompliance, toggleReg } from "state";
 import { getBuildingById, calculateDistance, verifyBusiness, imageUpload } from "helper/helper";
 /**TOAST IMPORTS */
@@ -51,6 +51,7 @@ const StoreProfileWidget = ({ store }) => {
     const [reg, setReg] = useState(registered)
     const [path, setPath] = useState("")
     const [cachedImage, setCachedImage] = useState(null);
+    const [activity,setActivity] = useState()
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -59,6 +60,13 @@ const StoreProfileWidget = ({ store }) => {
                 data && setCoords({ latitude: parseFloat(data?.latitude), longitude: parseFloat(data?.longitude) })
             })
     }, []);
+
+    useEffect(() => {
+        getStoreActivity({type:"",id:store._id})
+        .then(({data}) => {
+            setActivity(data)
+        })
+    }, [])
 
     useEffect(() => {
         const distance = location && calculateDistance(

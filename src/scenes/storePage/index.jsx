@@ -1,16 +1,17 @@
-import { Box, useMediaQuery, IconButton } from "@mui/material";
+import { Box, useMediaQuery, IconButton, Typography, useTheme } from "@mui/material";
 import { ArrowBackOutlined } from "@mui/icons-material";
 import { useSelector } from "react-redux";
-import Navbar from "scenes/navbar";
 import StoreProfileWidget from "scenes/widgets/StoreProfileWidget";
 import ComplianceWidget from "scenes/widgets/ComplianceWidget";
 import VerifyRegistrationWidget from "scenes/widgets/VerifyRegistrationWidget";
 import { getUsername } from "helper/helper";
 import { useState, useEffect } from "react";
 import FlexBetween from "components/FlexBetween";
+import WidgetWrapper from "components/WidgetWrapper";
 import { useNavigate, useParams } from "react-router-dom";
-import { getBusinessById } from "helper/helper";
+import { getBusinessById, getStoreActivity } from "helper/helper";
 import { TailSpin } from "react-loader-spinner";
+import dayjs from 'dayjs';
 /**CHART IMPORTS */
 import {
     Chart as ChartJS,
@@ -23,7 +24,7 @@ import {
     PointElement,
     LineElement,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
+
 import { Line } from 'react-chartjs-2';
 import { faker } from "@faker-js/faker";
 
@@ -98,7 +99,11 @@ const StorePage = () => {
     const [user, setUser] = useState()
     const { storeId } = useParams();
     const [store, setStore] = useState();
-    const [isLoading, setIsLoading] = useState(false);;
+    const [isLoading, setIsLoading] = useState(false);
+    const [activity, setActivity] = useState()
+    const { palette } = useTheme();
+    const medium = palette.neutral.medium;
+    const main = palette.neutral.main;
 
     const getStore = async () => {
         setIsLoading(true);
@@ -106,6 +111,13 @@ const StorePage = () => {
         setIsLoading(false)
         setStore(data)
     }
+
+    useEffect(() => {
+        getStoreActivity({ type: "", id: store._id })
+            .then(({ data }) => {
+                setActivity(data)
+            })
+    }, [])
 
     useEffect(() => {
         getUsername()
@@ -158,6 +170,34 @@ const StorePage = () => {
                         <Line options={lineoptions} data={linedata} />;
                     </Box>
                 </Box>
+
+                <WidgetWrapper>
+                    <Box p="1rem 0">
+                        <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
+                            Activity Log
+                        </Typography>
+                        <FlexBetween mb="0.5rem">
+                            <Typography color={main} fontWeight="400">Activity</Typography>
+                            <Typography color={main} fontWeight="400">
+                                Store
+                            </Typography>
+                            <Typography color={main} fontWeight="400">
+                                Date
+                            </Typography>
+                        </FlexBetween>
+                        {activity?.map(el => (
+                            <FlexBetween mb="0.5rem">
+                                <Typography fontSize="small" color={medium}>{el.type}</Typography>
+                                <Typography fontSize="small" color={medium} fontWeight="400">
+                                    {el?.store?.store_no}
+                                </Typography>
+                                <Typography fontSize="small" color={medium} fontWeight="400">
+                                    {dayjs(el?.created_at).format("DD/MM/YY")}
+                                </Typography>
+                            </FlexBetween>
+                        ))}
+                    </Box>
+                </WidgetWrapper>
             </Box>
         </Box>
     )

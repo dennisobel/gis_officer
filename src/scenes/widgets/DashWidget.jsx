@@ -38,7 +38,6 @@ ChartJS.register(
 
 const DashWidget = ({ userId }) => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
@@ -242,85 +241,6 @@ const DashWidget = ({ userId }) => {
       <Box p="1rem 0">
         <Bar options={payment_history_options} data={payment_history_data} />
       </Box>
-      {/* <WidgetWrapper>
-        <Box p="1rem 0">
-          <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-            Missed Store Visits {" "}
-            <Badge badgeContent={4} color="primary">
-              <WorkOutlineOutlined color="action" />
-            </Badge>
-          </Typography>
-
-          <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
-            <Paper
-              square
-              elevation={0}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                height: 50,
-                pl: 2,
-                bgcolor: 'background.default',
-              }}
-            >
-              <Typography>Store #</Typography>
-            </Paper>
-
-            <ListItem
-              key={steps[activeStep].label}
-              secondaryAction={
-                <IconButton edge="end" aria-label="comments">
-                  <VisibilityOutlined />
-                </IconButton>
-              }
-              disablePadding
-            >
-              <ListItemButton role={undefined} onClick={handleToggle(steps[activeStep].label)} dense>
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={checked.indexOf(steps[activeStep].label) !== -1}
-                    tabIndex={-1}
-                    disableRipple
-                    inputProps={{ 'aria-labelledby': " " }}
-                  />
-                </ListItemIcon>
-                <ListItemText id={""} primary={`Status: Partially paid`} />
-              </ListItemButton>
-            </ListItem>
-            <MobileStepper
-              variant="text"
-              steps={maxSteps}
-              position="static"
-              activeStep={activeStep}
-              nextButton={
-                <Button
-                  size="small"
-                  onClick={handleNext}
-                  disabled={activeStep === maxSteps - 1}
-                >
-                  Next
-                  {theme.direction === 'rtl' ? (
-                    <KeyboardArrowLeft />
-                  ) : (
-                    <KeyboardArrowRight />
-                  )}
-                </Button>
-              }
-              backButton={
-                <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
-                  {theme.direction === 'rtl' ? (
-                    <KeyboardArrowRight />
-                  ) : (
-                    <KeyboardArrowLeft />
-                  )}
-                  Back
-                </Button>
-              }
-            />
-          </Box>
-        </Box>
-      </WidgetWrapper> */}
       <WidgetWrapper>
         <Box p="1rem 0">
           <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
