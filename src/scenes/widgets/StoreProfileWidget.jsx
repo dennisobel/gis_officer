@@ -149,17 +149,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                                     <input {...getInputProps()} hidden/>
                                     <UserImage image={picturePath} store={store} />
                                 </Box>
-                                {image && (
-                                    <IconButton
-                                        onClick={() => setImage(null)}
-                                        sx={{ width: "15%" }}
-                                    >
-                                        <DeleteOutlined />
-                                    </IconButton>
-                                )}
                             </FlexBetween>
-
-
                         )}
 
                     </Dropzone>
