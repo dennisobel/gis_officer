@@ -5,15 +5,12 @@ import Navbar from "scenes/navbar";
 import StoreProfileWidget from "scenes/widgets/StoreProfileWidget";
 import ComplianceWidget from "scenes/widgets/ComplianceWidget";
 import VerifyRegistrationWidget from "scenes/widgets/VerifyRegistrationWidget";
-import PostsWidget from "scenes/widgets/PostsWidget";
-import AdvertWidget from "scenes/widgets/AdvertWidget";
-import FriendListWidget from "scenes/widgets/FriendListWidget";
 import { getUsername } from "helper/helper";
 import { useState, useEffect } from "react";
 import FlexBetween from "components/FlexBetween";
-import WidgetWrapper from "components/WidgetWrapper";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBusinessById } from "helper/helper";
+import { TailSpin } from "react-loader-spinner";
 /**CHART IMPORTS */
 import {
     Chart as ChartJS,
@@ -100,11 +97,13 @@ const StorePage = () => {
     const navigate = useNavigate()
     const [user, setUser] = useState()
     const { storeId } = useParams();
-    const [store, setStore] = useState()
+    const [store, setStore] = useState();
+    const [isLoading, setIsLoading] = useState(false);;
 
     const getStore = async () => {
+        setIsLoading(true);
         const { data } = await getBusinessById(storeId)
-        console.log("STORE:", data)
+        setIsLoading(false)
         setStore(data)
     }
 
@@ -116,6 +115,16 @@ const StorePage = () => {
 
     return (
         <Box>
+            {isLoading && <TailSpin
+                height="80"
+                width="80"
+                color="#4fa94d"
+                ariaLabel="tail-spin-loading"
+                radius="1"
+                wrapperStyle={{}}
+                wrapperClass=""
+                visible={true}
+            />}
             <FlexBetween gap="1.5rem">
                 <IconButton onClick={() => navigate("/stores")}>
                     <ArrowBackOutlined />

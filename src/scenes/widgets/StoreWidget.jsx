@@ -1,5 +1,4 @@
 import {
-    WorkOutlineOutlined,
     BusinessOutlined,
     VisibilityOutlined
 } from "@mui/icons-material";
@@ -32,8 +31,6 @@ const StoreWidget = ({
     const { palette } = useTheme();
     const [visitdate,setDate] = useState()
     const [todo,setAddTODO] = useState({})
-    const dark = palette.neutral.dark;
-    const medium = palette.neutral.medium;
     const main = palette.neutral.main;
 
     useEffect(() => {

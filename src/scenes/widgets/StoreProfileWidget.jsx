@@ -93,16 +93,20 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
         }
     }, [showreg, dispatch, distance, minimumdist])
 
+    useEffect(()=>{
+        createFormData(image)
+    },[image])
+
     const createFormData = async (image) => {
         if (image !== undefined || image !== null) {
             const formData = new FormData();
-            await formData.append("image", image);
-            await formData.append("category", "building");
-            await formData.append("store_id", store?._id);
-            await formData.append("description", `${store.store_no} building`);
+            formData.append("image", image);
+            formData.append("category", "building");
+            formData.append("store_id", store?._id);
+            formData.append("description", `${store.store_no} building`);
 
             console.log("IMAGE:", formData);
-            imageUpload(formData, location).then(res => {
+            imageUpload(formData, location).then(() => {
                 toast.success("Image successfully uploaded")
             })
         }
@@ -130,7 +134,8 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                     <Dropzone
                         acceptedFiles=".jpg,.jpeg,.png"
                         multiple={false}
-                        onDrop={handleImageDrop}
+                        // onDrop={handleImageDrop}
+                        onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
                     >
                         {({ getRootProps, getInputProps }) => (
                             <FlexBetween>
@@ -141,6 +146,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                                     width="100%"
                                     sx={{ "&:hover": { cursor: "pointer" } }}
                                 >
+                                    <input {...getInputProps()} hidden/>
                                     <UserImage image={picturePath} store={store} />
                                 </Box>
                                 {image && (
