@@ -396,6 +396,12 @@ const DashWidget = ({ userId }) => {
           <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
             Activity Log
           </Typography>
+          <FlexBetween mb="0.5rem">
+              <Typography color={main} fontWeight="500">Activity</Typography>
+              <Typography color={main} fontWeight="500">
+                Store #
+              </Typography>
+            </FlexBetween>
           {activity?.map(el => (
             <FlexBetween mb="0.5rem">
               <Typography color={medium}>{el.type}</Typography>
