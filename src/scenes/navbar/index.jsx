@@ -67,7 +67,7 @@ const Navbar = () => {
             },
           }}
         >
-          DRS
+          SBP
         </Typography>
         <FlexBetween
           backgroundColor={neutralLight}

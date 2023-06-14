@@ -1,18 +1,14 @@
 import {
     WorkOutlineOutlined,
-    DescriptionOutlined,
-    CheckCircleOutlined,
-    ContactsOutlined,
     BusinessOutlined,
     VisibilityOutlined
 } from "@mui/icons-material";
-import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+import { Box, Divider, IconButton, Typography, useTheme, Button } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Compliance from "components/Compliance";
 
 /**DATE PICKER LIBS */
 import dayjs from 'dayjs';
@@ -34,28 +30,16 @@ const StoreWidget = ({
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const { palette } = useTheme();
-    const main = palette.neutral.main;
-    const primary = palette.primary.main;
-    const [open, setOpen] = useState(false);
-    const [openView, setOpenView] = useState(false)
     const [visitdate,setDate] = useState()
     const [todo,setAddTODO] = useState({})
-    const MAPBOX_TOKEN = 'pk.eyJ1Ijoid2VzbGV5MjU0IiwiYSI6ImNsMzY2dnA0MDAzem0zZG8wZTFzc3B3eG8ifQ.EVg7Sg3_wpa_QO6EJjj9-g';
+    const dark = palette.neutral.dark;
+    const medium = palette.neutral.medium;
+    const main = palette.neutral.main;
+
     useEffect(() => {
         visitdate !== undefined && setAddTODO({...store,visitdate:dayjs(visitdate).format("DD-MM-YYYY")})
     },[visitdate,store])
 
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-    const handleCloseView = () => {
-        setOpenView(false);
-    };
 
     const handleView = () => {
         navigate(`/store/${store._id}`)
@@ -74,28 +58,14 @@ const StoreWidget = ({
                     Store # {store_no}
                 </Typography>
                 <FlexBetween gap="0.3rem">
-                    {/* <Compliance isOpen={open} onClose={handleClose} store={store} /> */}
-                    {/* <IconButton>
-                        <CheckCircleOutlined />
-                    </IconButton> */}
                     <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                         {paymentstatus}
                     </Typography>
-                    <IconButton onClick={handleView} >
+                    {/* <IconButton onClick={handleView} >
                         <VisibilityOutlined />
-                    </IconButton>
+                    </IconButton> */}
                 </FlexBetween>
             </FlexBetween>
-            {/* <FlexBetween gap="0.3rem">
-                <FlexBetween gap="0.3rem">
-                    <IconButton >
-                        <DescriptionOutlined />
-                    </IconButton>
-                    <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                        {description}
-                    </Typography>
-                </FlexBetween>
-            </FlexBetween> */}
             <FlexBetween mt="0.25rem">
                 <FlexBetween gap="1rem">
                     <FlexBetween gap="0.3rem">
@@ -109,23 +79,15 @@ const StoreWidget = ({
                 </FlexBetween>
             </FlexBetween>
             <Box>
-                {/* <FlexBetween gap="0.3rem">
-                    <IconButton onClick={() => navigate("/map")}>
-                        <ContactsOutlined />
-                    </IconButton>
-                    <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                        {phone}
-                    </Typography>
-                </FlexBetween> */}
                 <Divider />
                 <br/>
                 <FlexBetween gap="0.3rem">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker label="Pick visit date" value={visitdate} onChange={(newValue) => setDate(newValue)} onAccept={handleTodo}/>
                     </LocalizationProvider>
-                    <IconButton>
-                        <WorkOutlineOutlined />
-                    </IconButton>
+                    <Button variant="text" onClick={handleView} endIcon={<VisibilityOutlined/>} color="neutral">
+                        VIEW
+                    </Button>
                 </FlexBetween>
 
             </Box>

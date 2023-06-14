@@ -1,5 +1,8 @@
 import {
-  VisibilityOutlined
+  VisibilityOutlined,
+  LocationCitySharp,
+  DescriptionSharp,
+  AddRoadSharp
 } from "@mui/icons-material";
 import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
@@ -30,11 +33,11 @@ const PostWidget = ({
   const handleClick = () => {
     setIsLoading(true);
     getAllBuildingStores({ _id: id })
-    .then(({ data }) => {
-      dispatch(setStores(data))
-    })
-    .then(setIsLoading(false))
-    .then(navigate("/stores"))
+      .then(({ data }) => {
+        dispatch(setStores(data))
+      })
+      .then(setIsLoading(false))
+      .then(navigate("/stores"))
   }
 
 
@@ -52,34 +55,31 @@ const PostWidget = ({
       />}
       <WidgetWrapper m="2rem 0" >
         <FlexBetween gap="0.3rem">
+        <IconButton onClick={handleClick}>
+            <LocationCitySharp />
+          </IconButton>
           <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
             Building # {building_number}
           </Typography>
-        </FlexBetween>
-        <FlexBetween gap="0.3rem">
-          <Typography color={main} sx={{ mt: "1rem" }}>
-            {description}
-          </Typography>
-        </FlexBetween>
-        <FlexBetween mt="0.25rem">
-          <FlexBetween gap="1rem">
-            <FlexBetween gap="0.3rem">
-              {/* <IconButton onClick={() => navigate("/map")}>
-              <LocationOnOutlined />
-            </IconButton> */}
-              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                {street}
-              </Typography>
-            </FlexBetween>
-
-            <FlexBetween gap="0.3rem">
-              <Typography>Floors # {floors}</Typography>
-            </FlexBetween>
-          </FlexBetween>
-
           <IconButton onClick={handleClick}>
             <VisibilityOutlined />
           </IconButton>
+        </FlexBetween>
+        <FlexBetween gap="0.3rem">
+          <IconButton>
+            <DescriptionSharp />
+          </IconButton>
+          <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+            {description}
+          </Typography>
+        </FlexBetween>
+        <FlexBetween mt="0.3rem">
+              <IconButton>
+                <AddRoadSharp />
+              </IconButton>
+              <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
+                {street}
+              </Typography>
         </FlexBetween>
         <Box>
           <Divider />

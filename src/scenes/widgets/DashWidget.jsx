@@ -9,6 +9,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUsername, getSummaries, getUserActivity } from "helper/helper";
+import dayjs from 'dayjs';
 
 import {
   Chart as ChartJS,
@@ -37,8 +38,8 @@ ChartJS.register(
 
 const DashWidget = ({ userId }) => {
   const [user, setUser] = useState(null);
-  const { palette } = useTheme();
   const navigate = useNavigate();
+  const { palette } = useTheme();
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -148,7 +149,7 @@ const DashWidget = ({ userId }) => {
         <FlexBetween
           gap="0.5rem"
           pb="1.1rem"
-          onClick={() => navigate(`/profile/${userId}`)}
+          // onClick={() => navigate(`/profile/${userId}`)}
         >
           <FlexBetween gap="1rem">
             <UserImage image={""} />
@@ -326,16 +327,22 @@ const DashWidget = ({ userId }) => {
             Activity Log
           </Typography>
           <FlexBetween mb="0.5rem">
-              <Typography color={main} fontWeight="500">Activity</Typography>
-              <Typography color={main} fontWeight="500">
-                Store #
+              <Typography color={main} fontWeight="400">Activity</Typography>
+              <Typography color={main} fontWeight="400">
+                Store
+              </Typography>
+              <Typography color={main} fontWeight="400">
+                Date
               </Typography>
             </FlexBetween>
           {activity?.map(el => (
             <FlexBetween mb="0.5rem">
-              <Typography color={medium}>{el.type}</Typography>
-              <Typography color={medium} fontWeight="400">
+              <Typography fontSize="small" color={medium}>{el.type}</Typography>
+              <Typography fontSize="small" color={medium} fontWeight="400">
                 {el?.store?.store_no}
+              </Typography>
+              <Typography   fontSize="small" color={medium} fontWeight="400">
+                {dayjs(el?.created_at).format("DD/MM/YY")}
               </Typography>
             </FlexBetween>
           ))}
