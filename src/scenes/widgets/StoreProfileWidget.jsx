@@ -50,6 +50,7 @@ const StoreProfileWidget = ({ store }) => {
     const location = useSelector(state => state.currentLocation)
     const [reg, setReg] = useState(registered)
     const [path, setPath] = useState("")
+    const [cachedImage, setCachedImage] = useState(null);
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -88,6 +89,16 @@ const StoreProfileWidget = ({ store }) => {
         createFormData(image)
     }, [image])
 
+    useEffect(() => {
+        getUsername().then((user) => setUser(user));
+
+        // Check if the image data exists in localStorage
+        const imageData = localStorage.getItem(`cachedImage-${store_no}`);
+        if (imageData) {
+            setCachedImage(imageData);
+        }
+    }, []);
+
     const createFormData = async (image) => {
         if (image !== undefined || image !== null) {
             const formData = new FormData();
@@ -104,6 +115,14 @@ const StoreProfileWidget = ({ store }) => {
                         .then(({ data }) => {
                             const imageUrl = URL.createObjectURL(data);
                             setPath(imageUrl);
+                            // Save the image data in localStorage
+                            const imageBlob = new Blob([data]);
+                            const reader = new FileReader();
+                            reader.onload = function () {
+                                const imageData = reader.result;
+                                localStorage.setItem(`cachedImage-${store_no}`, imageData);
+                            };
+                            reader.readAsDataURL(imageBlob);
                         })
                         .then(() => toast.success(data?.message))
                         .catch((error) => {
@@ -141,8 +160,8 @@ const StoreProfileWidget = ({ store }) => {
                                     width="100%"
                                     sx={{ "&:hover": { cursor: "pointer" } }}
                                 >
-                                    {/* <input {...getInputProps()} hidden/> */}
-                                    <UserImage image={path} store={store} />
+                                    <UserImage image={cachedImage || path} store={store} />
+
                                 </Box>
                             </FlexBetween>
                         )}
