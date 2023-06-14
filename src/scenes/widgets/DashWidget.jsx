@@ -86,88 +86,88 @@ const DashWidget = ({ userId }) => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
   const [checked, setChecked] = useState([0]);
-  const [summary,setSummary] = useState();
-  const [activity,setUserActivity] = useState()
+  const [summary, setSummary] = useState();
+  const [activity, setUserActivity] = useState()
 
   //CHARTS
   const labels = ['March', 'April', 'May'];
-const payment_history_labels = ['May'];
-const target_number = summary?.monthly_target;
-const paidData = [summary?.monthly_ward_paid];
+  const payment_history_labels = ['May'];
+  const target_number = summary?.monthly_target;
+  const paidData = [summary?.monthly_ward_paid];
 
-const payment_history_options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Payment History",
+  const payment_history_options = {
+    plugins: {
+      title: {
+        display: true,
+        text: "Payment History",
+      },
     },
-  },
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
+    responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
     },
-    y: {
-      stacked: true,
-    },
-  },
-};
+  };
 
-const payment_history_data = {
-  labels: payment_history_labels,
-  datasets: [
-    {
-      label: 'Collected',
-      data: paidData,
-      backgroundColor: 'rgba(0, 255, 0, 0.5)',
-    },
-    {
-      label: 'Target',
-      data: paidData.map((paid) => target_number - paid),
-      backgroundColor: 'rgba(255, 0, 0, 0.5)',
-    },
-  ],
-};
+  const payment_history_data = {
+    labels: payment_history_labels,
+    datasets: [
+      {
+        label: 'Collected',
+        data: paidData,
+        backgroundColor: 'rgba(0, 255, 0, 0.5)',
+      },
+      {
+        label: 'Target',
+        data: paidData.map((paid) => target_number - paid),
+        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+      },
+    ],
+  };
 
-const options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Payment Status",
+  const options = {
+    plugins: {
+      title: {
+        display: true,
+        text: "Payment Status",
+      },
     },
-  },
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
+    responsive: true,
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
     },
-    y: {
-      stacked: true,
-    },
-  },
-};
+  };
 
-const data = {
-  labels,
-  datasets: [
-    {
-      label: 'P',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(0, 255, 0, 0.5)',
-    },
-    {
-      label: 'PP',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(255, 165, 0, 0.5)',
-    },
-    {
-      label: 'NP',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(255, 0, 0, 0.5)',
-    },
-  ],
-};
-//EOF CHARTS
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: 'P',
+        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(0, 255, 0, 0.5)',
+      },
+      {
+        label: 'PP',
+        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(255, 165, 0, 0.5)',
+      },
+      {
+        label: 'NP',
+        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        backgroundColor: 'rgba(255, 0, 0, 0.5)',
+      },
+    ],
+  };
+  //EOF CHARTS
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -196,7 +196,7 @@ const data = {
   useEffect(() => {
     getUsername().then(user => setUser(user))
     getSummaries().then(res => setSummary(res?.data.summary))
-    getUserActivity({type:""}).then(({data}) => console.log("USER ACTIVITY:",data))
+    getUserActivity({ type: "" }).then(({ data }) => setUserActivity(data))
   }, []);
 
   if (!user) {
@@ -284,7 +284,7 @@ const data = {
           </FlexBetween>
         </Box>
       </WidgetWrapper>
-      <br/>
+      <br />
       <Box p="1rem 0">
         <Bar options={options} data={data} />
       </Box>
@@ -310,7 +310,7 @@ const data = {
       </WidgetWrapper>
       <br />
       <Box p="1rem 0">
-      <Bar options={payment_history_options} data={payment_history_data} />
+        <Bar options={payment_history_options} data={payment_history_data} />
       </Box>
       {/* <WidgetWrapper>
         <Box p="1rem 0">
@@ -391,6 +391,21 @@ const data = {
           </Box>
         </Box>
       </WidgetWrapper> */}
+      <WidgetWrapper>
+        <Box p="1rem 0">
+          <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
+            Activity Log
+          </Typography>
+          {activity?.map(el => (
+            <FlexBetween mb="0.5rem">
+              <Typography color={medium}>{el.type}</Typography>
+              <Typography color={main} fontWeight="500">
+                {el?.store?.store_no}
+              </Typography>
+            </FlexBetween>
+          ))}
+        </Box>
+      </WidgetWrapper>
     </>
   );
 };
