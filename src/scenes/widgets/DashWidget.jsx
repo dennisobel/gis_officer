@@ -405,7 +405,7 @@ const DashWidget = ({ userId }) => {
           {activity?.map(el => (
             <FlexBetween mb="0.5rem">
               <Typography color={medium}>{el.type}</Typography>
-              <Typography color={main} fontWeight="500">
+              <Typography color={medium} fontWeight="400">
                 {el?.store?.store_no}
               </Typography>
             </FlexBetween>
