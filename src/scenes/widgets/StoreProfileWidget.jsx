@@ -7,15 +7,13 @@ import {
     BusinessCenterOutlined,
     ReportProblemOutlined,
     LocationOnOutlined,
-    DeleteOutlined
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme, IconButton } from "@mui/material";
+import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { getUsername } from "helper/helper";
 import { toggleCompliance, toggleReg } from "state";
 import { getBuildingById, calculateDistance, verifyBusiness, imageUpload } from "helper/helper";
@@ -24,8 +22,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 /**IMAGE UPLOAD */
 import Dropzone from "react-dropzone";
+import axios from "axios";
 
-const StoreProfileWidget = ({ userId, picturePath, store }) => {
+const StoreProfileWidget = ({ store }) => {
     const {
         business_category,
         business_description,
@@ -39,7 +38,6 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [user, setUser] = useState(null);
     const [image, setImage] = useState();
     const { palette } = useTheme();
-    const navigate = useNavigate();
     const dispatch = useDispatch()
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
@@ -51,15 +49,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
     const [minimumdist] = useState(10000)
     const location = useSelector(state => state.currentLocation)
     const [reg, setReg] = useState(registered)
-    const [files, setFiles] = useState([]);
-
-    const thumbs = files.map((file) => (
-        <div className="thumb" key={file.name}>
-            <div className="thumbInner">
-                <img src={file.preview} alt="img" />
-            </div>
-        </div>
-    ));
+    const [path, setPath] = useState("")
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -93,9 +83,10 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
         }
     }, [showreg, dispatch, distance, minimumdist])
 
-    useEffect(()=>{
+    useEffect(() => {
+        console.log("image:", image)
         createFormData(image)
-    },[image])
+    }, [image])
 
     const createFormData = async (image) => {
         if (image !== undefined || image !== null) {
@@ -105,17 +96,21 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
             formData.append("store_id", store?._id);
             formData.append("description", `${store.store_no} building`);
 
-            console.log("IMAGE:", formData);
-            imageUpload(formData, location).then(() => {
-                toast.success("Image successfully uploaded")
-            })
+            imageUpload(formData, location)
+                .then(({ data }) => {
+                    const token = localStorage.getItem("token");
+                    const headers = { Authorization: `Bearer ${token}` };
+                    axios.get(`https://gis.affordit.co.ke${data?.url}`, { responseType: "blob", headers })
+                        .then(({ data }) => {
+                            const imageUrl = URL.createObjectURL(data);
+                            setPath(imageUrl);
+                        })
+                        .then(() => toast.success(data?.message))
+                        .catch((error) => {
+                            console.error("Error fetching image data:", error);
+                        });
+                })
         }
-    };
-
-    const handleImageDrop = (acceptedFiles) => {
-        const file = acceptedFiles[0];
-        // setImage(file);
-        createFormData(file)
     };
 
     if (!user) {
@@ -146,8 +141,8 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                                     width="100%"
                                     sx={{ "&:hover": { cursor: "pointer" } }}
                                 >
-                                    <input {...getInputProps()} hidden/>
-                                    <UserImage image={picturePath} store={store} />
+                                    {/* <input {...getInputProps()} hidden/> */}
+                                    <UserImage image={path} store={store} />
                                 </Box>
                             </FlexBetween>
                         )}
@@ -175,8 +170,7 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
             <Box p="1rem 0">
                 <FlexBetween mb="0.5rem">
                     {/* <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)} /> */}
-                    {/* <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`https://google.com`)}/> */}
-                    <a target="_blank" href={`https://www.google.com/maps/dir/${coords.latitude},${coords.longitude}/@${location?.latitude},${location?.longitude},10z/data=!4m10!4m9!1m1!4e1!1m5!1m1!1s0x182f16d5f67653d9:0x13ef638e1bb7a5c5!2m2!1d${location?.longitude}!2d${location?.latitude}!3e0?entry=ttu`}>
+                    <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/dir/${coords.latitude},${coords.longitude}/@${location?.latitude},${location?.longitude},10z/data=!4m10!4m9!1m1!4e1!1m5!1m1!1s0x182f16d5f67653d9:0x13ef638e1bb7a5c5!2m2!1d${location?.longitude}!2d${location?.latitude}!3e0?entry=ttu`}>
                         <LocationOnOutlined fontSize="small" sx={{ color: main }} />
                     </a>
                     <Typography color={main} fontWeight="500">
@@ -226,7 +220,6 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
 
                 <FlexBetween gap="1rem">
                     <FlexBetween gap="1rem">
-                        {/* <img src="../assets/linkedin.png" alt="linkedin" /> */}
                         <BusinessCenterOutlined fontSize="small" sx={{ color: main }} />
                         <Box>
                             <Typography color={main} fontWeight="500">
@@ -243,13 +236,11 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                             }).catch(err => {
                                 toast.error("Something went wrong in verification")
                             })
-                        // setShowReg(!showreg)
                     }} />
                 </FlexBetween>
 
                 <FlexBetween gap="1rem" mb="0.5rem">
                     <FlexBetween gap="1rem">
-                        {/* <img src="../assets/twitter.png" alt="twitter" /> */}
                         <CheckCircleOutlined fontSize="small" sx={{ color: main }} />
                         <Box>
                             <Typography color={main} fontWeight="500">
@@ -270,7 +261,6 @@ const StoreProfileWidget = ({ userId, picturePath, store }) => {
                             </Typography>
                         </Box>
                     </FlexBetween>
-                    {/* <EditOutlined sx={{ color: main }} /> */}
                 </FlexBetween>
             </Box>
         </WidgetWrapper>
