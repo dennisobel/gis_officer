@@ -19,6 +19,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
+    "d3-scale-chromatic": "^3.0.0",
     "dayjs": "^1.11.8",
     "dotenv": "^16.0.3",
     "formik": "^2.2.9",

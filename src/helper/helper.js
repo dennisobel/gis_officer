@@ -423,6 +423,20 @@ export async function escalate(data,location){
   }
 }
 
+/**GET SUMMARIES */
+export async function getSummaries() {
+  const token = await localStorage.getItem("token");
+  try {
+    const headers = {
+      "Authorization": `Bearer ${token}`
+    };
+    const res = await axios.get("/user/summary",{headers})
+    return Promise.resolve(res);
+  } catch (error) {
+    return Promise.reject({ error });
+  }
+}
+
 /**CALCULATE DISTANCE BETWEEN CURRENT LOCATION AND STORE */
 export function calculateDistance(origin, destination) {
   function toRadians(degrees) {
@@ -465,5 +479,43 @@ export async function imageUpload(data,location){
     return Promise.resolve(res);
   } catch (error) {
     return Promise.reject({ error });
+  }
+}
+
+/**USER ACTIVITY LOG */
+export async function getUserActivity({type}){
+  try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+    const params = type !== "" ? { type } : {};
+    const res = await axios.get(
+      `/user/activity`,
+      {
+        params,
+        headers
+      }
+    )
+    return res    
+  } catch (error) {
+    return error
+  }
+}
+
+/**USER ACTIVITY LOG */
+export async function getWardActivity({type,id}){
+  try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+    const params = type !== "" ? { type } : {};
+    const res = await axios.get(
+      `/business/activity/${id}`,
+      {
+        params,
+        headers
+      }
+    )
+    return res    
+  } catch (error) {
+    return error
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { setPosts, setBuildings } from "state";
 import PostWidget from "./PostWidget";
 import { getWardBusinesses, getUsername } from "helper/helper";
 
@@ -18,7 +18,10 @@ const PostsWidget = ({ userId, isProfile = false }) => {
   useEffect(() => {
     if (user !== undefined) {
       getWardBusinesses({ ward: user?.ward }).then(({ data }) => {
+        console.log(data)
         setWardbusinesses(data);
+        dispatch(setBuildings(data))
+        localStorage.setItem("buildings",JSON.stringify(data))
       });
     }
   }, [user]);

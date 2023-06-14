@@ -236,9 +236,9 @@ const Navbar = () => {
                 variant="h5"
                 fontWeight="500"
                 sx={{ mb: "0.5rem" }}
-                onClick={() => { navigate("/image_capture") }}
+                onClick={() => { navigate("/map_page") }}
               >
-                Images
+                Map
               </Typography>
             </FlexBetween>
             {/* <Message sx={{ fontSize: "25px" }} />

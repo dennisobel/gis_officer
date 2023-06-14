@@ -6,6 +6,7 @@ import OtpPage from "scenes/otp";
 import ProfilePage from "scenes/profilePage";
 import BusinessRegPage from "scenes/business_reg";
 import Map from "scenes/map/old";
+import OldMap from "scenes/map/oldmap";
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -148,8 +149,8 @@ function App() {
               element={user ? <VisitPage /> : <Navigate to="/" />}
             />
             <Route
-              path="/image_capture"
-              element={user ? <VisitPage /> : <Navigate to="/" />}
+              path="/map_page"
+              element={user ? <OldMap /> : <Navigate to="/" />}
             />
             <Route
               path="/profile/:userId"

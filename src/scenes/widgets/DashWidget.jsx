@@ -26,7 +26,7 @@ import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getUsername } from "helper/helper";
+import { getUsername, getSummaries, getUserActivity } from "helper/helper";
 
 import {
   Chart as ChartJS,
@@ -54,85 +54,6 @@ ChartJS.register(
   LineElement,
 );
 
-const labels = ['March', 'April', 'May'];
-const payment_history_labels = ['March', 'April', 'May'];
-const target_number = 1000; // Constant target value
-
-// Example data for the actual paid amounts
-const paidData = [800, 900, 1000];
-
-export const payment_history_options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Last 3 Months' Payment History",
-    },
-  },
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-    },
-  },
-};
-
-export const payment_history_data = {
-  labels: payment_history_labels,
-  datasets: [
-    {
-      label: 'Collected',
-      data: paidData,
-      backgroundColor: 'rgba(0, 255, 0, 0.5)',
-    },
-    {
-      label: 'Target',
-      data: paidData.map((paid) => target_number - paid),
-      backgroundColor: 'rgba(255, 0, 0, 0.5)',
-    },
-  ],
-};
-
-export const options = {
-  plugins: {
-    title: {
-      display: true,
-      text: "Last 3 Months' Payment Status",
-    },
-  },
-  responsive: true,
-  scales: {
-    x: {
-      stacked: true,
-    },
-    y: {
-      stacked: true,
-    },
-  },
-};
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'P',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(0, 255, 0, 0.5)',
-    },
-    {
-      label: 'PP',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(255, 165, 0, 0.5)',
-    },
-    {
-      label: 'NP',
-      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-      backgroundColor: 'rgba(255, 0, 0, 0.5)',
-    },
-  ],
-};
 
 const steps = [
   {
@@ -165,6 +86,88 @@ const DashWidget = ({ userId }) => {
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
   const [checked, setChecked] = useState([0]);
+  const [summary,setSummary] = useState();
+  const [activity,setUserActivity] = useState()
+
+  //CHARTS
+  const labels = ['March', 'April', 'May'];
+const payment_history_labels = ['May'];
+const target_number = summary?.monthly_target;
+const paidData = [summary?.monthly_ward_paid];
+
+const payment_history_options = {
+  plugins: {
+    title: {
+      display: true,
+      text: "Payment History",
+    },
+  },
+  responsive: true,
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
+    },
+  },
+};
+
+const payment_history_data = {
+  labels: payment_history_labels,
+  datasets: [
+    {
+      label: 'Collected',
+      data: paidData,
+      backgroundColor: 'rgba(0, 255, 0, 0.5)',
+    },
+    {
+      label: 'Target',
+      data: paidData.map((paid) => target_number - paid),
+      backgroundColor: 'rgba(255, 0, 0, 0.5)',
+    },
+  ],
+};
+
+const options = {
+  plugins: {
+    title: {
+      display: true,
+      text: "Payment Status",
+    },
+  },
+  responsive: true,
+  scales: {
+    x: {
+      stacked: true,
+    },
+    y: {
+      stacked: true,
+    },
+  },
+};
+
+const data = {
+  labels,
+  datasets: [
+    {
+      label: 'P',
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      backgroundColor: 'rgba(0, 255, 0, 0.5)',
+    },
+    {
+      label: 'PP',
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      backgroundColor: 'rgba(255, 165, 0, 0.5)',
+    },
+    {
+      label: 'NP',
+      data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+      backgroundColor: 'rgba(255, 0, 0, 0.5)',
+    },
+  ],
+};
+//EOF CHARTS
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.indexOf(value);
@@ -192,7 +195,9 @@ const DashWidget = ({ userId }) => {
 
   useEffect(() => {
     getUsername().then(user => setUser(user))
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    getSummaries().then(res => setSummary(res?.data.summary))
+    getUserActivity({type:""}).then(({data}) => console.log("USER ACTIVITY:",data))
+  }, []);
 
   if (!user) {
     return null;
@@ -248,7 +253,7 @@ const DashWidget = ({ userId }) => {
           </Box>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Visits Last Month</Typography>
-            <Typography color={main} fontWeight="500">95 (-2%)</Typography>
+            <Typography color={main} fontWeight="500">{summary?.past_store_visits} (0%)</Typography>
           </FlexBetween>
         </Box>
 
@@ -262,19 +267,19 @@ const DashWidget = ({ userId }) => {
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Paid</Typography>
             <Typography color={main} fontWeight="500">
-              25 (-12%)
+              25 (0%)
             </Typography>
           </FlexBetween>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Not Paid</Typography>
             <Typography color={main} fontWeight="500">
-              25 (+23%)
+              25 (0%)
             </Typography>
           </FlexBetween>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Partially Paid</Typography>
             <Typography color={main} fontWeight="500">
-              45 (-2%)
+              45 (0%)
             </Typography>
           </FlexBetween>
         </Box>
@@ -292,13 +297,13 @@ const DashWidget = ({ userId }) => {
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Total Collected</Typography>
             <Typography color={main} fontWeight="500">
-              250000 (-12%)
+              {summary?.monthly_ward_paid} (0%)
             </Typography>
           </FlexBetween>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Balance</Typography>
             <Typography color={main} fontWeight="500">
-              25000 (+23%)
+              {summary?.monthly_ward_balance} (0%)
             </Typography>
           </FlexBetween>
         </Box>
@@ -307,7 +312,7 @@ const DashWidget = ({ userId }) => {
       <Box p="1rem 0">
       <Bar options={payment_history_options} data={payment_history_data} />
       </Box>
-      <WidgetWrapper>
+      {/* <WidgetWrapper>
         <Box p="1rem 0">
           <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
             Missed Store Visits {" "}
@@ -385,7 +390,7 @@ const DashWidget = ({ userId }) => {
             />
           </Box>
         </Box>
-      </WidgetWrapper>
+      </WidgetWrapper> */}
     </>
   );
 };
