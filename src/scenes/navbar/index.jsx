@@ -20,7 +20,7 @@ import {
   Menu,
   Close,
 } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setMode, setLogout, setSearchQuery } from "state";
 import { useNavigate } from "react-router-dom";
 import FlexBetween from "components/FlexBetween";
@@ -41,7 +41,6 @@ const Navbar = () => {
   const background = theme.palette.background.default;
   const primaryLight = theme.palette.primary.light;
   const alt = theme.palette.background.alt;
-  const [query, setQuery] = useState()
 
   useEffect(() => {
     getUsername().then(user => setUser(user))
@@ -49,7 +48,6 @@ const Navbar = () => {
 
   const handleInputChange = (event) => {
     dispatch(setSearchQuery(event.target.value));
-    setQuery(event.target.value)
   };
 
   const fullName = user?.name;

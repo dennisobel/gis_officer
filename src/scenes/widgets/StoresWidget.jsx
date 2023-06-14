@@ -1,32 +1,13 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
+import { useSelector } from "react-redux";
 import StoreWidget from "./StoreWidget";
-import { getWardBusinesses, getUsername } from "helper/helper";
 
 const StoresWidget = ({ userId, isProfile = false }) => {
-  const dispatch = useDispatch();
   const stores = useSelector(state => state.stores)
   const query = useSelector(state => state.searchStoreQuery)
-  const [user, setUser] = useState();
-  const [wardbusinesses, setWardbusinesses] = useState([]);
   const [filteredbusiness, setFiltered] = useState([]);
 
-//   useEffect(() => {
-//     getUsername().then((user) => setUser(user));
-//     console.log("STORES",stores)
-//   }, []);
-
-//   useEffect(() => {
-//     if (user !== undefined) {
-//       getWardBusinesses({ ward: user?.ward }).then(({ data }) => {
-//         setWardbusinesses(data);
-//       });
-//     }
-//   }, [user]);
-
   useEffect(() => {
-    console.log("STORES:", stores);
     let filtered = stores?.singleBusinessPermits.filter((el) => {
       const {
         branch_name,

@@ -1,26 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import {
-    List, ListItem, ListItemText, TextareaAutosize, Grid, Card
+    List, ListItem, ListItemText, Grid
 } from "@mui/material";
-import { Padding } from '@mui/icons-material';
-import { getOfficers,sendMail,getUsername } from 'helper/helper';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { getOfficers } from 'helper/helper';
 
 function PopupDetails({ selectedMarker }) {
     console.log("selectedMarker",selectedMarker)
     const countyBuildings = useSelector(state => state.buildings)
     // const searchQuery = useSelector(state => state.global.searchQuery)
     const [paymentdistribution, setPaymentDistribution] = useState()
-    const [message, setMessage] = useState();
-    const [toggleChatArray, setToggleChatArray] = useState([]);
-    const [selectedindex, setSelectedIndex] = useState(-1)
-    const [currentstore, setCurrentStore] = useState()
     const [ward,setWard] = useState()
     const [county,setCounty] = useState()
-    const [officer,setOfficer] = useState()
-    const [user,setUser] = useState()
 
     useEffect(() => {
         const selected = countyBuildings?.filter(el => {
@@ -54,12 +45,6 @@ function PopupDetails({ selectedMarker }) {
             return result
         }
 
-        getUsername().then(user => {
-            setUser(user)
-        })
-
-
-
         if (selectedMarker) {
             const paymentDistribution = getPaymentStatusDistribution(selectedMarker?.singleBusinessPermits || []);
             setPaymentDistribution(paymentDistribution);
@@ -76,37 +61,9 @@ function PopupDetails({ selectedMarker }) {
             console.log("officer:",wardOfficer)
         })
     },[ward,county])
-
-    const handleToggleChat = (index, store) => {
-        const newToggleChatArray = [...toggleChatArray];
-        newToggleChatArray[index] = !newToggleChatArray[index];
-        setToggleChatArray(newToggleChatArray);
-        setSelectedIndex(index === selectedindex ? -1 : index);
-        setCurrentStore(store)
-    };
-
-    const handleMessage = useCallback((event) => {
-        setMessage(event.target.value);
-    }, []);
-
-    const handleKeyDown = useCallback((event) => {
-        const notify = () => toast("Email sent");
-        console.log(user)
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            console.log('Message entered:', message);
-            sendMail({to:"ogembodenis2016@gmail.com", from:user.email, name: user.name, email_body:message})
-            .then((res) => {
-                console.log("RES",res)
-            })
-            .then(notify)
-            setMessage(''); // Clear the message after pressing Enter
-        }
-    }, [message]);
     
     return (
         <Grid width={325} height={500} container spacing={1} sx={{ maxWidth: "325px", maxHeight: "700px" }}>
-            <ToastContainer />
             <Grid>
                 <List>
                     <ListItem sx={{ marginBottom: '-20px', }}>
@@ -156,7 +113,6 @@ function PopupDetails({ selectedMarker }) {
                                         borderRadius: '2px',
                                         cursor: "pointer"
                                     }}
-                                    // onClick={() => handleToggleChat(index, store)}
                                 >
                                     <div>
                                         <ListItemText
@@ -206,7 +162,6 @@ function PopupDetails({ selectedMarker }) {
                                             border: `2px solid ${borderColor}`,
                                             borderRadius: '2px',
                                         }}
-                                        onClick={() => handleToggleChat(index, store)}
                                     >
                                         <div>
                                             <ListItemText

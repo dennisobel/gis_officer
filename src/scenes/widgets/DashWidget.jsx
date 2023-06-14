@@ -1,29 +1,11 @@
 import {
   ManageAccountsOutlined,
-  VisibilityOutlined,
-  LocationOnOutlined,
-  WorkOutlineOutlined,
+  LocationOnOutlined
 } from "@mui/icons-material";
-
-import MobileStepper from '@mui/material/MobileStepper';
-import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-
-import { Box, Typography, Divider, useTheme, Badge } from "@mui/material";
+import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getUsername, getSummaries, getUserActivity } from "helper/helper";
@@ -40,7 +22,6 @@ import {
   LineElement,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { Line } from 'react-chartjs-2';
 import { faker } from "@faker-js/faker";
 
 ChartJS.register(
@@ -54,38 +35,13 @@ ChartJS.register(
   LineElement,
 );
 
-
-const steps = [
-  {
-    label: 'Select campaign settings',
-    description: `For each ad campaign that you create, you can control how much
-              you're willing to spend on clicks and conversions, which networks
-              and geographical locations you want your ads to show on, and more.`,
-  },
-  {
-    label: 'Create an ad group',
-    description:
-      'An ad group contains one or more ads which target a shared set of keywords.',
-  },
-  {
-    label: 'Create an ad',
-    description: `Try out different ad text to see what brings in the most customers,
-              and learn how to enhance your ads using features like ad extensions.
-              If you run into any problems with your ads, find out how to tell if
-              they're running and how to resolve approval issues.`,
-  },
-];
-
 const DashWidget = ({ userId }) => {
   const [user, setUser] = useState(null);
   const { palette } = useTheme();
-  const theme = useTheme();
   const navigate = useNavigate();
-  const token = useSelector((state) => state.token);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
-  const [checked, setChecked] = useState([0]);
   const [summary, setSummary] = useState();
   const [activity, setUserActivity] = useState()
 
@@ -169,29 +125,6 @@ const DashWidget = ({ userId }) => {
   };
   //EOF CHARTS
 
-  const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
-  };
-
-  const [activeStep, setActiveStep] = useState(0);
-  const maxSteps = steps.length;
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
 
   useEffect(() => {
     getUsername().then(user => setUser(user))
@@ -205,11 +138,7 @@ const DashWidget = ({ userId }) => {
 
   const {
     name,
-    email,
-    id_number,
     msisdn,
-    role,
-    ministry,
   } = user;
 
   return (

@@ -6,18 +6,24 @@ import MyPostWidget from "scenes/widgets/MyPostWidget";
 import PostsWidget from "scenes/widgets/PostsWidget";
 import AdvertWidget from "scenes/widgets/AdvertWidget";
 import FriendListWidget from "scenes/widgets/FriendListWidget";
+import { ArrowUpwardOutlined } from "@mui/icons-material";
 import { getUsername } from "helper/helper";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   // const { _id, picturePath } = useSelector((state) => state.user);
-  const [user,setUser] = useState()
+  const [user, setUser] = useState()
 
-  useEffect(()=>{
+  useEffect(() => {
     getUsername()
-    .then(user => setUser(user))
-  },[])
+      .then(user => setUser(user))
+  }, [])
+
+  const handleReturnToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
 
   return (
     <Box>
@@ -38,6 +44,9 @@ const HomePage = () => {
         >
           {/* <MyPostWidget picturePath={""} /> */}
           <PostsWidget userId={user?.msisdn} />
+          <ArrowUpwardOutlined sx={{position:"fixed", bottom:10, left:1}} onClick={handleReturnToTop}>
+            Return to Top
+          </ArrowUpwardOutlined>
         </Box>
       </Box>
     </Box>

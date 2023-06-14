@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setPosts, setBuildings } from "state";
+import { setBuildings } from "state";
 import PostWidget from "./PostWidget";
 import { getWardBusinesses, getUsername } from "helper/helper";
+import { TailSpin } from "react-loader-spinner";
 
-const PostsWidget = ({ userId, isProfile = false }) => {
+const PostsWidget = ({ userId }) => {
   const dispatch = useDispatch();
   const query = useSelector((state) => state.searchQuery);
   const [user, setUser] = useState();
   const [wardbusinesses, setWardbusinesses] = useState([]);
   const [filteredbusiness, setFiltered] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     getUsername().then((user) => setUser(user));
@@ -17,11 +19,13 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   useEffect(() => {
     if (user !== undefined) {
+      setIsLoading(true);
       getWardBusinesses({ ward: user?.ward }).then(({ data }) => {
         console.log(data)
         setWardbusinesses(data);
         dispatch(setBuildings(data))
-        localStorage.setItem("buildings",JSON.stringify(data))
+        localStorage.setItem("buildings", JSON.stringify(data))
+        setIsLoading(false);
       });
     }
   }, [user]);
@@ -57,6 +61,16 @@ const PostsWidget = ({ userId, isProfile = false }) => {
 
   return (
     <>
+      {isLoading && <TailSpin
+        height="80"
+        width="80"
+        color="#4fa94d"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+        wrapperStyle={{}}
+        wrapperClass=""
+        visible={true}
+      />}
       {businessesToRender.map(
         ({
           building_number,
