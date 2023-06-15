@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import StoreProfileWidget from "scenes/widgets/StoreProfileWidget";
 import ComplianceWidget from "scenes/widgets/ComplianceWidget";
 import VerifyRegistrationWidget from "scenes/widgets/VerifyRegistrationWidget";
-import { getUsername } from "helper/helper";
+import { getUsername, getStoreTransactions } from "helper/helper";
 import { useState, useEffect } from "react";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
@@ -26,7 +26,6 @@ import {
 } from 'chart.js';
 
 import { Line } from 'react-chartjs-2';
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
     CategoryScale,
@@ -39,58 +38,6 @@ ChartJS.register(
     LineElement,
 );
 
-export const lineoptions = {
-    responsive: true,
-    interaction: {
-        mode: 'index',
-        intersect: false,
-    },
-    stacked: false,
-    plugins: {
-        title: {
-            display: true,
-            text: 'Payment History',
-        },
-    },
-    scales: {
-        y: {
-            type: 'linear',
-            display: true,
-            position: 'left',
-        },
-        y1: {
-            type: 'linear',
-            display: true,
-            position: 'right',
-            grid: {
-                drawOnChartArea: false,
-            },
-        },
-    },
-};
-
-const linelabels = ['Jan', 'Feb', 'March', 'Apr', 'May'];
-
-export const linedata = {
-    labels: linelabels,
-    datasets: [
-        {
-            label: 'Collected',
-            data: linelabels.map(() => faker.number.int({ min: 0, max: 1000 })),
-            borderColor: 'rgb(0, 255, 0)',
-            backgroundColor: 'rgba(255, 165, 0, 0.5)',
-            yAxisID: 'y',
-        },
-        {
-            label: 'Balance',
-            data: linelabels.map(() => faker.number.int({ min: 0, max: 1000 })),
-            borderColor: 'rgb(255, 0, 0)',
-            backgroundColor: 'rgba(255, 165, 0, 0.5)',
-            yAxisID: 'y1',
-        },
-    ],
-};
-
 const StorePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const togglecompliance = useSelector(state => state.togglecompliance);
@@ -101,9 +48,87 @@ const StorePage = () => {
     const [store, setStore] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [activity, setActivity] = useState()
+    const [transactions, setTransactions] = useState()
     const { palette } = useTheme();
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
+
+    const lineoptions = {
+        responsive: true,
+        interaction: {
+          mode: 'index',
+          intersect: false,
+        },
+        stacked: false,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Payment History',
+          },
+        },
+        scales: {
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            min: 0,
+            max: 200,
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            grid: {
+              drawOnChartArea: false,
+            },
+          },
+        },
+      };
+      
+
+    const linelabels = transactions?.map(obj => dayjs(obj.date).format('MMM'));
+    const collectedData = transactions?.map(obj => obj.transactions_sum);
+    const balanceData = transactions?.map(obj => obj.balance);
+
+    // const linedata = {
+    //     labels: linelabels,
+    //     datasets: [
+    //         {
+    //             label: 'Collected',
+    //             data: collectedData,
+    //             borderColor: 'rgb(0, 255, 0)',
+    //             backgroundColor: 'rgba(255, 165, 0, 0.5)',
+    //             yAxisID: 'y',
+    //         },
+    //         {
+    //             label: 'Balance',
+    //             data: balanceData,
+    //             borderColor: 'rgb(255, 0, 0)',
+    //             backgroundColor: 'rgba(255, 165, 0, 0.5)',
+    //             yAxisID: 'y1',
+    //         },
+    //     ],
+    // };
+
+    const linedata = {
+        labels: linelabels,
+        datasets: [
+            {
+                label: 'Collected',
+                data: collectedData,
+                borderColor: 'rgb(0, 255, 0)',
+                backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                yAxisID: 'y',
+            },
+            {
+                label: 'Balance',
+                data: balanceData,
+                borderColor: 'rgb(255, 0, 0)',
+                backgroundColor: 'rgba(255, 165, 0, 0.5)',
+                yAxisID: 'y1',
+            },
+        ],
+    };
 
     const getStore = async () => {
         setIsLoading(true);
@@ -113,10 +138,15 @@ const StorePage = () => {
     }
 
     useEffect(() => {
-        getStoreActivity({ type: "", id: store._id })
+        getStoreActivity({ type: "", id: storeId })
             .then(({ data }) => {
                 setActivity(data)
             })
+        getStoreTransactions({ id: storeId }).then(({ data }) => {
+            console.log("transactions:", data)
+            setTransactions(data)
+        })
+
     }, [])
 
     useEffect(() => {

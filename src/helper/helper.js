@@ -519,3 +519,15 @@ export async function getStoreActivity({type,id}){
     return error
   }
 }
+
+/**STORE TRANSACTIONS */
+export async function getStoreTransactions({id}){
+  try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+    const res = await axios.get(`/transactions/monthly/${id}`,{headers})
+    return res
+  } catch (error) {
+    return error
+  }
+}
