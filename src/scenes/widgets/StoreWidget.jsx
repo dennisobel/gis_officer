@@ -24,18 +24,19 @@ const StoreWidget = ({
     email,
     phone,
     paymentstatus,
-    store_no
+    store_no,
+    business_name
 }) => {
     const navigate = useNavigate()
     const dispatch = useDispatch();
     const { palette } = useTheme();
-    const [visitdate,setDate] = useState()
-    const [todo,setAddTODO] = useState({})
+    const [visitdate, setDate] = useState()
+    const [todo, setAddTODO] = useState({})
     const main = palette.neutral.main;
 
     useEffect(() => {
-        visitdate !== undefined && setAddTODO({...store,visitdate:dayjs(visitdate).format("DD-MM-YYYY")})
-    },[visitdate,store])
+        visitdate !== undefined && setAddTODO({ ...store, visitdate: dayjs(visitdate).format("DD-MM-YYYY") })
+    }, [visitdate, store])
 
 
     const handleView = () => {
@@ -52,15 +53,12 @@ const StoreWidget = ({
         <WidgetWrapper m="2rem 0">
             <FlexBetween gap="0.3rem">
                 <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
-                    Store # {store_no}
+                    {business_name} : {store_no}
                 </Typography>
                 <FlexBetween gap="0.3rem">
                     <Typography sx={{ color: main, m: "0.5rem 0", pl: "1rem" }}>
                         {paymentstatus}
                     </Typography>
-                    {/* <IconButton onClick={handleView} >
-                        <VisibilityOutlined />
-                    </IconButton> */}
                 </FlexBetween>
             </FlexBetween>
             <FlexBetween mt="0.25rem">
@@ -77,12 +75,12 @@ const StoreWidget = ({
             </FlexBetween>
             <Box>
                 <Divider />
-                <br/>
+                <br />
                 <FlexBetween gap="0.3rem">
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <MobileDatePicker label="Pick visit date" value={visitdate} onChange={(newValue) => setDate(newValue)} onAccept={handleTodo}/>
+                        <MobileDatePicker label="Pick visit date" value={visitdate} onChange={(newValue) => setDate(newValue)} onAccept={handleTodo} />
                     </LocalizationProvider>
-                    <Button variant="text" onClick={handleView} endIcon={<VisibilityOutlined/>} color="neutral">
+                    <Button variant="text" onClick={handleView} endIcon={<VisibilityOutlined />} color="neutral">
                         VIEW
                     </Button>
                 </FlexBetween>
