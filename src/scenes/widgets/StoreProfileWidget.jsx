@@ -8,12 +8,20 @@ import {
     ReportProblemOutlined,
     LocationOnOutlined,
 } from "@mui/icons-material";
-import { Box, Typography, Divider, useTheme } from "@mui/material";
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
+import { Box, Typography, Divider, useTheme, Button } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useSelector, useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, forwardRef } from "react";
 import { getUsername, getStoreActivity } from "helper/helper";
 import { toggleCompliance, toggleReg } from "state";
 import { getBuildingById, calculateDistance, verifyBusiness, imageUpload } from "helper/helper";
@@ -23,6 +31,10 @@ import "react-toastify/dist/ReactToastify.css";
 /**IMAGE UPLOAD */
 import Dropzone from "react-dropzone";
 import axios from "axios";
+
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const StoreProfileWidget = ({ store }) => {
     const {
@@ -52,7 +64,29 @@ const StoreProfileWidget = ({ store }) => {
     const [reg, setReg] = useState(registered)
     const [path, setPath] = useState("")
     const [cachedImage, setCachedImage] = useState(null);
-    const [activity,setActivity] = useState()
+    const [activity, setActivity] = useState()
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false)
+    };
+
+    const handleVerify = () => {
+        verifyBusiness({ store_id: store._id, verified: true }, location)
+            .then(({ data }) => {
+                setReg("true")
+                toast.success(`${data.message}`)
+            })
+            .then(setOpen(false))
+            .catch(({ error }) => {
+                toast.error(error.response.data.error)
+            })
+
+    };
 
     useEffect(() => {
         getUsername().then(user => setUser(user))
@@ -63,10 +97,10 @@ const StoreProfileWidget = ({ store }) => {
     }, []);
 
     useEffect(() => {
-        getStoreActivity({type:"",id:store._id})
-        .then(({data}) => {
-            setActivity(data)
-        })
+        getStoreActivity({ type: "", id: store._id })
+            .then(({ data }) => {
+                setActivity(data)
+            })
     }, [])
 
     useEffect(() => {
@@ -146,153 +180,173 @@ const StoreProfileWidget = ({ store }) => {
     }
 
     return (
-        <WidgetWrapper>
-            <ToastContainer />
-            {/* FIRST ROW */}
-            <FlexBetween
-                gap="0.5rem"
-                pb="1.1rem"
-            >
-                <FlexBetween gap="1rem">
-                    <Dropzone
-                        acceptedFiles=".jpg,.jpeg,.png"
-                        multiple={false}
-                        // onDrop={handleImageDrop}
-                        onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
-                    >
-                        {({ getRootProps, getInputProps }) => (
-                            <FlexBetween>
-                                <Box
-                                    {...getRootProps()}
-                                    border={`2px dashed ${palette.primary.main}`}
-                                    p="1rem"
-                                    width="100%"
-                                    sx={{ "&:hover": { cursor: "pointer" } }}
-                                >
-                                    <input {...getInputProps()} hidden />
-                                    <UserImage image={cachedImage || path} store={store} />
-
-                                </Box>
-                            </FlexBetween>
-                        )}
-
-                    </Dropzone>
-                    <Box>
-                        <Typography
-                            variant="h4"
-                            color={dark}
-                            fontWeight="500"
-                            sx={{
-                                "&:hover": {
-                                    color: palette.primary.light,
-                                    cursor: "pointer",
-                                },
-                            }}
+        <>
+            <div>
+                {/* <Button variant="outlined" onClick={handleClickOpen}>
+        Slide in alert dialog
+      </Button> */}
+                <Dialog
+                    open={open}
+                    TransitionComponent={Transition}
+                    keepMounted
+                    onClose={handleClose}
+                    aria-describedby="alert-dialog-slide-description"
+                >
+                    <DialogTitle>{`Verify store # ${store_no}`}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Please confirm that this store actually exists.
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClose}>Disagree</Button>
+                        <Button onClick={handleVerify}>Agree</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+            <WidgetWrapper>
+                <ToastContainer />
+                {/* FIRST ROW */}
+                <FlexBetween
+                    gap="0.5rem"
+                    pb="1.1rem"
+                >
+                    <FlexBetween gap="1rem">
+                        <Dropzone
+                            acceptedFiles=".jpg,.jpeg,.png"
+                            multiple={false}
+                            // onDrop={handleImageDrop}
+                            onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
                         >
-                            {business_name}
+                            {({ getRootProps, getInputProps }) => (
+                                <FlexBetween>
+                                    <Box
+                                        {...getRootProps()}
+                                        border={`2px dashed ${palette.primary.main}`}
+                                        p="1rem"
+                                        width="100%"
+                                        sx={{ "&:hover": { cursor: "pointer" } }}
+                                    >
+                                        <input {...getInputProps()} hidden />
+                                        <UserImage image={cachedImage || path} store={store} />
+
+                                    </Box>
+                                </FlexBetween>
+                            )}
+
+                        </Dropzone>
+                        <Box>
+                            <Typography
+                                variant="h4"
+                                color={dark}
+                                fontWeight="500"
+                                sx={{
+                                    "&:hover": {
+                                        color: palette.primary.light,
+                                        cursor: "pointer",
+                                    },
+                                }}
+                            >
+                                {business_name}
+                            </Typography>
+                            <Typography color={medium}>Store #: {store_no}</Typography>
+                        </Box>
+                    </FlexBetween>
+                </FlexBetween>
+
+                <Box p="1rem 0">
+                    <FlexBetween mb="0.5rem">
+                        {/* <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)} /> */}
+                        <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/dir/${coords.latitude},${coords.longitude}/@${location?.latitude},${location?.longitude},10z/data=!4m10!4m9!1m1!4e1!1m5!1m1!1s0x182f16d5f67653d9:0x13ef638e1bb7a5c5!2m2!1d${location?.longitude}!2d${location?.latitude}!3e0?entry=ttu`}>
+                            <LocationOnOutlined fontSize="small" sx={{ color: main }} />
+                        </a>
+                        <Typography color={main} fontWeight="500">
+                            Distance #: {Math.floor(distance)} Ms
                         </Typography>
-                        <Typography color={medium}>Store #: {store_no}</Typography>
+                    </FlexBetween>
+                </Box>
+
+                <Divider />
+
+                {/* SECOND ROW */}
+                <Box p="1rem 0">
+                    <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
+                        <Typography color={medium}>{business_category}</Typography>
                     </Box>
-                </FlexBetween>
-            </FlexBetween>
-
-            <Box p="1rem 0">
-                <FlexBetween mb="0.5rem">
-                    {/* <LocationOnOutlined fontSize="small" sx={{ color: main }} onClick={() => navigate(`/map/${location?.longitude}/${location?.latitude}/${store._id}`)} /> */}
-                    <a target="_blank" rel="noreferrer" href={`https://www.google.com/maps/dir/${coords.latitude},${coords.longitude}/@${location?.latitude},${location?.longitude},10z/data=!4m10!4m9!1m1!4e1!1m5!1m1!1s0x182f16d5f67653d9:0x13ef638e1bb7a5c5!2m2!1d${location?.longitude}!2d${location?.latitude}!3e0?entry=ttu`}>
-                        <LocationOnOutlined fontSize="small" sx={{ color: main }} />
-                    </a>
-                    <Typography color={main} fontWeight="500">
-                        Distance #: {Math.floor(distance)} Ms
-                    </Typography>
-                </FlexBetween>
-            </Box>
-
-            <Divider />
-
-            {/* SECOND ROW */}
-            <Box p="1rem 0">
-                <Box display="flex" alignItems="center" gap="1rem" mb="0.5rem">
-                    <Typography color={medium}>{business_category}</Typography>
+                    <Box display="flex" alignItems="center" gap="1rem">
+                        <WorkOutlineOutlined fontSize="small" sx={{ color: main }} />
+                        <Typography color={medium}>{business_description}</Typography>
+                    </Box>
                 </Box>
-                <Box display="flex" alignItems="center" gap="1rem">
-                    <WorkOutlineOutlined fontSize="small" sx={{ color: main }} />
-                    <Typography color={medium}>{business_description}</Typography>
+
+                <Divider />
+
+                {/* THIRD ROW */}
+                <Box p="1rem 0">
+                    <FlexBetween mb="0.5rem">
+                        <EmailOutlined fontSize="small" sx={{ color: main }} />
+                        <Typography color={main} fontWeight="500">
+                            {business_email}
+                        </Typography>
+                    </FlexBetween>
+                    <FlexBetween>
+                        <CallOutlined fontSize="small" sx={{ color: main }} />
+                        <Typography color={main} fontWeight="500">
+                            {business_phone}
+                        </Typography>
+                    </FlexBetween>
                 </Box>
-            </Box>
 
-            <Divider />
+                <Divider />
 
-            {/* THIRD ROW */}
-            <Box p="1rem 0">
-                <FlexBetween mb="0.5rem">
-                    <EmailOutlined fontSize="small" sx={{ color: main }} />
-                    <Typography color={main} fontWeight="500">
-                        {business_email}
+                {/* FOURTH ROW */}
+                <Box p="1rem 0">
+                    <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
+                        Status Checks
                     </Typography>
-                </FlexBetween>
-                <FlexBetween>
-                    <CallOutlined fontSize="small" sx={{ color: main }} />
-                    <Typography color={main} fontWeight="500">
-                        {business_phone}
-                    </Typography>
-                </FlexBetween>
-            </Box>
 
-            <Divider />
-
-            {/* FOURTH ROW */}
-            <Box p="1rem 0">
-                <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-                    Status Checks
-                </Typography>
-
-                <FlexBetween gap="1rem">
                     <FlexBetween gap="1rem">
-                        <BusinessCenterOutlined fontSize="small" sx={{ color: main }} />
-                        <Box>
-                            <Typography color={main} fontWeight="500">
-                                Registered
-                            </Typography>
-                            <Typography color={medium}>{reg === "false" ? "No" : "Yes"}</Typography>
-                        </Box>
+                        <FlexBetween gap="1rem">
+                            <BusinessCenterOutlined fontSize="small" sx={{ color: reg === "true" ? "green" : main }} />
+                            <Box>
+                                <Typography color={main} fontWeight="500">
+                                    Registered
+                                </Typography>
+                                <Typography color={medium}>{reg === "false" ? "No" : "Yes"}</Typography>
+                            </Box>
+                        </FlexBetween>
+                        {reg === "false" && <EditOutlined sx={{ color: main }} onClick={() => {
+                            handleClickOpen()
+                        }} />}
                     </FlexBetween>
-                    <EditOutlined sx={{ color: main }} onClick={() => {
-                        verifyBusiness({ store_id: store._id, verified: true }, location)
-                            .then(({ data }) => {
-                                setReg("true")
-                                toast.success(`${data.message}`)
-                            }).catch(({error}) => {                                
-                                toast.error(error.response.data.error)
-                            })
-                    }} />
-                </FlexBetween>
 
-                <FlexBetween gap="1rem" mb="0.5rem">
-                    <FlexBetween gap="1rem">
-                        <CheckCircleOutlined fontSize="small" sx={{ color: main }} />
-                        <Box>
-                            <Typography color={main} fontWeight="500">
-                                Payment Status
-                            </Typography>
-                            <Typography color={medium}>{payment_status}</Typography>
-                        </Box>
+                    <FlexBetween gap="1rem" mb="0.5rem">
+                        <FlexBetween gap="1rem">
+                            <CheckCircleOutlined fontSize="small" sx={{ color: payment_status === "Paid" ? "green" : payment_status === "Partially Paid" ? "yellow" : "red" }} />
+                            <Box>
+                                <Typography color={main} fontWeight="500">
+                                    Compliance
+                                </Typography>
+                                <Typography color={medium}>{payment_status}</Typography>
+                            </Box>
+                        </FlexBetween>
+                        <EditOutlined sx={{ color: main }} onClick={() => setShowCompliance(!showcompliance)} />
                     </FlexBetween>
-                    <EditOutlined sx={{ color: main }} onClick={() => setShowCompliance(!showcompliance)} />
-                </FlexBetween>
 
-                <FlexBetween gap="1rem">
                     <FlexBetween gap="1rem">
-                        <ReportProblemOutlined fontSize="small" sx={{ color: escalated ? "red" : "" }} />
-                        <Box>
-                            <Typography color={main} fontWeight="700">
-                                Escalated : {escalated ? "Yes": "No"}
-                            </Typography>
-                        </Box>
+                        <FlexBetween gap="1rem">
+                            <ReportProblemOutlined fontSize="small" sx={{ color: escalated ? "red" : "" }} />
+                            <Box>
+                                <Typography color={main} fontWeight="500">
+                                    Escalated : {escalated ? "Yes" : "No"}
+                                </Typography>
+                            </Box>
+                        </FlexBetween>
                     </FlexBetween>
-                </FlexBetween>
-            </Box>
-        </WidgetWrapper>
+                </Box>
+            </WidgetWrapper>
+        </>
+
     );
 };
 
