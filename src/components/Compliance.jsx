@@ -1,8 +1,7 @@
-import React, { useState, useRef } from "react";
-import { Box, useTheme, Button, Modal, TextField, Typography, Select, MenuItem, InputLabel, useMediaQuery } from "@mui/material";
+import React, { useState } from "react";
+import { Box, useTheme, Button, Modal, TextField, Typography, InputLabel, useMediaQuery } from "@mui/material";
 import validator from "validator";
-import MyPostWidget from "scenes/widgets/MyPostWidget";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { initiateSTK } from "helper/helper";
 
 const Compliance = ({ isOpen, onClose, store }) => {

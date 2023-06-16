@@ -3,7 +3,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { useDropzone } from "react-dropzone";
 import "react-tabs/style/react-tabs.css";
 import { setBusinessReg } from "state";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import BusinessActivity from "components/steps/BusinessActivity";
 import BusinessCategory from "components/steps/BusinessCategory";
 import BusinessContacts from "components/steps/BusinessContacts";

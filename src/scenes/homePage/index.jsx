@@ -10,8 +10,6 @@ const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
   const { palette } = useTheme();
   const dark = palette.neutral.dark;
-  const medium = palette.neutral.medium;
-  const main = palette.neutral.main;
   const [user, setUser] = useState()
 
   useEffect(() => {

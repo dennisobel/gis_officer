@@ -2,46 +2,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setBusinessReg } from "../../state";
 import {
-  EditOutlined,
-  DeleteOutlined,
-  AttachFileOutlined,
-  GifBoxOutlined,
-  ImageOutlined,
-  MicOutlined,
-  MoreHorizOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Typography,
   InputBase,
   useTheme,
-  Button,
-  IconButton,
-  useMediaQuery,
   TextareaAutosize,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Dropzone from "react-dropzone";
-import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 
 export default function BusinessActivity() {
   const businessReg = useSelector(state => state.businessReg)
   const { palette } = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const mediumMain = palette.neutral.mediumMain;
-  const medium = palette.neutral.medium;
   const dispatch = useDispatch()
-
-  const [formErrors, setFormErrors] = useState({
-    business_category: false,
-    business_sub_category: false,
-    business_description: false,
-    no_of_employees: false,
-    additional_activity: false,
-    premise_size: false,
-  });
 
   const [formValues, setFormValues] = useState({
     business_category: "",

@@ -72,10 +72,6 @@ export default function ReviewAccept() {
     dispatch(updateReviewAccept({ [name]: checked }));
   };
 
-  useEffect(() => {
-    console.log("STATE:",state)
-  },[])
-
   return (
     <>
       <div className="text-center">

@@ -40,18 +40,6 @@ export default function BusinessContacts() {
   const [isImage, setIsImage] = useState(false);
   const [image, setImage] = useState(null);
 
-  const [formErrors, setFormErrors] = useState({
-    business_email:false,
-    business_phone:false,
-    postal_address: false,
-    postal_code: false,
-    contact_person_id: false,
-    contact_person_role: false,
-    contact_person_name: false,
-    contact_person_email: false,
-    contact_person_phone: false,
-  });
-
   const [formValues,setFormValues] = useState({
     business_email:"",
     business_phone:"",
@@ -120,9 +108,7 @@ export default function BusinessContacts() {
 
 
   const handleRegistration = (e) => {
-    console.log("REGISTER USER:", businessReg)
     e.preventDefault();
-
     
     const errors = {
       business_email: !validator.isEmail(formValues.business_email),
@@ -135,8 +121,6 @@ export default function BusinessContacts() {
       postal_code: validator.isEmpty(formValues.postal_code),
       contact_person_role: validator.isEmpty(formValues.contact_person_role),
     };
-
-    setFormErrors(errors);
 
     if (!Object.values(errors).some(Boolean)) {
       let registerPromise = createBusiness(businessReg,location)

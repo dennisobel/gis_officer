@@ -2,36 +2,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setBusinessReg } from "../../state";
 import {
-  EditOutlined,
-  DeleteOutlined,
-  AttachFileOutlined,
-  GifBoxOutlined,
-  ImageOutlined,
-  MicOutlined,
-  MoreHorizOutlined,
-} from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Typography,
   InputBase,
   useTheme,
-  Button,
-  IconButton,
-  useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Dropzone from "react-dropzone";
-import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
 
 export default function BusinessDetails() {
   const businessReg = useSelector(state => state.businessReg)
   const dispatch = useDispatch()
   const { palette } = useTheme();
-  const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const mediumMain = palette.neutral.mediumMain;
-  const medium = palette.neutral.medium;
 
   const [formValues, setFormValues] = useState({
     business_name: "",

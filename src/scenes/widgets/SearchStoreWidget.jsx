@@ -30,32 +30,30 @@ const SearchStoreWidget = () => {
 
     return (
         <WidgetWrapper>
-            <div style={{ position: "" }}>
-                <FlexBetween gap="1.5rem">
-                    <IconButton onClick={() => navigate("/home")}>
-                        <ArrowBackOutlined />
-                    </IconButton>
+            <FlexBetween gap="1.5rem">
+                <IconButton onClick={() => navigate("/home")}>
+                    <ArrowBackOutlined />
+                </IconButton>
 
-                    <FlexBetween
-                        backgroundColor={neutralLight}
-                        borderRadius="9px"
-                        gap="3rem"
-                        padding="0.1rem 1.5rem"
-                    >
-                        <InputBase
-                            placeholder="Filter"
-                            onChange={handleInputChange}
-                            sx={{
-                                width: "100%",
-                                backgroundColor: palette.neutral.light,
-                                borderRadius: "2rem",
-                                padding: "1rem 2rem",
-                            }}
-                        />
-                    </FlexBetween>
-
+                <FlexBetween
+                    backgroundColor={neutralLight}
+                    borderRadius="9px"
+                    gap="3rem"
+                    padding="0.1rem 1.5rem"
+                >
+                    <InputBase
+                        placeholder="Filter"
+                        onChange={handleInputChange}
+                        sx={{
+                            width: "100%",
+                            backgroundColor: palette.neutral.light,
+                            borderRadius: "2rem",
+                            padding: "1rem 2rem",
+                        }}
+                    />
                 </FlexBetween>
-            </div>
+
+            </FlexBetween>
         </WidgetWrapper>
     );
 };
