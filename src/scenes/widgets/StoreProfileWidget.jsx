@@ -169,6 +169,7 @@ const StoreProfileWidget = ({ store }) => {
                                     width="100%"
                                     sx={{ "&:hover": { cursor: "pointer" } }}
                                 >
+                                    <input {...getInputProps()} hidden />
                                     <UserImage image={cachedImage || path} store={store} />
 
                                 </Box>
