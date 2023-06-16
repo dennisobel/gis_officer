@@ -141,6 +141,9 @@ const StorePage = () => {
                     <IconButton onClick={() => navigate("/stores")}>
                         <ArrowBackOutlined />
                     </IconButton>
+                    <Typography fontSize="0.8rem" color={main} fontWeight="500" mb="0.5rem">
+                        {store?.business_name}
+                    </Typography>
                 </FlexBetween>
             </WidgetWrapper>
 
