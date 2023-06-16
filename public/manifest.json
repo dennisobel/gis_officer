@@ -3,16 +3,21 @@
   "name": "SBP",
   "icons": [
     {
-      "src": "",
-      "type": "",
-      "sizes": ""
+      "src": "/logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
   "start_url": "/?source=pwa",
-  "background_color": "#00353F",
+  "background_color": "#3367D6",
+  "background_image": "/map-pin-location.png",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#00353F",
-  "description": "Single Business Permit Officer app",
-  "background_image": "/map-pin-location.jpg"
+  "theme_color": "#3367D6",
+  "description": "Single Business Permit Officer app"
 }
