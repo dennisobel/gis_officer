@@ -18,5 +18,9 @@
   "display": "standalone",
   "scope": "/",
   "theme_color": "#00D5FA",
-  "description": "Single Business Permit Officer app"
+  "description": "Single Business Permit Officer app",
+  "splash_screen": {
+    "image": "/map-pin-location.png",
+    "background_color": "#00D5FA"
+  }
 }
