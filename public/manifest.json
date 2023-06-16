@@ -1,12 +1,18 @@
 {
   "short_name": "SBP",
   "name": "SBP",
-
+  "icons": [
+    {
+      "src": "",
+      "type": "",
+      "sizes": ""
+    }
+  ],
   "start_url": "/?source=pwa",
-  "background_color": "#00D5FA",
+  "background_color": "#00353F",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#00D5FA",
+  "theme_color": "#00353F",
   "description": "Single Business Permit Officer app",
-  "background_image": "/assets/map-pin-location.jpg"
+  "background_image": "/map-pin-location.jpg"
 }
