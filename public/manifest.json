@@ -5,14 +5,9 @@
   "background_color": "#3367D6",
   "icons": [
     {
-      "src": "/logo192.png",
+      "src": "/map-pin-location.png",
       "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "1000x684"
     }
   ],
   "display": "standalone",
