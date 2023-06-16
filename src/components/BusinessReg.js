@@ -8,8 +8,6 @@ import BusinessActivity from "components/steps/BusinessActivity";
 import BusinessCategory from "components/steps/BusinessCategory";
 import BusinessContacts from "components/steps/BusinessContacts";
 import BusinessDetails from "components/steps/BusinessDetails";
-import Review from "components/steps/Review";
-import Final from "components/steps/Final";
 
 const BusinessReg = (props) => {
   const [files, setFiles] = useState([]);
@@ -73,12 +71,6 @@ const BusinessReg = (props) => {
               <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
                 <span>04</span>
               </Tab>
-              {/* <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
-                <span>05</span> Review
-              </Tab>
-              <Tab className="px-4 py-2 font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700 cursor-pointer">
-                <span>06</span> Final
-              </Tab> */}
             </TabList>
           </div>
 
@@ -114,20 +106,6 @@ const BusinessReg = (props) => {
               </div>
             </div>
           </TabPanel>
-          <TabPanel>
-            <div className="row">
-              <div className="col-md-12 form-group">
-                <Review />
-              </div>
-            </div>
-          </TabPanel>
-          <TabPanel>
-            <div className="row">
-              <div className="col-md-12 form-group">
-                <Final />
-              </div>
-            </div>
-          </TabPanel> 
         </div>
       </Tabs>
     </div>

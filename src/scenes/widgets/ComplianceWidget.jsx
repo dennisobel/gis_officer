@@ -1,52 +1,24 @@
 import {
-    EditOutlined,
-    DeleteOutlined,
-    AttachFileOutlined,
-    GifBoxOutlined,
-    ImageOutlined,
-    MicOutlined,
-    MoreHorizOutlined,
-} from "@mui/icons-material";
-import {
-    Box,
     Divider,
-    Typography,
     InputBase,
     useTheme,
     Button,
-    IconButton,
-    useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
-import Dropzone from "react-dropzone";
-import UserImage from "components/UserImage";
 import WidgetWrapper from "components/WidgetWrapper";
-import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "state";
-import { getUsername } from "helper/helper";
-import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 import validator from "validator";
 import { initiateSTK, escalate, verifyTransaction } from "helper/helper";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { useDropzone } from "react-dropzone";
 import "react-tabs/style/react-tabs.css";
 /**TOAST IMPORTS */
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ComplianceWidget = ({ picturePath, store }) => {
-    const dispatch = useDispatch();
-    const [isImage, setIsImage] = useState(false);
-    const [image, setImage] = useState(null);
-    const [post, setPost] = useState("");
+const ComplianceWidget = ({ store }) => {
     const { palette } = useTheme();
     const location = useSelector(state => state.currentLocation)
-    const token = useSelector((state) => state.token);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const mediumMain = palette.neutral.mediumMain;
-    const medium = palette.neutral.medium;
-
-    const [user, setUser] = useState()
     const [formValues, setFormValues] = useState({
         amount: "",
         receipt_no: "",
@@ -109,7 +81,6 @@ const ComplianceWidget = ({ picturePath, store }) => {
     }
 
     const handleEscalate = async (event) => {
-        console.log("in handleescalate:",store)
         event.preventDefault()
         const errors = {
             escalation_reason: validator.isEmpty(formValues.escalation_reason),
@@ -126,16 +97,10 @@ const ComplianceWidget = ({ picturePath, store }) => {
                 },
                 location
             ).then((res) => {
-                console.log("RES:",res)
                 toast.success("Issue successfully escalated.")
             }).catch(err => console.error("ERR:",err))
         }
     }
-
-    useEffect(() => {
-        getUsername()
-            .then(user => setUser(user))
-    }, [])
 
     return (
         <WidgetWrapper>

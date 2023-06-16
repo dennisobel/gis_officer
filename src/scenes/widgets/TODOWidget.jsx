@@ -1,69 +1,20 @@
-import {
-    WorkOutlineOutlined,
-    DescriptionOutlined,
-    CheckCircleOutlined,
-    ContactsOutlined,
-    BusinessOutlined,
-    VisibilityOutlined,
-    LocationOnOutlined
-} from "@mui/icons-material";
+import { LocationOnOutlined } from "@mui/icons-material";
 import {
     Box,
-    Divider,
     IconButton,
-    Typography,
-    useTheme,
-    Paper,
-    Button,
     ListItem,
     ListItemButton,
     ListItemIcon,
     ListItemText,
     Checkbox
 } from "@mui/material";
-import FlexBetween from "components/FlexBetween";
+
 import WidgetWrapper from "components/WidgetWrapper";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import Compliance from "components/Compliance";
+import { useState } from "react";
 
-/**DATE PICKER LIBS */
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 
-const TODOWidget = ({
-    store,
-    branch,
-    category,
-    description,
-    email,
-    phone,
-    paymentstatus,
-    store_no
-}) => {
-    const navigate = useNavigate()
-    const dispatch = useDispatch();
-    const { palette } = useTheme();
-    const [open, setOpen] = useState(false);
-    const [openView, setOpenView] = useState(false)
-    const [visitdate, setDate] = useState()
-    const [todo, setAddTODO] = useState({})
-    const dark = palette.neutral.dark;
-    const medium = palette.neutral.medium;
-    const main = palette.neutral.main;
-    const primary = palette.primary.main;
+const TODOWidget = ({store}) => {
     const [checked, setChecked] = useState([0]);
-
-    const handleOpen = () => {
-        setOpen(true);
-    };
-
-    const handleClose = () => {
-        setOpen(false);
-    };
 
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);

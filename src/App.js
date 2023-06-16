@@ -3,7 +3,6 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import HomePage from "scenes/homePage";
 import LoginPage from "scenes/loginPage";
 import OtpPage from "scenes/otp";
-import ProfilePage from "scenes/profilePage";
 import BusinessRegPage from "scenes/business_reg";
 import Map from "scenes/map/old";
 import OldMap from "scenes/map/oldmap";
@@ -151,10 +150,6 @@ function App() {
             <Route
               path="/map_page"
               element={user ? <OldMap /> : <Navigate to="/" />}
-            />
-            <Route
-              path="/profile/:userId"
-              element={user ? <ProfilePage /> : <Navigate to="/" />}
             />
           </Routes>
         </ThemeProvider>
