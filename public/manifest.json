@@ -1,22 +1,12 @@
 {
-  "short_name": "GIS OFFICER",
-  "name": "GIS Officer App",
-  "icons": [
-    {
-      "src": "/logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "/logo512.png",
-      "type": "image/png",
-      "sizes": "512x512"
-    }
-  ],
+  "short_name": "SBP",
+  "name": "SBP",
+
   "start_url": "/?source=pwa",
-  "background_color": "#3367D6",
+  "background_color": "#00D5FA",
   "display": "standalone",
   "scope": "/",
-  "theme_color": "#3367D6",
-  "description": "GIS Officer"
+  "theme_color": "#00D5FA",
+  "description": "Single Business Permit Officer app",
+  "background_image": "/assets/map-pin-location.jpg"
 }
