@@ -34,6 +34,7 @@ const StoreProfileWidget = ({ store }) => {
         payment_status,
         registered,
         store_no,
+        escalated
     } = store
     const [user, setUser] = useState(null);
     const [image, setImage] = useState();
@@ -260,8 +261,8 @@ const StoreProfileWidget = ({ store }) => {
                             .then(({ data }) => {
                                 setReg("true")
                                 toast.success(`${data.message}`)
-                            }).catch(err => {
-                                toast.error("Something went wrong in verification")
+                            }).catch(({error}) => {                                
+                                toast.error(error.response.data.error)
                             })
                     }} />
                 </FlexBetween>
@@ -281,10 +282,10 @@ const StoreProfileWidget = ({ store }) => {
 
                 <FlexBetween gap="1rem">
                     <FlexBetween gap="1rem">
-                        <ReportProblemOutlined fontSize="small" sx={{ color: "red" }} />
+                        <ReportProblemOutlined fontSize="small" sx={{ color: escalated ? "red" : "" }} />
                         <Box>
                             <Typography color={main} fontWeight="700">
-                                Escalated
+                                Escalated : {escalated ? "Yes": "No"}
                             </Typography>
                         </Box>
                     </FlexBetween>
