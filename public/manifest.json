@@ -3,7 +3,6 @@
   "name": "SBP",
   "start_url": "/?source=pwa",
   "background_color": "#3367D6",
-  "background_image": "/map-pin-location.png",
   "display": "standalone",
   "scope": "/",
   "theme_color": "#3367D6",
