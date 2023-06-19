@@ -21,7 +21,6 @@ const PostsWidget = ({ userId }) => {
     if (user !== undefined) {
       setIsLoading(true);
       getWardBusinesses({ ward: user?.ward }).then(({ data }) => {
-        console.log(data)
         setWardbusinesses(data);
         dispatch(setBuildings(data))
         localStorage.setItem("buildings", JSON.stringify(data))

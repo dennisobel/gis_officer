@@ -37,7 +37,6 @@ const StoresWidget = ({ userId, isProfile = false }) => {
       }
       return false;
     });
-    console.log("FILTERED:", filtered);
     setFiltered(filtered);
   }, [query, stores]);
 

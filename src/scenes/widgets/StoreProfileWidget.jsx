@@ -16,6 +16,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Switch from '@mui/material/Switch';
+
 import { Box, Typography, Divider, useTheme, Button } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
@@ -48,6 +53,7 @@ const StoreProfileWidget = ({ store }) => {
         store_no,
         escalated
     } = store
+    const [allChecked, setAllChecked] = useState(false);
     const [user, setUser] = useState(null);
     const [image, setImage] = useState();
     const { palette } = useTheme();
@@ -66,6 +72,21 @@ const StoreProfileWidget = ({ store }) => {
     const [cachedImage, setCachedImage] = useState(null);
     const [activity, setActivity] = useState()
     const [open, setOpen] = useState(false);
+    const [checked, setChecked] = useState(['wifi']);
+
+    const handleToggle = (value) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+
+        if (currentIndex === -1) {
+            newChecked.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+
+        setChecked(newChecked);
+        checkAllItemsChecked();
+    };
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -74,6 +95,12 @@ const StoreProfileWidget = ({ store }) => {
     const handleClose = () => {
         setOpen(false)
     };
+
+    const checkAllItemsChecked = () => {
+        const allItemsChecked = checked.length === 7; // Change the number based on the total number of list items
+        setAllChecked(allItemsChecked);
+    };
+
 
     const handleVerify = () => {
         verifyBusiness({ store_id: store._id, verified: true }, location)
@@ -182,9 +209,6 @@ const StoreProfileWidget = ({ store }) => {
     return (
         <>
             <div>
-                {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Slide in alert dialog
-      </Button> */}
                 <Dialog
                     open={open}
                     TransitionComponent={Transition}
@@ -195,12 +219,72 @@ const StoreProfileWidget = ({ store }) => {
                     <DialogTitle>{`Verify store # ${store_no}`}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-slide-description">
-                            Please confirm that this store actually exists.
+                            Confirm store existence & details.
                         </DialogContentText>
+                        <List
+                            sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+                        >
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Store # - ${store.store_no}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('store_no')}
+                                    checked={checked.indexOf('store_no') !== -1}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Application Type - ${store.application_type}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('application_type')}
+                                    checked={checked.indexOf('application_type') !== -1}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Branch - ${store.branch_name}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('branch_name')}
+                                    checked={checked.indexOf('branch_name') !== -1}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Category - ${store.business_category}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('business_category')}
+                                    checked={checked.indexOf('business_category') !== -1}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Floor # - ${store.floor_no}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('floor_no')}
+                                    checked={checked.indexOf('floor_no') !== -1}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Address - ${store.postal_address}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('postal_address')}
+                                    checked={checked.indexOf('postal_address') !== -1}
+                                />
+                            </ListItem>
+                            <ListItem>
+                                <ListItemText id="switch-list-label-wifi" primary={`Postal Code - ${store.postal_code}`} />
+                                <Switch
+                                    edge="end"
+                                    onChange={handleToggle('postal_code')}
+                                    checked={checked.indexOf('postal_code') !== -1}
+                                />
+                            </ListItem>
+                        </List>
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleClose}>Disagree</Button>
-                        <Button onClick={handleVerify}>Agree</Button>
+                        <Button onClick={handleVerify} disabled={!allChecked}>Agree</Button>
                     </DialogActions>
                 </Dialog>
             </div>
