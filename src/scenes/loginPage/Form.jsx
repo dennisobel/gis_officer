@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Box,
   Button,
@@ -30,14 +29,11 @@ const Form = () => {
   const navigate = useNavigate();
   const isNonMobile = useMediaQuery("(min-width:600px)");
 
-  const login = async (values, onSubmitProps) => {
-    console.log(" in here")
+  const login = async (values) => {
     const res = await verifyPassword(values)
-    console.log("login res:",res)
     let {token} = res.data
     await localStorage.setItem("token",token)
     let user = await getUsername()
-    console.log("user:",user)
     if(user.role === "revenueOfficer"){
       navigate("/otp")
     }else {
@@ -46,7 +42,6 @@ const Form = () => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values)
     await login(values, onSubmitProps);
   };
 
