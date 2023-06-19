@@ -531,3 +531,27 @@ export async function getStoreTransactions({id}){
     return error
   }
 }
+
+/**GET CATEGORIES */
+export async function getCategories(){
+  try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+    const res = await axios.get(`/categories`,{headers})
+    return res
+  } catch (error) {
+    return error
+  }
+}
+
+/**GET SUB-CATEGORIES */
+export async function getSubCategories({id}){
+  try {
+    const token = localStorage.getItem("token");
+    const headers = { Authorization: `Bearer ${token}` };
+    const res = await axios.get(`/categories/${id}`,{headers})
+    return res
+  } catch (error) {
+    return error
+  }
+}

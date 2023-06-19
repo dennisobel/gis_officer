@@ -5,14 +5,19 @@ import {
   InputBase,
   useTheme,
   TextareaAutosize,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
+import { getCategories, getSubCategories } from "helper/helper";
 
 export default function BusinessActivity() {
-  const businessReg = useSelector(state => state.businessReg)
+  const businessReg = useSelector((state) => state.businessReg);
   const { palette } = useTheme();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [categories, setCategories] = useState();
+  const [subcategories, setSubCategories] = useState();
 
   const [formValues, setFormValues] = useState({
     business_category: "",
@@ -22,6 +27,10 @@ export default function BusinessActivity() {
     additional_activity: "",
     premise_size: "",
   });
+
+  useEffect(() => {
+    getCategories().then(({ data }) => setCategories(data));
+  }, []);
 
   useEffect(() => {
     setFormValues({
@@ -34,9 +43,21 @@ export default function BusinessActivity() {
     });
   }, []);
 
-  useEffect(()=>{
-    dispatch(setBusinessReg(formValues))
-  },[formValues,dispatch])
+  useEffect(() => {
+    dispatch(setBusinessReg(formValues));
+  }, [formValues, dispatch]);
+
+  useEffect(() => {
+    let selectedCategory =
+      categories &&
+      categories.filter((category) => {
+        return category.name === formValues.business_category;
+      });
+
+    categories && getSubCategories({ id: selectedCategory[0]?._id }).then(({ data }) =>
+      setSubCategories(data)
+    );
+  }, [formValues.business_category, categories]);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -59,18 +80,25 @@ export default function BusinessActivity() {
             business category
           </div>
           <FlexBetween gap="1.5rem">
-            <InputBase
+            <Select
               onChange={handleChange}
-              value={formValues["business_category"] || businessReg?.business_category}
+              value={
+                formValues["business_category"] ||
+                businessReg?.business_category
+              }
               name="business_category"
-              placeholder="Health"
               sx={{
                 width: "95%",
                 backgroundColor: palette.neutral.light,
                 borderRadius: "0.5rem",
-                padding: "1rem 2rem",
+                padding: "0.3rem 0.3rem",
               }}
-            />
+            >
+              <MenuItem value="">Choose Business Category</MenuItem>
+              {categories?.map((category) => (
+                <MenuItem value={category.name}>{category.name}</MenuItem>
+              ))}
+            </Select>
           </FlexBetween>
         </div>
         <div className="w-full mx-2 flex-1">
@@ -78,18 +106,25 @@ export default function BusinessActivity() {
             business sub-category
           </div>
           <FlexBetween gap="1.5rem">
-            <InputBase
+            <Select
               onChange={handleChange}
-              value={formValues["business_sub_category"] || businessReg?.business_sub_category}
+              value={
+                formValues["business_sub_category"] ||
+                businessReg?.business_sub_category
+              }
               name="business_sub_category"
-              placeholder="Clinic"
               sx={{
                 width: "95%",
                 backgroundColor: palette.neutral.light,
                 borderRadius: "0.5rem",
-                padding: "1rem 2rem",
+                padding: "0.3rem 0.3rem",
               }}
-            />
+            >
+              <MenuItem value="">Choose Business Sub-Category</MenuItem>
+              {subcategories?.map((subcategory) => (
+                <MenuItem value={subcategory.name}>{subcategory.name}</MenuItem>
+              ))}
+            </Select>
           </FlexBetween>
         </div>
       </div>
@@ -104,7 +139,10 @@ export default function BusinessActivity() {
               rows={4}
               placeholder="Enter business description"
               onChange={handleChange}
-              value={formValues["business_description"] || businessReg?.business_description}
+              value={
+                formValues["business_description"] ||
+                businessReg?.business_description
+              }
               name="business_description"
               style={{
                 width: "95%",
@@ -127,7 +165,9 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["no_of_employees"] || businessReg?.no_of_employees}
+              value={
+                formValues["no_of_employees"] || businessReg?.no_of_employees
+              }
               name="no_of_employees"
               placeholder="0"
               sx={{
@@ -149,7 +189,10 @@ export default function BusinessActivity() {
           <FlexBetween gap="1.5rem">
             <InputBase
               onChange={handleChange}
-              value={formValues["additional_activity"] || businessReg?.additional_activity}
+              value={
+                formValues["additional_activity"] ||
+                businessReg?.additional_activity
+              }
               name="additional_activity"
               placeholder="Additional activity"
               sx={{
