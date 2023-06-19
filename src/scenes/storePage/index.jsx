@@ -78,6 +78,8 @@ const StorePage = () => {
                 type: 'linear',
                 display: true,
                 position: 'right',
+                min: 0,
+                max: 200,
                 grid: {
                     drawOnChartArea: false,
                 },

@@ -101,7 +101,6 @@ const StoreProfileWidget = ({ store }) => {
         setAllChecked(allItemsChecked);
     };
 
-
     const handleVerify = () => {
         verifyBusiness({ store_id: store._id, verified: true }, location)
             .then(({ data }) => {
