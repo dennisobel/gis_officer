@@ -18,34 +18,21 @@ import SummariesPage from "scenes/summaries";
 import VisitPage from "scenes/visit";
 import { setCurrentLocation } from "state";
 import { setBusinessReg } from "state";
-// import { useGeolocation } from "react-use";
 
 function App() {
   const mode = useSelector((state) => state.mode);
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-  const isAuth = Boolean(useSelector((state) => state.token));
+  const user = getUsername();
   const businessReg = useSelector((state) => state.businessReg);
   const dispatch = useDispatch();
   const [location, setLocation] = useState(null);
-  const [distance, setDistance] = useState();
   const [error, setError] = useState(null);
-
-  const user = getUsername();
-
   const [formValues, setFormValues] = useState({
     location: {},
   });
 
   useEffect(() => {
-    const { latitude, longitude } = location || {};
-    // Do something with latitude and longitude values
-    console.log("Latitude:", latitude);
-    console.log("Longitude:", longitude);
-  }, [location]);
-
-  useEffect(() => {
     const { code, message } = error || {};
-    // Handle the error
     console.log("Geolocation Error:", code, message);
   }, [error]);
 
@@ -90,23 +77,6 @@ function App() {
   useEffect(() => {
     formValues !== undefined && dispatch(setBusinessReg(formValues));
   }, [formValues, dispatch]);
-
-  // useEffect(() => {
-  //   const watchId = navigator.geolocation.watchPosition(
-  //     (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       setLocation({ latitude, longitude });
-  //     },
-  //     (error) => {
-  //       console.log("Error:", error);
-  //     },
-  //     { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-  //   );
-
-  //   return () => {
-  //     navigator.geolocation.clearWatch(watchId);
-  //   };
-  // }, []);
 
   return (
     <div className="app">

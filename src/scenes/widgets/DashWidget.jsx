@@ -1,13 +1,9 @@
-import {
-  ManageAccountsOutlined,
-  LocationOnOutlined
-} from "@mui/icons-material";
+import { ManageAccountsOutlined, LocationOnOutlined } from "@mui/icons-material";
 import { Box, Typography, Divider, useTheme } from "@mui/material";
 import UserImage from "components/UserImage";
 import FlexBetween from "components/FlexBetween";
 import WidgetWrapper from "components/WidgetWrapper";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { getUsername, getSummaries, getUserActivity } from "helper/helper";
 import dayjs from 'dayjs';
 
@@ -23,7 +19,6 @@ import {
   LineElement,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { faker } from "@faker-js/faker";
 
 ChartJS.register(
   CategoryScale,
@@ -44,6 +39,7 @@ const DashWidget = ({ userId }) => {
   const main = palette.neutral.main;
   const [summary, setSummary] = useState();
   const [activity, setUserActivity] = useState()
+  const [visits, setVisits] = useState(0)
 
   //CHARTS
   const labels = ['March', 'April', 'May'];
@@ -103,34 +99,65 @@ const DashWidget = ({ userId }) => {
     },
   };
 
+  const payment_status_data = [
+    {
+      month: "March",
+      p: 20,
+      pp: 45,
+      np: 25
+    },
+    {
+      month: "April",
+      p: 40,
+      pp: 15,
+      np: 30
+    },
+    {
+      month: "May",
+      p: 25,
+      pp: 20,
+      np: 50
+    }
+  ]
+
+  /**REPLACE WITH ACTUAL DATA */
+  const dashlabels = payment_status_data.map(obj => obj.month)
+  const p = payment_status_data.map(obj => obj.p)
+  const pp = payment_status_data.map(obj => obj.pp)
+  const np = payment_status_data.map(obj => obj.np)
+
   const data = {
-    labels,
+    labels: dashlabels,
     datasets: [
       {
         label: 'P',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        data: p,
         backgroundColor: 'rgba(0, 255, 0, 0.5)',
       },
       {
         label: 'PP',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        data: pp,
         backgroundColor: 'rgba(255, 165, 0, 0.5)',
       },
       {
         label: 'NP',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
+        data: np,
         backgroundColor: 'rgba(255, 0, 0, 0.5)',
       },
     ],
   };
   //EOF CHARTS
 
-
   useEffect(() => {
     getUsername().then(user => setUser(user))
     getSummaries().then(res => setSummary(res?.data.summary))
     getUserActivity({ type: "" }).then(({ data }) => setUserActivity(data))
   }, []);
+
+  useEffect(() => {
+    let count = activity !== undefined && activity.filter(el => el.type === "store_checkin").length
+    setVisits(count)
+  }, [activity])
 
   if (!user) {
     return null;
@@ -148,7 +175,7 @@ const DashWidget = ({ userId }) => {
         <FlexBetween
           gap="0.5rem"
           pb="1.1rem"
-          // onClick={() => navigate(`/profile/${userId}`)}
+        // onClick={() => navigate(`/profile/${userId}`)}
         >
           <FlexBetween gap="1rem">
             <UserImage image={""} />
@@ -166,10 +193,10 @@ const DashWidget = ({ userId }) => {
               >
                 {name}
               </Typography>
-              <Typography color={medium}>{msisdn} ID</Typography>
+              <Typography color={medium}>{msisdn}</Typography>
             </Box>
           </FlexBetween>
-          <ManageAccountsOutlined />
+          {/* <ManageAccountsOutlined /> */}
         </FlexBetween>
 
         <Divider />
@@ -181,8 +208,8 @@ const DashWidget = ({ userId }) => {
             <Typography color={medium}>{user.ward}</Typography>
           </Box>
           <FlexBetween mb="0.5rem">
-            <Typography color={medium}>Visits Last Month</Typography>
-            <Typography color={main} fontWeight="500">{summary?.past_store_visits} (0%)</Typography>
+            <Typography color={medium}>Visits Count</Typography>
+            <Typography color={main} fontWeight="500">{visits}</Typography>
           </FlexBetween>
         </Box>
 
@@ -196,19 +223,31 @@ const DashWidget = ({ userId }) => {
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Paid</Typography>
             <Typography color={main} fontWeight="500">
-              25 (0%)
+              {payment_status_data[2].p} ({
+                ((payment_status_data[2].p / (
+                  payment_status_data[2].p + payment_status_data[2].pp + payment_status_data[2].np
+                )) * 100).toFixed(2)
+              }%)
             </Typography>
           </FlexBetween>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Not Paid</Typography>
             <Typography color={main} fontWeight="500">
-              25 (0%)
+              {payment_status_data[2].np} ({
+                ((payment_status_data[2].np / (
+                  payment_status_data[2].p + payment_status_data[2].pp + payment_status_data[2].np
+                )) * 100).toFixed(2)
+              }%)
             </Typography>
           </FlexBetween>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Partially Paid</Typography>
             <Typography color={main} fontWeight="500">
-              45 (0%)
+              {payment_status_data[2].pp} ({
+                ((payment_status_data[2].pp / (
+                  payment_status_data[2].p + payment_status_data[2].pp + payment_status_data[2].np
+                )) * 100).toFixed(2)
+              }%)
             </Typography>
           </FlexBetween>
         </Box>
@@ -226,13 +265,21 @@ const DashWidget = ({ userId }) => {
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Total Collected</Typography>
             <Typography color={main} fontWeight="500">
-              {summary?.monthly_ward_paid} (0%)
+              {summary?.monthly_ward_paid} ({
+                ((summary?.monthly_ward_paid / (
+                  summary?.monthly_ward_paid + summary?.monthly_ward_balance
+                )) * 100).toFixed(2)
+              }%)
             </Typography>
           </FlexBetween>
           <FlexBetween mb="0.5rem">
             <Typography color={medium}>Balance</Typography>
             <Typography color={main} fontWeight="500">
-              {summary?.monthly_ward_balance} (0%)
+              {summary?.monthly_ward_balance} ({
+                ((summary?.monthly_ward_balance / (
+                  summary?.monthly_ward_paid + summary?.monthly_ward_balance
+                )) * 100).toFixed(2)
+              }%)
             </Typography>
           </FlexBetween>
         </Box>
@@ -247,21 +294,21 @@ const DashWidget = ({ userId }) => {
             Activity Log
           </Typography>
           <FlexBetween mb="0.5rem">
-              <Typography color={main} fontWeight="400">Activity</Typography>
-              <Typography color={main} fontWeight="400">
-                Store
-              </Typography>
-              <Typography color={main} fontWeight="400">
-                Date
-              </Typography>
-            </FlexBetween>
+            <Typography color={main} fontWeight="400">Activity</Typography>
+            <Typography color={main} fontWeight="400">
+              Store
+            </Typography>
+            <Typography color={main} fontWeight="400">
+              Date
+            </Typography>
+          </FlexBetween>
           {activity?.map(el => (
             <FlexBetween mb="0.5rem">
               <Typography fontSize="small" color={medium}>{el.type}</Typography>
               <Typography fontSize="small" color={medium} fontWeight="400">
                 {el?.store?.store_no}
               </Typography>
-              <Typography   fontSize="small" color={medium} fontWeight="400">
+              <Typography fontSize="small" color={medium} fontWeight="400">
                 {dayjs(el?.created_at).format("DD/MM/YY")}
               </Typography>
             </FlexBetween>

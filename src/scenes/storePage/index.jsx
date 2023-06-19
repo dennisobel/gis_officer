@@ -85,7 +85,6 @@ const StorePage = () => {
         },
     };
 
-
     const linelabels = transactions?.map(obj => dayjs(obj.date).format('MMM'));
     const collectedData = transactions?.map(obj => obj.transactions_sum);
     const balanceData = transactions?.map(obj => obj.balance);
