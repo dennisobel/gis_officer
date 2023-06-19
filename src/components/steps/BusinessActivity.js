@@ -26,7 +26,7 @@ export default function BusinessActivity() {
     no_of_employees: "",
     additional_activity: "",
     premise_size: "",
-    sub_category_fee: 0
+    sub_category_fee: 0,
   });
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function BusinessActivity() {
       no_of_employees: businessReg?.no_of_employees || "",
       additional_activity: businessReg?.additional_activity || "",
       premise_size: businessReg?.premise_size || "",
-      sub_category_fee: businessReg?.sub_category_fee || 0
+      sub_category_fee: businessReg?.sub_category_fee || 0,
     });
   }, []);
 
@@ -51,24 +51,28 @@ export default function BusinessActivity() {
 
   useEffect(() => {
     let selectedCategory =
-      categories &&
+      categories !== undefined &&
       categories.filter((category) => {
         return category.name === formValues.business_category;
       });
 
-    categories && getSubCategories({ id: selectedCategory[0]?._id }).then(({ data }) =>
-      setSubCategories(data)
-    );
-  }, [formValues.business_category, categories]);
+    categories !== undefined &&
+      getSubCategories({ id: selectedCategory[0]?._id }).then(({ data }) =>
+        setSubCategories(data)
+      );
+  }, [categories]);
 
   useEffect(() => {
-    let selectedSubCategory = subcategories && subcategories.filter((item) => {
-      return subcategories.name === formValues.business_sub_category
-    })
+    let selectedSubCategory =
+      subcategories !== undefined &&
+      subcategories.filter((item) => {
+        return subcategories.name === formValues.business_sub_category;
+      });
 
-    console.log("selected sub cat:",selectedSubCategory)
-    subcategories && setFormValues({sub_category_fee: selectedSubCategory[0]?.price})
-  },[formValues.business_sub_category,subcategories])
+    console.log("selected sub cat:", selectedSubCategory);
+    subcategories !== undefined &&
+      setFormValues({ sub_category_fee: selectedSubCategory[0]?.price });
+  }, [subcategories]);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -137,7 +141,6 @@ export default function BusinessActivity() {
               ))}
             </Select>
           </FlexBetween>
-          <input value="" hidden/>
         </div>
       </div>
 
