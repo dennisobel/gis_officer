@@ -188,4 +188,6 @@ $themes: (
   z-index: 9999;
 }
 
-
+.no-border .MuiOutlinedInput-notchedOutline {
+  border: none;
+}

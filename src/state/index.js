@@ -13,6 +13,7 @@ const initialState = {
   currentLocation: {},
   signup: {},
   TODO: [],
+  doneTODO: [],
   togglecompliance:false,
   togglereg:false,
   buildings:{}
@@ -82,6 +83,14 @@ export const authSlice = createSlice({
         TODO: [...state.TODO,action.payload]
       }
     },
+    setDoneTODO: (state, action) => {
+      return {
+        ...state,
+        TODO: action.payload.updatedTODO,
+        doneTODO: action.payload.updatedDoneTODO
+      };
+    },
+         
     toggleCompliance: (state,action) => {
       state.togglecompliance = action.payload
     },
@@ -109,6 +118,7 @@ export const {
   setBusinessReg,
   updateReviewAccept,
   setTODO,
+  setDoneTODO,
   toggleCompliance,
   toggleReg,
   setBuildings

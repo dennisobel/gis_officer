@@ -111,7 +111,6 @@ const StoreProfileWidget = ({ store }) => {
             .catch(({ error }) => {
                 toast.error(error.response.data.error)
             })
-
     };
 
     useEffect(() => {

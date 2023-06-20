@@ -302,8 +302,8 @@ const DashWidget = ({ userId }) => {
               Date
             </Typography>
           </FlexBetween>
-          {activity?.map(el => (
-            <FlexBetween mb="0.5rem">
+          {activity?.map((el,i) => (
+            <FlexBetween mb="0.5rem" key={i}>
               <Typography fontSize="small" color={medium}>{el.type}</Typography>
               <Typography fontSize="small" color={medium} fontWeight="400">
                 {el?.store?.store_no}
