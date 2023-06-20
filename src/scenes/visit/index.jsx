@@ -43,23 +43,13 @@ const VisitPage = () => {
     }, [])
 
     useEffect(() => {
-        // const waypointscoords = addCoords.map(el => {
-        //     return `${el.coords.latitude},${el.coords.longitude},`
-        // })
         const origin = addCoords[0]?.coords;
         const destination = addCoords[addCoords.length - 1]?.coords;
-
-
         const intermediateWaypoints = addCoords.slice(1, addCoords.length - 1);
-        // const intermediateWaypoints = waypoints.slice(1, waypoints.length - 1);
         const waypointCoordinates = intermediateWaypoints.length > 0 ? intermediateWaypoints.map(el => `${el?.coords?.latitude},${el?.coords?.longitude}`).join('|') : '';
-
-
-        // const googleMapsURL = `https://www.google.com/maps/dir/?api=1&origin=${origin?.latitude},${origin?.longitude}&destination=${destination?.latitude},${destination?.longitude}&travelmode=driving&waypoints=${waypointCoordinates.join('|')}`;
         const googleMapsURL = `https://www.google.com/maps/dir/?api=1&origin=${origin?.latitude},${origin?.longitude}&destination=${destination?.latitude},${destination?.longitude}&travelmode=driving${waypointCoordinates ? `&waypoints=${waypointCoordinates}` : ''}`;
         setMapUrl(googleMapsURL)
-
-        console.log("googleMapsURL:", googleMapsURL)
+        
         if (visitdate !== undefined) {
             let filtered = addCoords.filter(store => {
                 return store.visitdate === dayjs(visitdate).format("DD-MM-YYYY")
