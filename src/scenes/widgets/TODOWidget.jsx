@@ -52,11 +52,6 @@ const TODOWidget = ({ store }) => {
                 <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
                     <ListItem
                         key={store._id}
-                        // secondaryAction={
-                        //     <IconButton edge="end" aria-label="location">
-                        //         <LocationOnOutlined />
-                        //     </IconButton>
-                        // }
                         disablePadding
                     >
                         <ListItemButton role={undefined} onClick={handleToggle(store._id)} dense>

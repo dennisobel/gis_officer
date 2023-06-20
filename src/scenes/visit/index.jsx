@@ -14,8 +14,6 @@ import { getBuildingById } from "helper/helper";
 
 const VisitPage = () => {
     const { palette } = useTheme();
-    const dark = palette.neutral.dark;
-    const medium = palette.neutral.medium;
     const main = palette.neutral.main;
     const TODO = useSelector(state => state.TODO)
     const doneTODO = useSelector(state => state.doneTODO)
@@ -24,7 +22,6 @@ const VisitPage = () => {
     const [addCoords, setAddCoords] = useState([])
     const [filteredTODO, setFiltered] = useState([])
     const [mapurl, setMapUrl] = useState()
-    const location = useSelector(state => state.currentLocation)
 
     useEffect(() => {
         let todos = []
@@ -40,7 +37,7 @@ const VisitPage = () => {
                     setAddCoords([...res])
                 })
         })
-    }, [])
+    }, [TODO])
 
     useEffect(() => {
         const origin = addCoords[0]?.coords;
@@ -49,7 +46,7 @@ const VisitPage = () => {
         const waypointCoordinates = intermediateWaypoints.length > 0 ? intermediateWaypoints.map(el => `${el?.coords?.latitude},${el?.coords?.longitude}`).join('|') : '';
         const googleMapsURL = `https://www.google.com/maps/dir/?api=1&origin=${origin?.latitude},${origin?.longitude}&destination=${destination?.latitude},${destination?.longitude}&travelmode=driving${waypointCoordinates ? `&waypoints=${waypointCoordinates}` : ''}`;
         setMapUrl(googleMapsURL)
-        
+
         if (visitdate !== undefined) {
             let filtered = addCoords.filter(store => {
                 return store.visitdate === dayjs(visitdate).format("DD-MM-YYYY")
