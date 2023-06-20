@@ -103,10 +103,11 @@ const VisitPage = () => {
                         To Visit
                     </Typography>
                 </Box>
+                
                 <Box padding="0.2rem 4%" gap="0.2rem" flexBasis={isNonMobileScreens ? "26%" : undefined}>
-                    {todos.map(store => (
+                    {todos.map((store,i) => (
                         <TODOWidget
-                            key={store._id}
+                            key={i}
                             branch={store.branch_name}
                             category={store.business_category}
                             description={store.business_description}
@@ -125,9 +126,9 @@ const VisitPage = () => {
                     </Typography>
                 </Box>
                 <Box padding="0.2rem 4%" gap="0.2rem" flexBasis={isNonMobileScreens ? "26%" : undefined}>
-                    {doneTODO.map(store => (
+                    {doneTODO.map((store,i) => (
                         <TODOWidget
-                            key={store._id}
+                            key={i}
                             branch={store.branch_name}
                             category={store.business_category}
                             description={store.business_description}

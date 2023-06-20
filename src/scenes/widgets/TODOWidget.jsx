@@ -14,7 +14,6 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setDoneTODO } from "state";
 
-
 const TODOWidget = ({ store }) => {
     const [checked, setChecked] = useState([0]);
     const dispatch = useDispatch()
@@ -24,28 +23,28 @@ const TODOWidget = ({ store }) => {
     const handleToggle = (value) => () => {
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
-      
+
         if (currentIndex === -1) {
-          newChecked.push(value);
+            newChecked.push(value);
         } else {
-          newChecked.splice(currentIndex, 1);
+            newChecked.splice(currentIndex, 1);
         }
-      
+
         setChecked(newChecked);
-      
+
         const updatedTODO = TODO.filter((todo) => todo._id !== value);
         const updatedDoneTODO = newChecked.includes(value)
-          ? [...doneTODO, store]
-          : doneTODO;
-      
+            ? [...doneTODO, store]
+            : doneTODO;
+
         dispatch(
-          setDoneTODO({
-            updatedTODO: updatedTODO,
-            updatedDoneTODO: updatedDoneTODO,
-          })
+            setDoneTODO({
+                updatedTODO: updatedTODO,
+                updatedDoneTODO: updatedDoneTODO,
+            })
         );
-      };
-      
+    };
+
     return (
         <WidgetWrapper m="0.4rem 0">
             <Box p="0.1rem 0">
