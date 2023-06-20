@@ -47,16 +47,16 @@ const TODOWidget = ({ store }) => {
       };
       
     return (
-        <WidgetWrapper m="1rem 0">
+        <WidgetWrapper m="0.4rem 0">
             <Box p="0.1rem 0">
                 <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
                     <ListItem
                         key={store._id}
-                        secondaryAction={
-                            <IconButton edge="end" aria-label="location">
-                                <LocationOnOutlined />
-                            </IconButton>
-                        }
+                        // secondaryAction={
+                        //     <IconButton edge="end" aria-label="location">
+                        //         <LocationOnOutlined />
+                        //     </IconButton>
+                        // }
                         disablePadding
                     >
                         <ListItemButton role={undefined} onClick={handleToggle(store._id)} dense>
