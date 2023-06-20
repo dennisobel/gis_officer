@@ -1,5 +1,5 @@
 import { Box, useMediaQuery, IconButton, Typography, useTheme } from "@mui/material";
-import { ArrowBackOutlined } from "@mui/icons-material";
+import { ArrowBackOutlined, ArrowUpwardOutlined } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import StoreProfileWidget from "scenes/widgets/StoreProfileWidget";
 import ComplianceWidget from "scenes/widgets/ComplianceWidget";
@@ -52,6 +52,11 @@ const StorePage = () => {
     const { palette } = useTheme();
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
+    const dark = palette.neutral.dark;
+
+    const handleReturnToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     const lineoptions = {
         responsive: true,
@@ -136,7 +141,7 @@ const StorePage = () => {
     }, [])
 
     return (
-        <>
+        <Box>
             <WidgetWrapper>
                 <FlexBetween gap="0.1rem">
                     <IconButton onClick={() => navigate("/stores")}>
@@ -215,9 +220,10 @@ const StorePage = () => {
                             ))}
                         </Box>
                     </WidgetWrapper>
+                    <ArrowUpwardOutlined fontSize="small" sx={{ position: "fixed", bottom: 10, left: 1, color: dark }} onClick={handleReturnToTop}/>
                 </Box>
             </Box>
-        </>
+        </Box>
     )
 }
 

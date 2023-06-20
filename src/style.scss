@@ -176,18 +176,10 @@ $themes: (
   color: #2196f3;
 }
 
-// .posts-widget-container {
-//   position: relative;
-//   min-height: 100vh;
-// }
 
 .return-to-top-button {
   position: fixed;
   bottom: 20;
   right: 20;
   z-index: 9999;
-}
-
-.no-border .MuiOutlinedInput-notchedOutline {
-  border: none;
 }

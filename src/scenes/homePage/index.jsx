@@ -27,7 +27,7 @@ const HomePage = () => {
       <Navbar />
       <Box
         width="100%"
-        padding="2rem 6%"
+        padding="0.5rem 5%"
         display={isNonMobileScreens ? "flex" : "block"}
         gap="0.5rem"
         justifyContent="space-between"
@@ -41,9 +41,7 @@ const HomePage = () => {
         >
           {/* <MyPostWidget picturePath={""} /> */}
           <PostsWidget userId={user?.msisdn} />
-          <ArrowUpwardOutlined fontSize="small" sx={{position:"fixed", bottom:10, left:1, color:dark}} onClick={handleReturnToTop}>
-            Return to Top
-          </ArrowUpwardOutlined>
+          <ArrowUpwardOutlined fontSize="small" sx={{position:"fixed", bottom:10, left:1, color:dark}} onClick={handleReturnToTop}/>
         </Box>
       </Box>
     </Box>

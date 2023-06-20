@@ -1,4 +1,5 @@
-import { Box, useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
+import { ArrowUpwardOutlined } from "@mui/icons-material";
 import SearchStoreWidget from "scenes/widgets/SearchStoreWidget";
 import StoresWidget from "scenes/widgets/StoresWidget";
 import { getUsername } from "helper/helper";
@@ -7,11 +8,17 @@ import { useState, useEffect } from "react";
 function StoresPage() {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const [user, setUser] = useState()
+    const { palette } = useTheme();
+    const dark = palette.neutral.dark;
 
     useEffect(() => {
         getUsername()
             .then(user => setUser(user))
     }, [])
+
+    const handleReturnToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     return (
         <Box>
@@ -24,10 +31,11 @@ function StoresPage() {
                 justifyContent="space-between"
             >
                 <Box
-                    flexBasis={isNonMobileScreens ? "42%" : undefined}
+                    flexBasis={isNonMobileScreens ? "%" : undefined}
                     mt={isNonMobileScreens ? undefined : "2rem"}
                 >
                     <StoresWidget userId={user?.msisdn} />
+                    <ArrowUpwardOutlined fontSize="small" sx={{ position: "fixed", bottom: 10, left: 1, color: dark }} onClick={handleReturnToTop} />
                 </Box>
             </Box>
         </Box>
