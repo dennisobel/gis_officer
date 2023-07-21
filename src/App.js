@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import HomePage from "scenes/homePage";
-import LoginPage from "scenes/loginPage";
-import OtpPage from "scenes/otp";
-import BusinessRegPage from "scenes/business_reg";
-import Map from "scenes/map/old";
-import OldMap from "scenes/map/oldmap";
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import { themeSettings } from "./theme";
 import { getUsername } from "helper/helper";
+
+import HomePage from "scenes/homePage";
+import LoginPage from "scenes/loginPage";
+import OtpPage from "scenes/otp";
+import BusinessRegPage from "scenes/business_reg";
+import Map from "scenes/map/old";
+import OldMap from "scenes/map/oldmap";
 import StoresPage from "scenes/stores";
 import StorePage from "scenes/storePage";
 import SummariesPage from "scenes/summaries";
 import VisitPage from "scenes/visit";
+
 import { setCurrentLocation } from "state";
 import { setBusinessReg } from "state";
 

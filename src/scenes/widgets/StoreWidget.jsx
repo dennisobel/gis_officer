@@ -44,7 +44,6 @@ const StoreWidget = ({
     }
 
     const handleTodo = () => {
-        console.log("add to list:", todo)
         dispatch(setTODO(todo))
     }
 

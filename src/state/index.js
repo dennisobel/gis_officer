@@ -123,4 +123,5 @@ export const {
   toggleReg,
   setBuildings
 } = authSlice.actions;
+
 export default authSlice.reducer;
