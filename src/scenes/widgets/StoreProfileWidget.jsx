@@ -163,8 +163,12 @@ const StoreProfileWidget = ({ store }) => {
         // Check if the image data exists in localStorage
         const imageData = localStorage.getItem(`cachedImage-${store_no}`);
         if (imageData) {
+            
             setCachedImage(imageData);
+        } else {
+            setCachedImage(path)
         }
+
     }, []);
 
     const createFormData = async (image) => {
