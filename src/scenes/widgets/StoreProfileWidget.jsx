@@ -302,7 +302,10 @@ const StoreProfileWidget = ({ store }) => {
                             acceptedFiles=".jpg,.jpeg,.png"
                             multiple={false}
                             // onDrop={handleImageDrop}
-                            onDrop={(acceptedFiles) => setImage(acceptedFiles[0])}
+                            onDrop={(acceptedFiles) => {
+                                console.log("accepted files:",acceptedFiles)
+                                setImage(acceptedFiles[0])
+                            }}
                         >
                             {({ getRootProps, getInputProps }) => (
                                 <FlexBetween>
